@@ -1,0 +1,17 @@
+# Thư mục biên dịch và file tạm thời
+target/
+*.log
+*.jar
+*.war
+*.class
+
+# IDE và công cụ build
+/.idea/
+/.vscode/
+/.gradle/
+/mvnw
+
+# File cấu hình cá nhân
+application.properties
+application.yml
+.env
