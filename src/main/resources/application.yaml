@@ -1,0 +1,18 @@
+spring:
+ application:
+  name: movieticketbooking
+
+ datasource:
+  url: jdbc:postgresql://localhost:5432/movie_ticket_booking_db
+  username: postgres
+  password: anhkhoa123
+
+ jpa:
+  properties:
+   hibernate:
+    format_sql: true
+
+
+ docker:
+  compose:
+   enabled: false
