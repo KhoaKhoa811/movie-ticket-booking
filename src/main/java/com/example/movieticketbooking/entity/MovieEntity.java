@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -25,7 +25,7 @@ public class MovieEntity {
     private String director;
     @Column(name = "duration_in_mins")
     private Integer durationInMinutes;
-    private Date releaseDate;
+    private LocalDate releaseDate;
     private String language;
     private String country;
     private String style;
@@ -36,4 +36,6 @@ public class MovieEntity {
             inverseJoinColumns = @JoinColumn(name = "genre_id")
     )
     private List<GenreEntity> genres;
+    @OneToMany(mappedBy = "movie", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<ShowEntity> shows;
 }
