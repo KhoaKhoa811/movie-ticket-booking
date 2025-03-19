@@ -96,9 +96,9 @@ CREATE TABLE booking (
 );
 
 CREATE TABLE booking_detail (
+	id SERIAL PRIMARY KEY,
 	booking_id INT NOT NULL,
-	show_seat_id INT NOT NULL,
-	PRIMARY KEY (booking_id, show_seat_id)
+	show_seat_id INT NOT NULL
 );
 
 CREATE TABLE payment (
