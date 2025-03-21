@@ -1,5 +1,6 @@
 package com.example.movieticketbooking.entity;
 
+import com.example.movieticketbooking.enums.BookingStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,7 +21,8 @@ public class BookingEntity {
     @Column(nullable = false)
     private LocalDateTime createdOn;
     @Column(nullable = false)
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private BookingStatus status;
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "account_id")
     private AccountEntity account;
