@@ -1,5 +1,6 @@
 package com.example.movieticketbooking.entity;
 
+import com.example.movieticketbooking.enums.SeatStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,7 +18,8 @@ public class ShowSeatEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column(nullable = false)
-    private String seatStatus;
+    @Enumerated(EnumType.STRING)
+    private SeatStatus seatStatus;
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "show_id")
     private ShowEntity show;
