@@ -1,5 +1,6 @@
 package com.example.movieticketbooking.entity;
 
+import com.example.movieticketbooking.enums.MovieType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,7 +29,8 @@ public class MovieEntity {
     private LocalDate releaseDate;
     private String language;
     private String country;
-    private String style;
+    @Enumerated(EnumType.STRING)
+    private MovieType style;
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.REFRESH})
     @JoinTable(
             name = "movie_genre",
