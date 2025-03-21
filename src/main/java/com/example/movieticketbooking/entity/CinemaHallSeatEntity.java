@@ -1,5 +1,6 @@
 package com.example.movieticketbooking.entity;
 
+import com.example.movieticketbooking.enums.SeatType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,7 +22,8 @@ public class CinemaHallSeatEntity {
     @Column(name = "seat_column", nullable = false)
     private Integer seatCol;
     @Column(nullable = false)
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private SeatType type;
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "cinema_hall_id")
     private CinemaHallEntity cinemaHall;
