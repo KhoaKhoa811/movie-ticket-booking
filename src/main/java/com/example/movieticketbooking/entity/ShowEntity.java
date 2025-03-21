@@ -1,5 +1,6 @@
 package com.example.movieticketbooking.entity;
 
+import com.example.movieticketbooking.enums.ShowType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,7 +28,8 @@ public class ShowEntity {
     @Column(nullable = false)
     private LocalTime endTime;
     @Column(nullable = false)
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private ShowType type;
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "movie_id")
     private MovieEntity movie;
