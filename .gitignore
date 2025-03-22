@@ -14,5 +14,5 @@ target/
 
 # File cấu hình cá nhân
 application.properties
-application.yml
+application.yaml
 .env
