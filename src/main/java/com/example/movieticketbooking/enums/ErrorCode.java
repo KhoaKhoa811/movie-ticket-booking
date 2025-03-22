@@ -8,7 +8,8 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public enum ErrorCode {
     UNCATEGORIZED_EXCEPTION(9999, "Uncagorized error"),
-    DUPLICATED_GENRE(102, "Duplicated genre")
+    DUPLICATED_GENRE(102, "Duplicated genre"),
+    GENRE_INVALID(103, "Genre invalid"),
     ;
 
     private final int code;
