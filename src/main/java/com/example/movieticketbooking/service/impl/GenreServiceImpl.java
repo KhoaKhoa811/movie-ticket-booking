@@ -21,4 +21,9 @@ public class GenreServiceImpl implements GenreService {
         GenreEntity savedEntity = genreRepository.save(genreEntity);
         return genreMapper.toResponse(savedEntity);
     }
+
+    @Override
+    public boolean existsGenre(String genreName) {
+        return genreRepository.existsByName(genreName);
+    }
 }

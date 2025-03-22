@@ -17,4 +17,13 @@ public class GlobalExceptionHandler {
                 .build();
         return ResponseEntity.badRequest().body(exceptionResponse);
     }
+
+    @ExceptionHandler(value = DuplicateCreateException.class)
+    public ResponseEntity<ApiResponse<?>> handlingException(DuplicateCreateException exception) {
+        ApiResponse<?> exceptionResponse = ApiResponse.builder()
+                .code(exception.getErrorCode().getCode())
+                .message(exception.getErrorCode().getMessage())
+                .build();
+        return ResponseEntity.badRequest().body(exceptionResponse);
+    }
 }
