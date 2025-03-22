@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public enum ErrorCode {
     UNCATEGORIZED_EXCEPTION(9999, "Uncagorized error"),
+    JSON_FORMAT_INVALID(9998, "JSON format invalid"),
     DUPLICATED_GENRE(102, "Duplicated genre"),
     GENRE_INVALID(103, "Genre invalid"),
     ;
