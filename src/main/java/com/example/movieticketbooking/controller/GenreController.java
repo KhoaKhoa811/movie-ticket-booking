@@ -1,5 +1,6 @@
 package com.example.movieticketbooking.controller;
 
+import com.example.movieticketbooking.dto.api.ApiResponse;
 import com.example.movieticketbooking.dto.genre.request.GenreCreateRequest;
 import com.example.movieticketbooking.dto.genre.response.GenreResponse;
 import com.example.movieticketbooking.service.GenreService;
@@ -18,7 +19,11 @@ public class GenreController {
     private final GenreService genreService;
 
     @PostMapping
-    public ResponseEntity<GenreResponse> createGenre(@RequestBody @Valid GenreCreateRequest request) {
-        return ResponseEntity.ok(genreService.createGenre(request));
+    public ResponseEntity<ApiResponse<GenreResponse>> createGenre(@RequestBody @Valid GenreCreateRequest request) {
+        ApiResponse<GenreResponse> genreResponse = ApiResponse.<GenreResponse>builder()
+                .code(100)
+                .data(genreService.createGenre(request))
+                .build();
+        return ResponseEntity.ok(genreResponse);
     }
 }
