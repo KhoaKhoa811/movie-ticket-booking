@@ -9,10 +9,7 @@ import com.example.movieticketbooking.service.GenreService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/genres")
@@ -22,9 +19,6 @@ public class GenreController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<GenreResponse>> createGenre(@RequestBody @Valid GenreCreateRequest request) {
-        if (genreService.existsGenre(request.getName())) {
-            throw new ResourceAlreadyExistsException(ErrorCode.DUPLICATED_GENRE);
-        }
         ApiResponse<GenreResponse> genreResponse = ApiResponse.<GenreResponse>builder()
                 .code(100)
                 .data(genreService.createGenre(request))

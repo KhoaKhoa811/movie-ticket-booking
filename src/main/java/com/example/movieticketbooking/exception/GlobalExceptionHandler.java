@@ -2,6 +2,7 @@ package com.example.movieticketbooking.exception;
 
 import com.example.movieticketbooking.dto.api.ApiResponse;
 import com.example.movieticketbooking.enums.ErrorCode;
+import jdk.jfr.Registered;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -47,6 +48,15 @@ public class GlobalExceptionHandler {
         ApiResponse<?> exceptionResponse = ApiResponse.builder()
                 .code(ErrorCode.JSON_FORMAT_INVALID.getCode())
                 .message(ErrorCode.JSON_FORMAT_INVALID.getMessage())
+                .build();
+        return ResponseEntity.badRequest().body(exceptionResponse);
+    }
+
+    @ExceptionHandler(value = ResourceNotFoundException.class)
+    public ResponseEntity<ApiResponse<?>> handlingResourceNotFoundException(ResourceNotFoundException exception) {
+        ApiResponse<?> exceptionResponse = ApiResponse.builder()
+                .code(exception.getErrorCode().getCode())
+                .message(exception.getErrorCode().getMessage())
                 .build();
         return ResponseEntity.badRequest().body(exceptionResponse);
     }
