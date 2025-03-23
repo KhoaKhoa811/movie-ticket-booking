@@ -25,4 +25,10 @@ public class GenreController {
                 .build();
         return ResponseEntity.ok(genreResponse);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteGenre(@PathVariable Integer id) {
+        genreService.removeGenre(id);
+        return ResponseEntity.noContent().build();
+    }
 }

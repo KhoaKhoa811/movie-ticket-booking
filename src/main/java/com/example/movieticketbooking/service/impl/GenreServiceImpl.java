@@ -5,6 +5,7 @@ import com.example.movieticketbooking.dto.genre.response.GenreResponse;
 import com.example.movieticketbooking.entity.GenreEntity;
 import com.example.movieticketbooking.enums.ErrorCode;
 import com.example.movieticketbooking.exception.ResourceAlreadyExistsException;
+import com.example.movieticketbooking.exception.ResourceNotFoundException;
 import com.example.movieticketbooking.mapper.GenreMapper;
 import com.example.movieticketbooking.repository.GenreRepository;
 import com.example.movieticketbooking.service.GenreService;
@@ -30,7 +31,13 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public boolean existsGenre(String genreName) {
-        return genreRepository.existsByName(genreName);
+    @Transactional
+    public void removeGenre(Integer id) {
+        if (!genreRepository.existsById(id)) {
+            throw new ResourceNotFoundException(ErrorCode.GENRE_NOT_FOUND);
+        }
+        genreRepository.deleteById(id);
     }
+
+
 }

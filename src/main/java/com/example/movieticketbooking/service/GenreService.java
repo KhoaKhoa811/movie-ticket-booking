@@ -5,5 +5,5 @@ import com.example.movieticketbooking.dto.genre.response.GenreResponse;
 
 public interface GenreService {
     GenreResponse createGenre(GenreCreateRequest request);
-    boolean existsGenre(String genreName);
+    void removeGenre(Integer id);
 }
