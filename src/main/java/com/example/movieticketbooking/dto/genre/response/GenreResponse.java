@@ -8,7 +8,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
 public class GenreResponse {
     private Integer id;
     private String name;

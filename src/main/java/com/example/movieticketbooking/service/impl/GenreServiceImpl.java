@@ -44,7 +44,7 @@ public class GenreServiceImpl implements GenreService {
 
     @Override
     public List<GenreResponse> getAllGenre() {
-        return genreRepository.findAll().stream()
+        return genreRepository.findAllGenre().stream()
                 .map(genreMapper::toResponse)
                 .collect(Collectors.toList());
     }
