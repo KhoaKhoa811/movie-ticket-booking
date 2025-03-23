@@ -1,8 +1,7 @@
 package com.example.movieticketbooking.exception;
 
 import com.example.movieticketbooking.dto.api.ApiResponse;
-import com.example.movieticketbooking.enums.ErrorCode;
-import jdk.jfr.Registered;
+import com.example.movieticketbooking.enums.Code;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -17,8 +16,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity<ApiResponse<?>> handlingException(Exception exception) {
         ApiResponse<?> exceptionResponse = ApiResponse.builder()
-                .code(ErrorCode.UNCATEGORIZED_EXCEPTION.getCode())
-                .message(ErrorCode.UNCATEGORIZED_EXCEPTION.getMessage())
+                .code(Code.UNCATEGORIZED_EXCEPTION.getCode())
+                .message(Code.UNCATEGORIZED_EXCEPTION.getMessage())
                 .build();
         return ResponseEntity.badRequest().body(exceptionResponse);
     }
@@ -35,7 +34,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public ResponseEntity<ApiResponse<?>> handlingMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
         String enumKey = Objects.requireNonNull(exception.getFieldError()).getDefaultMessage();
-        ErrorCode errorCode = ErrorCode.valueOf(enumKey);
+        Code errorCode = Code.valueOf(enumKey);
         ApiResponse<?> exceptionResponse = ApiResponse.builder()
                 .code(errorCode.getCode())
                 .message(errorCode.getMessage())
@@ -46,8 +45,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = HttpMessageNotReadableException.class)
     public ResponseEntity<ApiResponse<?>> handlingHttpMessageNotReadableException(HttpMessageNotReadableException exception) {
         ApiResponse<?> exceptionResponse = ApiResponse.builder()
-                .code(ErrorCode.JSON_FORMAT_INVALID.getCode())
-                .message(ErrorCode.JSON_FORMAT_INVALID.getMessage())
+                .code(Code.JSON_FORMAT_INVALID.getCode())
+                .message(Code.JSON_FORMAT_INVALID.getMessage())
                 .build();
         return ResponseEntity.badRequest().body(exceptionResponse);
     }

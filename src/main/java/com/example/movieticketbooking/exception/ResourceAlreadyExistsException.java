@@ -1,10 +1,10 @@
 package com.example.movieticketbooking.exception;
 
-import com.example.movieticketbooking.enums.ErrorCode;
+import com.example.movieticketbooking.enums.Code;
 
 public class ResourceAlreadyExistsException extends BaseException {
 
-    public ResourceAlreadyExistsException(ErrorCode errorCode) {
+    public ResourceAlreadyExistsException(Code errorCode) {
         super(errorCode);
     }
 }
