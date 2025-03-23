@@ -22,8 +22,8 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(exceptionResponse);
     }
 
-    @ExceptionHandler(value = DuplicateCreateException.class)
-    public ResponseEntity<ApiResponse<?>> handlingDuplicateCreateException(DuplicateCreateException exception) {
+    @ExceptionHandler(value = ResourceAlreadyExistsException.class)
+    public ResponseEntity<ApiResponse<?>> handlingDuplicateCreateException(ResourceAlreadyExistsException exception) {
         ApiResponse<?> exceptionResponse = ApiResponse.builder()
                 .code(exception.getErrorCode().getCode())
                 .message(exception.getErrorCode().getMessage())
