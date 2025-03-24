@@ -7,6 +7,7 @@ import com.example.movieticketbooking.enums.Code;
 import com.example.movieticketbooking.service.GenreService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +26,7 @@ public class GenreController {
                 .code(Code.GENRE_CREATED.getCode())
                 .data(genreService.createGenre(request))
                 .build();
-        return ResponseEntity.ok(genreResponse);
+        return ResponseEntity.status(HttpStatus.CREATED).body(genreResponse);
     }
 
     @DeleteMapping("/{id}")
