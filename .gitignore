@@ -15,4 +15,5 @@ target/
 # File cấu hình cá nhân
 application.properties
 application.yaml
+movieticketbooking.iml
 .env

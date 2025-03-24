@@ -109,6 +109,11 @@ CREATE TABLE payment (
 	transaction_id INT
 );
 
+CREATE TABLE cinema_images (
+	id SERIAL PRIMARY KEY,
+	img_url VARCHAR(255) NOT NULL
+);
+
 
 
 
@@ -184,5 +189,10 @@ ALTER TABLE payment ADD COLUMN booking_id INT NOT NULL;
 ALTER TABLE payment
 ADD CONSTRAINT fk_payment_booking FOREIGN KEY (booking_id)
 REFERENCES booking(id);
+
+ALTER TABLE cinema_images ADD COLUMN cinema_id INT NOT NULL;
+ALTER TABLE cinema_images
+ADD CONSTRAINT  fk_ci_cinema FOREIGN KEY (cinema_id)
+REFERENCES cinema(id);
 
 COMMIT;
