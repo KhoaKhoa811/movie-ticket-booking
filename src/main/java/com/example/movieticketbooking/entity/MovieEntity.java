@@ -22,6 +22,7 @@ public class MovieEntity {
     private Integer id;
     @Column(nullable = false)
     private String title;
+    private String imagePath;
     private String description;
     private String director;
     @Column(name = "duration_in_mins")

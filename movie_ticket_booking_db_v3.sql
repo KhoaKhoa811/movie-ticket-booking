@@ -31,7 +31,8 @@ CREATE TABLE roles_permissions (
 CREATE TABLE movie (
 	id SERIAL PRIMARY KEY,
 	title VARCHAR(255) NOT NULL,
-	director VARCHAR(255),	
+	director VARCHAR(255),
+	image_path VARCHAR(255),
 	description TEXT,
 	duration_in_mins INT,
 	language VARCHAR(100),
