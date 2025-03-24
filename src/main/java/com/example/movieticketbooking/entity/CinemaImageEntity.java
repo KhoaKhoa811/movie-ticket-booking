@@ -18,6 +18,8 @@ public class CinemaImageEntity {
     private Integer id;
     @Column(name = "img_url", nullable = false)
     private String imageUrl;
+    @Column(name = "img_id")
+    private String imageId;
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "cinema_id")
     private CinemaEntity cinema;

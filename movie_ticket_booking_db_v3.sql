@@ -111,7 +111,8 @@ CREATE TABLE payment (
 
 CREATE TABLE cinema_images (
 	id SERIAL PRIMARY KEY,
-	img_url VARCHAR(255) NOT NULL
+	img_url VARCHAR(255) NOT NULL,
+	img_id VARCHAR(255)
 );
 
 
