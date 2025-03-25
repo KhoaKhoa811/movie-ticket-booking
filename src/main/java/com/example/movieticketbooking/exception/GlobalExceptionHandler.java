@@ -8,6 +8,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.io.IOException;
 import java.util.Objects;
 
 @ControllerAdvice
@@ -56,6 +57,24 @@ public class GlobalExceptionHandler {
         ApiResponse<?> exceptionResponse = ApiResponse.builder()
                 .code(exception.getErrorCode().getCode())
                 .message(exception.getErrorCode().getMessage())
+                .build();
+        return ResponseEntity.badRequest().body(exceptionResponse);
+    }
+
+    @ExceptionHandler(value = FileProcessingException.class)
+    public ResponseEntity<ApiResponse<?>> handlingFileProcessingException(FileProcessingException exception) {
+        ApiResponse<?> exceptionResponse = ApiResponse.builder()
+                .code(exception.getErrorCode().getCode())
+                .message(exception.getErrorCode().getMessage())
+                .build();
+        return ResponseEntity.badRequest().body(exceptionResponse);
+    }
+
+    @ExceptionHandler(value = IOException.class)
+    public ResponseEntity<ApiResponse<?>> handlingIOException(IOException exception) {
+        ApiResponse<?> exceptionResponse = ApiResponse.builder()
+                .code(Code.IO_ERROR.getCode())
+                .message(exception.getMessage())
                 .build();
         return ResponseEntity.badRequest().body(exceptionResponse);
     }
