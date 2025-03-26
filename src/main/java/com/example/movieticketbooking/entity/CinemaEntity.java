@@ -34,6 +34,6 @@ public class CinemaEntity {
     private String phoneNumber;
     @OneToMany(mappedBy = "cinema", cascade = CascadeType.ALL)
     private List<CinemaHallEntity> cinemaHalls;
-    @OneToMany(mappedBy = "cinema", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "cinema", cascade = {CascadeType.REFRESH, CascadeType.DETACH})
     private List<CinemaImageEntity> cinemaImages;
 }

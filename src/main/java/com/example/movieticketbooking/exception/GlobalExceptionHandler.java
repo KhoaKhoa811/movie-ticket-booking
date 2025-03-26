@@ -4,6 +4,7 @@ import com.example.movieticketbooking.dto.api.ApiResponse;
 import com.example.movieticketbooking.enums.Code;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,14 +15,14 @@ import java.util.Objects;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(value = Exception.class)
-    public ResponseEntity<ApiResponse<?>> handlingException(Exception exception) {
-        ApiResponse<?> exceptionResponse = ApiResponse.builder()
-                .code(Code.UNCATEGORIZED_EXCEPTION.getCode())
-                .message(Code.UNCATEGORIZED_EXCEPTION.getMessage())
-                .build();
-        return ResponseEntity.badRequest().body(exceptionResponse);
-    }
+//    @ExceptionHandler(value = Exception.class)
+//    public ResponseEntity<ApiResponse<?>> handlingException(Exception exception) {
+//        ApiResponse<?> exceptionResponse = ApiResponse.builder()
+//                .code(Code.UNCATEGORIZED_EXCEPTION.getCode())
+//                .message(Code.UNCATEGORIZED_EXCEPTION.getMessage())
+//                .build();
+//        return ResponseEntity.badRequest().body(exceptionResponse);
+//    }
 
     @ExceptionHandler(value = ResourceAlreadyExistsException.class)
     public ResponseEntity<ApiResponse<?>> handlingDuplicateCreateException(ResourceAlreadyExistsException exception) {
@@ -78,4 +79,13 @@ public class GlobalExceptionHandler {
                 .build();
         return ResponseEntity.badRequest().body(exceptionResponse);
     }
+
+//    @ExceptionHandler(value = HttpMediaTypeNotSupportedException.class)
+//    public ResponseEntity<ApiResponse<?>> handlingHttpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException exception) {
+//        ApiResponse<?> exceptionResponse = ApiResponse.builder()
+//                .code(Code.CONTENT_TYPE_INVALID.getCode())
+//                .message(Code.CONTENT_TYPE_INVALID.getMessage())
+//                .build();
+//        return ResponseEntity.badRequest().body(exceptionResponse);
+//    }
 }
