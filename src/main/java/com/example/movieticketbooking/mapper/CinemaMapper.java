@@ -14,4 +14,7 @@ public interface CinemaMapper {
     CinemaEntity toEntity(CinemaCreateRequest request);
     @Mapping(source = "cinemaImages", target = "images", qualifiedByName = "toResponseList")
     CinemaResponse toResponse(CinemaEntity entity);
+//    @Mapping(source = "city", target = "city")
+//    CinemaCityResponse toCityResponse(CinemaEntity entity);
+//    List<CinemaCityResponse> toCityResponseList(List<CinemaEntity> entities);
 }

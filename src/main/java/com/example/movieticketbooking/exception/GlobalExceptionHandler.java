@@ -88,4 +88,13 @@ public class GlobalExceptionHandler {
 //                .build();
 //        return ResponseEntity.badRequest().body(exceptionResponse);
 //    }
+
+    @ExceptionHandler(value = BadRequestException.class)
+    public ResponseEntity<ApiResponse<?>> handlingBadRequestException(BadRequestException exception) {
+        ApiResponse<?> exceptionResponse = ApiResponse.builder()
+                .code(exception.getErrorCode().getCode())
+                .message(exception.getErrorCode().getMessage())
+                .build();
+        return ResponseEntity.badRequest().body(exceptionResponse);
+    }
 }
