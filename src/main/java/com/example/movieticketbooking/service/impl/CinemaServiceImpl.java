@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -60,5 +61,12 @@ public class CinemaServiceImpl implements CinemaService {
         }
         List<CinemaCityResponse> results = cinemaRepository.getCinemasByCity(city);
         return results != null ? results : Collections.emptyList();
+    }
+
+    @Override
+    public CinemaResponse getCinemaById(Integer id) {
+        CinemaEntity cinemaEntity = cinemaRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(Code.CINEMA_NOT_FOUND));
+        return cinemaMapper.toResponse(cinemaEntity);
     }
 }

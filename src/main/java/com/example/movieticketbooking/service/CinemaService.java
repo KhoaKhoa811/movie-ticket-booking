@@ -12,4 +12,5 @@ public interface CinemaService {
     CinemaResponse createCinema(CinemaCreateRequest cinemaCreateRequest, List<MultipartFile> images);
     List<CityResponse> getAllCity();
     List<CinemaCityResponse> getCinemaByCity(String city);
+    CinemaResponse getCinemaById(Integer id);
 }

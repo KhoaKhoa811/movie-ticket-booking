@@ -54,4 +54,13 @@ public class CinemaController {
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(cinemaResponse);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<CinemaResponse>> getCinemaById(@PathVariable Integer id) {
+        ApiResponse<CinemaResponse> cinemaResponse = ApiResponse.<CinemaResponse>builder()
+                .code(Code.CINEMA_GET_ALL.getCode())
+                .data(cinemaService.getCinemaById(id))
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(cinemaResponse);
+    }
 }

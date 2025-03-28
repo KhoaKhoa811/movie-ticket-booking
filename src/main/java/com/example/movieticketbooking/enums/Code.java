@@ -27,6 +27,7 @@ public enum Code {
     CINEMA_ADDRESS_INVALID(202, "cinema address invalid"),
     CINEMA_PHONE_INVALID(203, "cinema phone invalid"),
     CINEMA_ALREADY_EXIST(204, "cinema already exist"),
+    CINEMA_NOT_FOUND(209, "cinema not found"),
     CITY_GET_ALL(205, "City retrieved"),
     CINEMA_GET_ALL(206, "Cinema retrieved"),
     CITY_INVALID(207, "City invalid"),
