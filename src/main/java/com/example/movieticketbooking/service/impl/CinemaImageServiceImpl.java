@@ -29,7 +29,7 @@ public class CinemaImageServiceImpl implements CinemaImageService {
                 .map(image -> {
                     // upload image to cloudinary
                     Map<String, Object> uploadedImage = cloudinaryService.uploadImage(
-                            image, CloudinaryFolderName.CINEMA.getCinemaFolder() + savedCinema.getName()
+                            image, CloudinaryFolderName.CINEMA.getCinemaFolder() + "/" + savedCinema.getName()
                     );
                     // create cinema image based on cloudinary information
                     return CinemaImageEntity.builder()

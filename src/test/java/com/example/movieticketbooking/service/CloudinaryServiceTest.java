@@ -57,7 +57,7 @@ public class CloudinaryServiceTest {
         Map<String, Object> deleteResult = Map.of("result", "ok");
         Mockito.when(uploader.destroy(Mockito.anyString(), Mockito.anyMap())).thenReturn(deleteResult);
         // Thực hiện test
-        Map<String, Object> result = cloudinaryService.deleteImage("test-image-id", "test-folder");
+        Map<String, Object> result = cloudinaryService.deleteImage("test-image-id");
         // Kiểm tra kết quả
         assertNotNull(result);
         assertEquals("ok", result.get("result"));

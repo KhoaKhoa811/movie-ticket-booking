@@ -63,4 +63,23 @@ public class CinemaController {
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(cinemaResponse);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<?>> deleteCinemaById(@PathVariable Integer id) {
+        cinemaService.removeCinema(id);
+        ApiResponse<?> cinemaResponse = ApiResponse.builder()
+                .code(Code.CINEMA_DELETED.getCode())
+                .message(Code.CINEMA_DELETED.getMessage())
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(cinemaResponse);
+    }
+
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<CinemaResponse>>> getAllCinema() {
+        ApiResponse<List<CinemaResponse>> cinemaResponse = ApiResponse.<List<CinemaResponse>>builder()
+                .code(Code.CINEMA_GET_ALL.getCode())
+                .data(cinemaService.getAllCinema())
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(cinemaResponse);
+    }
 }

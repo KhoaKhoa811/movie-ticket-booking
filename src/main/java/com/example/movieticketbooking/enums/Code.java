@@ -32,6 +32,7 @@ public enum Code {
     CINEMA_GET_ALL(206, "Cinema retrieved"),
     CITY_INVALID(207, "City invalid"),
     CITY_NOT_FOUND(208, "City not found"),
+    CINEMA_DELETED(209, "Cinema deleted successfully"),
     ;
 
     private final int code;

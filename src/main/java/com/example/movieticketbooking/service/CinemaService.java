@@ -13,4 +13,6 @@ public interface CinemaService {
     List<CityResponse> getAllCity();
     List<CinemaCityResponse> getCinemaByCity(String city);
     CinemaResponse getCinemaById(Integer id);
+    void removeCinema(Integer id);
+    List<CinemaResponse> getAllCinema();
 }

@@ -7,6 +7,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring", uses = {CinemaImageMapper.class})
 public interface CinemaMapper {
     CinemaMapper INSTANCE = Mappers.getMapper(CinemaMapper.class);
@@ -14,6 +16,7 @@ public interface CinemaMapper {
     CinemaEntity toEntity(CinemaCreateRequest request);
     @Mapping(source = "cinemaImages", target = "images", qualifiedByName = "toResponseList")
     CinemaResponse toResponse(CinemaEntity entity);
+    List<CinemaResponse> toResponseList(List<CinemaEntity> cinemaEntities);
 //    @Mapping(source = "city", target = "city")
 //    CinemaCityResponse toCityResponse(CinemaEntity entity);
 //    List<CinemaCityResponse> toCityResponseList(List<CinemaEntity> entities);

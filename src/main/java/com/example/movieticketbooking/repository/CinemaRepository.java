@@ -16,4 +16,6 @@ public interface CinemaRepository extends JpaRepository<CinemaEntity, Integer> {
     boolean existsByCity(String city);
     @Query(value = "SELECT id, name FROM cinema WHERE city = :city", nativeQuery = true)
     List<CinemaCityResponse> getCinemasByCity(@Param("city") String city);
+    @Query(value = "SELECT name FROM cinema WHERE id = :id", nativeQuery = true)
+    String findNameById(@Param("id") Integer id);
 }
