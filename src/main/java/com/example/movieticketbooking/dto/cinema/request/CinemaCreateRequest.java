@@ -1,6 +1,6 @@
 package com.example.movieticketbooking.dto.cinema.request;
 
-import com.example.movieticketbooking.dto.city.request.CityCreateRequest;
+import com.example.movieticketbooking.dto.city.request.CityRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -26,5 +26,5 @@ public class CinemaCreateRequest {
     @Pattern(regexp = "^\\d{10}$", message = "CINEMA_PHONE_INVALID")
     private String phoneNumber;
     @Valid
-    private CityCreateRequest city;
+    private CityRequest city;
 }

@@ -27,13 +27,17 @@ public enum Code {
     CINEMA_ADDRESS_INVALID(202, "cinema address invalid"),
     CINEMA_PHONE_INVALID(203, "cinema phone invalid"),
     CINEMA_ALREADY_EXIST(204, "cinema already exist"),
-    CINEMA_NOT_FOUND(209, "cinema not found"),
-    CITY_GET_ALL(205, "City retrieved"),
+    CINEMA_NOT_FOUND(205, "cinema not found"),
     CINEMA_GET_ALL(206, "Cinema retrieved"),
-    CITY_INVALID(207, "City invalid"),
-    CITY_NOT_FOUND(208, "City not found"),
-    CINEMA_DELETED(209, "Cinema deleted successfully"),
-    CITY_ALREADY_EXIST(210, "City already exist"),
+    CINEMA_DELETED(207, "Cinema deleted successfully"),
+    // city code
+    CITY_CREATED(300, "City created"),
+    CITY_GET_ALL(301, "City retrieved"),
+    CITY_INVALID(302, "City invalid"),
+    CITY_NOT_FOUND(303, "City not found"),
+    CITY_ALREADY_EXIST(304, "City already exist"),
+    CITY_DELETED(305, "City deleted successfully"),
+    CITY_UPDATED(306, "City updated successfully"),
     ;
 
     private final int code;
