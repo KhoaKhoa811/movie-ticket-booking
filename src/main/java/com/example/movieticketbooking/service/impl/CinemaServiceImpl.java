@@ -1,29 +1,28 @@
 package com.example.movieticketbooking.service.impl;
 
 import com.example.movieticketbooking.dto.cinema.request.CinemaCreateRequest;
-import com.example.movieticketbooking.dto.cinema.response.CinemaCityResponse;
-import com.example.movieticketbooking.dto.cinema.response.CityResponse;
 import com.example.movieticketbooking.dto.cinema.response.CinemaResponse;
+import com.example.movieticketbooking.dto.city.response.CityResponse;
 import com.example.movieticketbooking.entity.CinemaEntity;
 import com.example.movieticketbooking.entity.CinemaImageEntity;
+import com.example.movieticketbooking.entity.CityEntity;
 import com.example.movieticketbooking.enums.CloudinaryFolderName;
 import com.example.movieticketbooking.enums.Code;
-import com.example.movieticketbooking.exception.BadRequestException;
 import com.example.movieticketbooking.exception.ResourceAlreadyExistsException;
 import com.example.movieticketbooking.exception.ResourceNotFoundException;
 import com.example.movieticketbooking.mapper.CinemaMapper;
+import com.example.movieticketbooking.mapper.CityMapper;
 import com.example.movieticketbooking.repository.CinemaRepository;
 import com.example.movieticketbooking.service.CinemaImageService;
 import com.example.movieticketbooking.service.CinemaService;
+import com.example.movieticketbooking.service.CityService;
 import com.example.movieticketbooking.service.CloudinaryService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +31,8 @@ public class CinemaServiceImpl implements CinemaService {
     private final CinemaMapper cinemaMapper;
     private final CinemaImageService cinemaImageService;
     private final CloudinaryService cloudinaryService;
+    private final CityService cityService;
+    private final CityMapper cityMapper;
 
     @Override
     @Transactional
@@ -39,31 +40,21 @@ public class CinemaServiceImpl implements CinemaService {
         if (cinemaRepository.existsByName(cinemaCreateRequest.getName())) {
             throw new ResourceAlreadyExistsException(Code.CINEMA_ALREADY_EXIST);
         }
-        // save cinema
         CinemaEntity cinemaEntity = cinemaMapper.toEntity(cinemaCreateRequest);
+        CityEntity cityEntity;
+        // Kiểm tra nếu CityRequest có ID hợp lệ thì lấy từ DB, nếu không thì tạo mới
+        if (cinemaCreateRequest.getCity() != null) {
+            CityResponse cityResponse = cityService.findOrCreateCity(cinemaCreateRequest.getCity());
+            cityEntity = cityMapper.updateEntityFromResponse(cityResponse);
+            cinemaEntity.setCity(cityEntity);
+        }
+        // save cinema
         CinemaEntity savedCinema = cinemaRepository.save(cinemaEntity);
         // upload and save images
         List<CinemaImageEntity> savedImages = cinemaImageService.uploadAndSaveImage(savedCinema, images);
         // convert cinema entity to cinema response
         savedCinema.setCinemaImages(savedImages);
         return cinemaMapper.toResponse(savedCinema);
-    }
-
-    @Override
-    public List<CityResponse> getAllCity() {
-        return cinemaRepository.findAllCities() != null ? cinemaRepository.findAllCities() : Collections.emptyList();
-    }
-
-    @Override
-    public List<CinemaCityResponse> getCinemaByCity(String city) {
-        if (city == null || city.isEmpty()) {
-            throw new BadRequestException(Code.CITY_INVALID);
-        }
-        if (!cinemaRepository.existsByCity(city)) {
-            throw new ResourceNotFoundException(Code.CITY_NOT_FOUND);
-        }
-        List<CinemaCityResponse> results = cinemaRepository.getCinemasByCity(city);
-        return results != null ? results : Collections.emptyList();
     }
 
     @Override
@@ -87,6 +78,12 @@ public class CinemaServiceImpl implements CinemaService {
     @Override
     public List<CinemaResponse> getAllCinema() {
         List<CinemaEntity> cinemaEntities = cinemaRepository.findAll();
+        return cinemaMapper.toResponseList(cinemaEntities);
+    }
+
+    @Override
+    public List<CinemaResponse> getCinemaByCityId(Integer id) {
+        List<CinemaEntity> cinemaEntities = cinemaRepository.findByCityId(id);
         return cinemaMapper.toResponseList(cinemaEntities);
     }
 

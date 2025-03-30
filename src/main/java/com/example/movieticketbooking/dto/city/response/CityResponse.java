@@ -1,4 +1,4 @@
-package com.example.movieticketbooking.dto.cinema.response;
+package com.example.movieticketbooking.dto.city.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,5 +10,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CityResponse {
-    private String city;
+    private Integer id;
+    private String name;
 }

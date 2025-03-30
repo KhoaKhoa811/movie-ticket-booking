@@ -33,6 +33,7 @@ public enum Code {
     CITY_INVALID(207, "City invalid"),
     CITY_NOT_FOUND(208, "City not found"),
     CINEMA_DELETED(209, "Cinema deleted successfully"),
+    CITY_ALREADY_EXIST(210, "City already exist"),
     ;
 
     private final int code;

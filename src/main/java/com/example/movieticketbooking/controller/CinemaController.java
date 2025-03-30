@@ -2,8 +2,6 @@ package com.example.movieticketbooking.controller;
 
 import com.example.movieticketbooking.dto.api.ApiResponse;
 import com.example.movieticketbooking.dto.cinema.request.CinemaCreateRequest;
-import com.example.movieticketbooking.dto.cinema.response.CinemaCityResponse;
-import com.example.movieticketbooking.dto.cinema.response.CityResponse;
 import com.example.movieticketbooking.dto.cinema.response.CinemaResponse;
 import com.example.movieticketbooking.enums.Code;
 import com.example.movieticketbooking.service.CinemaService;
@@ -37,24 +35,6 @@ public class CinemaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(cinemaResponse);
     }
 
-    @GetMapping("/cities")
-    public ResponseEntity<ApiResponse<List<CityResponse>>> getAllCinemaCity() {
-        ApiResponse<List<CityResponse>> cityResponse = ApiResponse.<List<CityResponse>>builder()
-                .code(Code.CITY_GET_ALL.getCode())
-                .data(cinemaService.getAllCity())
-                .build();
-        return ResponseEntity.status(HttpStatus.OK).body(cityResponse);
-    }
-
-    @GetMapping
-    public ResponseEntity<ApiResponse<List<CinemaCityResponse>>> getCinemaByCity(@RequestParam String city) {
-        ApiResponse<List<CinemaCityResponse>> cinemaResponse = ApiResponse.<List<CinemaCityResponse>>builder()
-                .code(Code.CINEMA_GET_ALL.getCode())
-                .data(cinemaService.getCinemaByCity(city))
-                .build();
-        return ResponseEntity.status(HttpStatus.OK).body(cinemaResponse);
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<CinemaResponse>> getCinemaById(@PathVariable Integer id) {
         ApiResponse<CinemaResponse> cinemaResponse = ApiResponse.<CinemaResponse>builder()
@@ -79,6 +59,15 @@ public class CinemaController {
         ApiResponse<List<CinemaResponse>> cinemaResponse = ApiResponse.<List<CinemaResponse>>builder()
                 .code(Code.CINEMA_GET_ALL.getCode())
                 .data(cinemaService.getAllCinema())
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(cinemaResponse);
+    }
+
+    @GetMapping("/city/{id}")
+    public ResponseEntity<ApiResponse<List<CinemaResponse>>> getCinemaByCityId(@PathVariable Integer id) {
+        ApiResponse<List<CinemaResponse>> cinemaResponse = ApiResponse.<List<CinemaResponse>>builder()
+                .code(Code.CINEMA_GET_ALL.getCode())
+                .data(cinemaService.getCinemaByCityId(id))
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(cinemaResponse);
     }
