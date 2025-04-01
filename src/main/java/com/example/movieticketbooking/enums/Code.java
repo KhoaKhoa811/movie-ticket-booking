@@ -30,6 +30,7 @@ public enum Code {
     CINEMA_NOT_FOUND(205, "cinema not found"),
     CINEMA_GET_ALL(206, "Cinema retrieved"),
     CINEMA_DELETED(207, "Cinema deleted successfully"),
+    CINEMA_UPDATED(208, "Cinema updated successfully"),
     // city code
     CITY_CREATED(300, "City created"),
     CITY_GET_ALL(301, "City retrieved"),
@@ -39,6 +40,7 @@ public enum Code {
     CITY_DELETED(305, "City deleted successfully"),
     CITY_UPDATED(306, "City updated successfully"),
     ;
+
 
     private final int code;
     private final String message;

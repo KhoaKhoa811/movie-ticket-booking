@@ -67,7 +67,11 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
+    @Transactional
     public CityResponse updateCity(Integer id, CityRequest cityRequest) {
+        if (!cityRepository.existsById(id)) {
+            throw new ResourceNotFoundException(Code.CITY_NOT_FOUND);
+        }
         CityEntity cityEntity = cityRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(Code.CITY_NOT_FOUND));
         cityEntity.setName(cityRequest.getName());

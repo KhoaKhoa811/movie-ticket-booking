@@ -2,6 +2,7 @@ package com.example.movieticketbooking.controller;
 
 import com.example.movieticketbooking.dto.api.ApiResponse;
 import com.example.movieticketbooking.dto.cinema.request.CinemaCreateRequest;
+import com.example.movieticketbooking.dto.cinema.request.CinemaUpdateRequest;
 import com.example.movieticketbooking.dto.cinema.response.CinemaResponse;
 import com.example.movieticketbooking.enums.Code;
 import com.example.movieticketbooking.service.CinemaService;
@@ -68,6 +69,17 @@ public class CinemaController {
         ApiResponse<List<CinemaResponse>> cinemaResponse = ApiResponse.<List<CinemaResponse>>builder()
                 .code(Code.CINEMA_GET_ALL.getCode())
                 .data(cinemaService.getCinemaByCityId(id))
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(cinemaResponse);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<ApiResponse<CinemaResponse>> updateCinema(
+            @PathVariable Integer id,
+            @RequestBody CinemaUpdateRequest request) {
+        ApiResponse<CinemaResponse> cinemaResponse = ApiResponse.<CinemaResponse>builder()
+                .code(Code.CINEMA_UPDATED.getCode())
+                .data(cinemaService.updateCinema(id, request))
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(cinemaResponse);
     }

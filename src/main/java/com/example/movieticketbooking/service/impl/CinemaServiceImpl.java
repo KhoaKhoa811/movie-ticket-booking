@@ -1,6 +1,7 @@
 package com.example.movieticketbooking.service.impl;
 
 import com.example.movieticketbooking.dto.cinema.request.CinemaCreateRequest;
+import com.example.movieticketbooking.dto.cinema.request.CinemaUpdateRequest;
 import com.example.movieticketbooking.dto.cinema.response.CinemaResponse;
 import com.example.movieticketbooking.dto.city.response.CityResponse;
 import com.example.movieticketbooking.entity.CinemaEntity;
@@ -85,6 +86,27 @@ public class CinemaServiceImpl implements CinemaService {
     public List<CinemaResponse> getCinemaByCityId(Integer id) {
         List<CinemaEntity> cinemaEntities = cinemaRepository.findByCityId(id);
         return cinemaMapper.toResponseList(cinemaEntities);
+    }
+
+    @Override
+    @Transactional
+    public CinemaResponse updateCinema(Integer id, CinemaUpdateRequest request) {
+        if (cinemaRepository.existsByName(request.getName())) {
+            throw new ResourceAlreadyExistsException(Code.CINEMA_ALREADY_EXIST);
+        }
+        // get cinema need to update
+        CinemaEntity cinemaEntity = cinemaRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(Code.CINEMA_NOT_FOUND));
+        cinemaMapper.updateCinemaFromRequest(cinemaEntity, request);
+        CityEntity cityEntity;
+        if (request.getCity() != null) {
+            CityResponse cityResponse = cityService.findOrCreateCity(request.getCity());
+            cityEntity = cityMapper.updateEntityFromResponse(cityResponse);
+            cinemaEntity.setCity(cityEntity);
+        }
+        // update cinema
+        CinemaEntity savedCinema = cinemaRepository.save(cinemaEntity);
+        return cinemaMapper.toResponse(savedCinema);
     }
 
 
