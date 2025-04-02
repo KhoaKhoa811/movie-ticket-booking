@@ -73,7 +73,6 @@ public class CloudinaryServiceImpl implements CloudinaryService {
                     ObjectUtils.asMap("type", "upload", "prefix", folderName + "/")
             );
             Map<String, Object> result = (Map<String, Object>) apiResponse; // Lấy kết quả an toàn
-
             // Ép kiểu và lấy danh sách public_id
             List<String> publicIds = ((List<Map<String, Object>>) result.get("resources"))
                     .stream()
