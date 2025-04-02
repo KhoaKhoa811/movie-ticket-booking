@@ -10,8 +10,10 @@ target/
 /.vscode/
 /.gradle/
 /mvnw
+/mvnw.cmd
 
 # File cấu hình cá nhân
 application.properties
-application.yml
+application.yaml
+movieticketbooking.iml
 .env
