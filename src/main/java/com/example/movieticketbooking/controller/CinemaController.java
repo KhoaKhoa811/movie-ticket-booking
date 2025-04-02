@@ -4,7 +4,9 @@ import com.example.movieticketbooking.dto.api.ApiResponse;
 import com.example.movieticketbooking.dto.cinema.request.CinemaCreateRequest;
 import com.example.movieticketbooking.dto.cinema.request.CinemaUpdateRequest;
 import com.example.movieticketbooking.dto.cinema.response.CinemaResponse;
+import com.example.movieticketbooking.dto.cinemaImage.CinemaImageResponse;
 import com.example.movieticketbooking.enums.Code;
+import com.example.movieticketbooking.service.CinemaImageService;
 import com.example.movieticketbooking.service.CinemaService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,6 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CinemaController {
     private final CinemaService cinemaService;
+    private final CinemaImageService cinemaImageService;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResponse<CinemaResponse>> createCinema(
@@ -82,5 +85,38 @@ public class CinemaController {
                 .data(cinemaService.updateCinema(id, request))
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(cinemaResponse);
+    }
+
+    @PostMapping(value = "{cinemaId}/images", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ApiResponse<List<CinemaImageResponse>>> uploadCinemaImages(
+            @PathVariable Integer cinemaId,
+            @RequestPart(value = "images") List<MultipartFile> images
+    ) {
+        ApiResponse<List<CinemaImageResponse>> cinemaImageResponse = ApiResponse.<List<CinemaImageResponse>>builder()
+                .code(Code.CINEMA_IMAGES_CREATED.getCode())
+                .data(cinemaImageService.createCinemaImage(cinemaId, images))
+                .build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(cinemaImageResponse);
+    }
+
+    @DeleteMapping(value = "{cinemaId}/images/{id}")
+    public ResponseEntity<ApiResponse<?>> deleteCinemaImages(
+            @PathVariable Integer cinemaId,
+            @PathVariable Integer id) {
+        cinemaImageService.removeCinemaImage(cinemaId, id);
+        ApiResponse<?> cinemaImageResponse = ApiResponse.builder()
+                .code(Code.CINEMA_IMAGES_DELETED.getCode())
+                .message(Code.CINEMA_IMAGES_DELETED.getMessage())
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(cinemaImageResponse);
+    }
+
+    @GetMapping("{cinemaId}/images")
+    public ResponseEntity<ApiResponse<List<CinemaImageResponse>>> getCinemaImages(@PathVariable Integer cinemaId) {
+        ApiResponse<List<CinemaImageResponse>> cinemaImageResponse = ApiResponse.<List<CinemaImageResponse>>builder()
+                .code(Code.CINEMA_IMAGES_GET.getCode())
+                .data(cinemaImageService.getCinemaImageByCinemaId(cinemaId))
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(cinemaImageResponse);
     }
 }

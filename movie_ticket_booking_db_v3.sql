@@ -115,6 +115,11 @@ CREATE TABLE cinema_images (
 	img_id VARCHAR(255)
 );
 
+CREATE TABLE city(
+	id SERIAL PRIMARY KEY,
+	name VARCHAR(255) NOT NULL
+);
+
 
 
 
@@ -195,5 +200,10 @@ ALTER TABLE cinema_images ADD COLUMN cinema_id INT NOT NULL;
 ALTER TABLE cinema_images
 ADD CONSTRAINT  fk_ci_cinema FOREIGN KEY (cinema_id)
 REFERENCES cinema(id);
+
+ALTER TABLE cinema ADD COLUMN city_id INT NOT NULL;
+ALTER TABLE cinema
+ADD CONSTRAINT fk_cinema_city FOREIGN KEY(city_id)
+REFERENCES city(id);
 
 COMMIT;

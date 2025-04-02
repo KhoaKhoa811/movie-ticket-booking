@@ -39,6 +39,11 @@ public enum Code {
     CITY_ALREADY_EXIST(304, "City already exist"),
     CITY_DELETED(305, "City deleted successfully"),
     CITY_UPDATED(306, "City updated successfully"),
+    // cinema image code
+    CINEMA_IMAGES_CREATED(400, "Cinema images created"),
+    CINEMA_IMAGES_DELETED(401, "Cinema image deleted"),
+    CINEMA_IMAGES_NOT_FOUND(402, "Cinema image not found"),
+    CINEMA_IMAGES_GET(403, "Cinema images retrieved"),
     ;
 
 
