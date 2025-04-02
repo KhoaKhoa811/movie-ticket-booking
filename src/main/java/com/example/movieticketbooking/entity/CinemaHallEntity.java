@@ -22,6 +22,12 @@ public class CinemaHallEntity {
     private String name;
     @Column(name = "total_seat", nullable = false)
     private Integer totalSeats;
+    @Column(name = "row_count", nullable = false)
+    private Integer rowCount;
+    @Column(name = "column_count", nullable = false)
+    private Integer columnCount;
+    @Column(name = "is_active", nullable = false)
+    private Boolean isActive;
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "cinema_id")
     private CinemaEntity cinema;

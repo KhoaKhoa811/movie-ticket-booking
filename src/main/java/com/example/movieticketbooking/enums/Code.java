@@ -44,6 +44,15 @@ public enum Code {
     CINEMA_IMAGES_DELETED(401, "Cinema image deleted"),
     CINEMA_IMAGES_NOT_FOUND(402, "Cinema image not found"),
     CINEMA_IMAGES_GET(403, "Cinema images retrieved"),
+    // cinema hall code
+    CINEMA_HALL_CREATED(500, "Cinema hall created"),
+    CINEMA_HALL_DELETED(501, "Cinema hall deleted"),
+    CINEMA_HALL_NOT_FOUND(502, "Cinema hall not found"),
+    CINEMA_HALL_GET_ALL(503, "Cinema hall retrieved"),
+    CINEMA_HALL_NAME_INVALID(504, "Cinema hall name invalid"),
+    CINEMA_HALL_ROW_COUNT_INVALID(505, "Cinema hall row count invalid"),
+    CINEMA_HALL_COLUMN_COUNT_INVALID(506, "Cinema hall column count invalid"),
+    CINEMA_HALL_ACTIVE_INVALID(507, "Cinema hall active invalid"),
     ;
 
 
