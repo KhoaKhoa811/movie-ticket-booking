@@ -37,4 +37,17 @@ public class CinemaHallController {
                 .build();
         return ResponseEntity.ok(cinemaHallResponse);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<?>> deleteCinemaHall(
+            @PathVariable Integer cinemaId,
+            @PathVariable Integer id
+    ) {
+        cinemaHallService.removeCinemaHall(cinemaId, id);
+        ApiResponse<?> cinemaHallResponse = ApiResponse.builder()
+                .code(Code.CINEMA_HALL_DELETED.getCode())
+                .message(Code.CINEMA_HALL_DELETED.getMessage())
+                .build();
+        return ResponseEntity.ok(cinemaHallResponse);
+    }
 }

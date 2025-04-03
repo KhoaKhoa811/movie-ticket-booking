@@ -48,4 +48,15 @@ public class CinemaHallServiceImpl implements CinemaHallService {
         List<CinemaHallEntity> cinemaHallEntities = cinemaHallRepository.findByCinemaId(cinemaId);
         return cinemaHallMapper.toResponseList(cinemaHallEntities);
     }
+
+    @Override
+    public void removeCinemaHall(Integer cinemaId, Integer id) {
+        if (!cinemaRepository.existsById(cinemaId)) {
+            throw new ResourceNotFoundException(Code.CINEMA_NOT_FOUND);
+        }
+        if (!cinemaHallRepository.existsById(id)) {
+            throw new ResourceNotFoundException(Code.CINEMA_HALL_NOT_FOUND);
+        }
+        cinemaHallRepository.deleteById(id);
+    }
 }

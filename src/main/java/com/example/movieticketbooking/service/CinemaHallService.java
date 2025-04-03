@@ -8,4 +8,5 @@ import java.util.List;
 public interface CinemaHallService {
     CinemaHallResponse createCinemaHall(Integer cinemaId, CinemaHallCreateRequest cinemaHallCreateRequest);
     List<CinemaHallResponse> getCinemaHallsByCinemaId(Integer cinemaId);
+    void removeCinemaHall(Integer cinemaId, Integer id);
 }
