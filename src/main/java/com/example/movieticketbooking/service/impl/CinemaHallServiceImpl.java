@@ -14,6 +14,8 @@ import com.example.movieticketbooking.utils.CinemaHallUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class CinemaHallServiceImpl implements CinemaHallService {
@@ -27,10 +29,23 @@ public class CinemaHallServiceImpl implements CinemaHallService {
             throw new ResourceNotFoundException(Code.CINEMA_NOT_FOUND);
         }
         CinemaHallEntity cinemaHallEntity = cinemaHallMapper.toEntity(cinemaHallCreateRequest);
+        // calculate total seats
         Integer totalSeats = CinemaHallUtils.calculateTotalSeats(cinemaHallCreateRequest.getRowCount(), cinemaHallCreateRequest.getColumnCount());
+        // set total seats for cinema hall entity
         cinemaHallEntity.setTotalSeats(totalSeats);
+        // set cinema id for cinema hall entity
         cinemaHallEntity.setCinema(CinemaEntity.builder().id(cinemaId).build());
+        // save cinema hall
         CinemaHallEntity savedCinemaHall = cinemaHallRepository.save(cinemaHallEntity);
         return cinemaHallMapper.toResponse(savedCinemaHall);
+    }
+
+    @Override
+    public List<CinemaHallResponse> getCinemaHallsByCinemaId(Integer cinemaId) {
+        if (!cinemaRepository.existsById(cinemaId)) {
+            throw new ResourceNotFoundException(Code.CINEMA_NOT_FOUND);
+        }
+        List<CinemaHallEntity> cinemaHallEntities = cinemaHallRepository.findByCinemaId(cinemaId);
+        return cinemaHallMapper.toResponseList(cinemaHallEntities);
     }
 }

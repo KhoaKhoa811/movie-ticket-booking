@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("api/v1/cinemas/{cinemaId}/halls")
 @RequiredArgsConstructor
@@ -23,6 +25,15 @@ public class CinemaHallController {
         ApiResponse<CinemaHallResponse> cinemaHallResponse = ApiResponse.<CinemaHallResponse>builder()
                 .code(Code.CINEMA_HALL_CREATED.getCode())
                 .data(cinemaHallService.createCinemaHall(cinemaId, cinemaHallCreateRequest))
+                .build();
+        return ResponseEntity.ok(cinemaHallResponse);
+    }
+
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<CinemaHallResponse>>> getCinemaHallsByCinemaId(@PathVariable Integer cinemaId) {
+        ApiResponse<List<CinemaHallResponse>> cinemaHallResponse = ApiResponse.<List<CinemaHallResponse>>builder()
+                .code(Code.CINEMA_HALL_GET_ALL.getCode())
+                .data(cinemaHallService.getCinemaHallsByCinemaId(cinemaId))
                 .build();
         return ResponseEntity.ok(cinemaHallResponse);
     }
