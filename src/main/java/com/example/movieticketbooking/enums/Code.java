@@ -53,6 +53,9 @@ public enum Code {
     CINEMA_HALL_ROW_COUNT_INVALID(505, "Cinema hall row count invalid"),
     CINEMA_HALL_COLUMN_COUNT_INVALID(506, "Cinema hall column count invalid"),
     CINEMA_HALL_ACTIVE_INVALID(507, "Cinema hall active invalid"),
+    CINEMA_HALL_ROW_INVALID(508, "Cinema hall row invalid"),
+    CINEMA_HALL_COLUMN_INVALID(509, "Cinema hall column invalid"),
+    CINEMA_HALL_UPDATED(510, "Cinema hall updated successfully" ),
     // row column cinema seat
     ROW_COLUMN_ILLEGAL(9899, "Row column illegal" ),
     ;
