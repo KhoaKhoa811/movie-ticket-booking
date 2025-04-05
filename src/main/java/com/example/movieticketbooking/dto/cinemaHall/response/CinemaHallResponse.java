@@ -12,9 +12,6 @@ import lombok.Setter;
 public class CinemaHallResponse {
     private Integer id;
     private String name;
-    private Integer totalSeats;
-    private Integer rowCount;
-    private Integer columnCount;
     private Boolean isActive;
     private Integer cinemaId;
 }
