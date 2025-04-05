@@ -14,4 +14,5 @@ public class CinemaHallResponse {
     private String name;
     private Boolean isActive;
     private Integer cinemaId;
+    private Integer seatTemplateId;
 }

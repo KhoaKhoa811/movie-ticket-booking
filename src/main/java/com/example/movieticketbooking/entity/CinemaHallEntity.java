@@ -29,4 +29,7 @@ public class CinemaHallEntity {
     private List<CinemaHallSeatEntity> cinemaHallSeats;
     @OneToMany(mappedBy = "cinemaHall", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ShowEntity> shows;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinColumn(name = "seat_template_id")
+    private SeatTemplateEntity seatTemplate;
 }

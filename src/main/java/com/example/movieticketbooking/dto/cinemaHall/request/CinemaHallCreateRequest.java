@@ -19,6 +19,8 @@ public class CinemaHallCreateRequest {
     private Boolean isActive;
     @NotNull(message = "CINEMA_INVALID")
     private Integer cinemaId;
+    @NotNull(message = "SEAT_TEMPLATE_INVALID")
+    private Integer seatTemplateId;
 }
 
 

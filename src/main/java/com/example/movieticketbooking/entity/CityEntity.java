@@ -22,9 +22,4 @@ public class CityEntity {
     private String name;
     @OneToMany(mappedBy = "city", cascade = {CascadeType.DETACH, CascadeType.REFRESH})
     private List<CinemaEntity> cinemas;
-
-    public CityEntity(Integer id, String name) {
-        this.id = id;
-        this.name = name;
-    }
 }

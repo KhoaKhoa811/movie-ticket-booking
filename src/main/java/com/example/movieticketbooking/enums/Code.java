@@ -56,8 +56,8 @@ public enum Code {
     CINEMA_HALL_ROW_INVALID(508, "Cinema hall row invalid"),
     CINEMA_HALL_COLUMN_INVALID(509, "Cinema hall column invalid"),
     CINEMA_HALL_UPDATED(510, "Cinema hall updated successfully" ),
-    // row column cinema seat
-    ROW_COLUMN_ILLEGAL(9899, "Row column illegal" ),
+    // seat template
+    SEAT_TEMPLATE_INVALID(511, "seat template invalid"),
     ;
 
 
