@@ -11,6 +11,7 @@ import com.example.movieticketbooking.exception.ResourceNotFoundException;
 import com.example.movieticketbooking.mapper.CinemaHallMapper;
 import com.example.movieticketbooking.repository.CinemaHallRepository;
 import com.example.movieticketbooking.repository.CinemaRepository;
+import com.example.movieticketbooking.service.CinemaHallSeatService;
 import com.example.movieticketbooking.service.CinemaHallService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -28,6 +29,7 @@ public class CinemaHallServiceImpl implements CinemaHallService {
     private final CinemaHallMapper cinemaHallMapper;
     @PersistenceContext
     private final EntityManager entityManager;
+    private final CinemaHallSeatService cinemaHallSeatService;
 
     @Override
     @Transactional
@@ -35,9 +37,12 @@ public class CinemaHallServiceImpl implements CinemaHallService {
         if (!cinemaRepository.existsById(cinemaHallCreateRequest.getCinemaId())) {
             throw new ResourceNotFoundException(Code.CINEMA_NOT_FOUND);
         }
+        // mapping request to entity
         CinemaHallEntity cinemaHallEntity = cinemaHallMapper.toEntity(cinemaHallCreateRequest);
         // save cinema hall
         CinemaHallEntity savedCinemaHall = cinemaHallRepository.save(cinemaHallEntity);
+        // mapping seat template to cinema hall seat
+        cinemaHallSeatService.generateSeatsFromTemplate(cinemaHallEntity, cinemaHallCreateRequest.getSeatTemplateId());
         return cinemaHallMapper.toResponse(savedCinemaHall);
     }
 
@@ -76,7 +81,12 @@ public class CinemaHallServiceImpl implements CinemaHallService {
             cinemaHallEntity.setSeatTemplate(template);
 
         }
+        // update cinema hall
         CinemaHallEntity cinemaHallEntityUpdated = cinemaHallRepository.save(cinemaHallEntity);
+        // update cinema hall seat if seat template is changed
+        if (cinemaHallUpdateRequest.getSeatTemplateId() != null) {
+            cinemaHallSeatService.deleteAndCreateCinemaHallSeats(cinemaHallEntityUpdated, cinemaHallUpdateRequest.getSeatTemplateId());
+        }
         return cinemaHallMapper.toResponse(cinemaHallEntityUpdated);
     }
 

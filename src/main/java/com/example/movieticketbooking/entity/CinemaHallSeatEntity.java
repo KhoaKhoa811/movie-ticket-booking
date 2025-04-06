@@ -2,10 +2,7 @@ package com.example.movieticketbooking.entity;
 
 import com.example.movieticketbooking.enums.SeatType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "cinema_hall_seat")
@@ -13,6 +10,7 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class CinemaHallSeatEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +22,8 @@ public class CinemaHallSeatEntity {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private SeatType type;
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.REFRESH})
+    private Boolean isActive;
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "cinema_hall_id")
     private CinemaHallEntity cinemaHall;
 }

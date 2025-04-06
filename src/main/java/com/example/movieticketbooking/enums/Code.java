@@ -60,6 +60,10 @@ public enum Code {
     SEAT_TEMPLATE_INVALID(511, "seat template invalid"),
     SEAT_TEMPLATE_GET_ALL(512, "seat template retrieved"),
     SEAT_TEMPLATE_NOT_FOUND(513, "seat template not found"),
+    // cinema hall seat
+    SEAT_GET_ALL(600, "seat retrieved"),
+    SEAT_UPDATED(601, "seat updated successfully"),
+    SEAT_NOT_FOUND(602, "seat does not exist"),
     ;
 
 
