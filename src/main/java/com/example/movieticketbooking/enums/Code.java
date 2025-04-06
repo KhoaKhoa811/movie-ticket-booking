@@ -58,6 +58,8 @@ public enum Code {
     CINEMA_HALL_UPDATED(510, "Cinema hall updated successfully" ),
     // seat template
     SEAT_TEMPLATE_INVALID(511, "seat template invalid"),
+    SEAT_TEMPLATE_GET_ALL(512, "seat template retrieved"),
+    SEAT_TEMPLATE_NOT_FOUND(513, "seat template not found"),
     ;
 
 

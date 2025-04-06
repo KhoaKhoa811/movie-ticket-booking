@@ -19,6 +19,7 @@ public class SeatTemplateDetailEntity {
     private Integer id;
     private Character seatRow;
     private Integer seatColumn;
+    @Enumerated(EnumType.STRING)
     private SeatType type;
     private Boolean isActive;
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.REFRESH})
