@@ -20,8 +20,8 @@ public class CinemaHallEntity {
     private Integer id;
     @Column(nullable = false)
     private String name;
-    @Column(name = "total_seat", nullable = false)
-    private Integer totalSeats;
+    @Column(name = "is_active", nullable = false)
+    private Boolean isActive;
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "cinema_id")
     private CinemaEntity cinema;
@@ -29,4 +29,7 @@ public class CinemaHallEntity {
     private List<CinemaHallSeatEntity> cinemaHallSeats;
     @OneToMany(mappedBy = "cinemaHall", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ShowEntity> shows;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinColumn(name = "seat_template_id")
+    private SeatTemplateEntity seatTemplate;
 }
