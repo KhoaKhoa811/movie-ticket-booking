@@ -30,7 +30,7 @@ public class MovieCreateRequest {
     private Integer durationInMinutes;
     @NotNull(message = "MOVIE_RELEASE_DATE_INVALID")
     @FutureOrPresent(message = "MOVIE_RELEASE_DATE_INVALID")
-    private LocalDate releaseDate;
+    private String releaseDate;
     private String language;
     private String country;
     @NotNull(message = "MOVIE_TYPE_INVALID")

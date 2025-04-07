@@ -20,7 +20,7 @@ public class MovieResponse {
     private String description;
     private String director;
     private Integer durationInMinutes;
-    private LocalDate releaseDate;
+    private String releaseDate;
     private String language;
     private String country;
     private MovieType movieType;

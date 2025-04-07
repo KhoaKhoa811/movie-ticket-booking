@@ -76,6 +76,7 @@ public enum Code {
     MOVIE_RELEASE_DATE_INVALID(708, "Movie release date invalid"),
     MOVIE_TYPE_INVALID(709, "Movie type invalid"),
     MOVIE_GENRE_INVALID(710, "Movie genre invalid"),
+    MOVIE_ALREADY_EXIST(711, "Movie already exist"),
     ;
 
 

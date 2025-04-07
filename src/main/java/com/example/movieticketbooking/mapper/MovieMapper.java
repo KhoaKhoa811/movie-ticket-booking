@@ -11,9 +11,11 @@ import java.util.List;
 @Mapper(componentModel = "spring", uses = {GenreMapper.class})
 public interface MovieMapper {
     // convert movie create request to movie entity
+    @Mapping(source = "releaseDate", target = "releaseDate", dateFormat = "yyyy-MM-dd")
     @Mapping(source = "genreIds", target = "genres")
     MovieEntity toEntity(MovieCreateRequest movieCreateRequest);
     // convert movie entity to movie response
+    @Mapping(source = "releaseDate", target = "releaseDate", dateFormat = "yyyy-MM-dd")
     @Mapping(source = "genres", target = "genreIds")
     MovieResponse toResponse(MovieEntity movieEntity);
     List<MovieResponse> toResponseList(List<MovieEntity> movieEntities);
