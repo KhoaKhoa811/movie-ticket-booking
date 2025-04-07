@@ -16,7 +16,7 @@ public interface MovieMapper {
     MovieEntity toEntity(MovieCreateRequest movieCreateRequest);
     // convert movie entity to movie response
     @Mapping(source = "releaseDate", target = "releaseDate", dateFormat = "yyyy-MM-dd")
-    @Mapping(source = "genres", target = "genreIds")
+    @Mapping(source = "genres", target = "genres", qualifiedByName = "toResponseList")
     MovieResponse toResponse(MovieEntity movieEntity);
     List<MovieResponse> toResponseList(List<MovieEntity> movieEntities);
 }

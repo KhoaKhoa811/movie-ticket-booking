@@ -1,5 +1,6 @@
 package com.example.movieticketbooking.dto.movie.response;
 
+import com.example.movieticketbooking.dto.genre.response.GenreResponse;
 import com.example.movieticketbooking.enums.MovieType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,5 +25,5 @@ public class MovieResponse {
     private String language;
     private String country;
     private MovieType movieType;
-    private List<Integer> genreIds;
+    private List<GenreResponse> genres;
 }

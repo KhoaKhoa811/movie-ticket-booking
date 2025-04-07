@@ -6,6 +6,7 @@ import com.example.movieticketbooking.dto.movie.storage.UploadImage;
 import com.example.movieticketbooking.entity.MovieEntity;
 import com.example.movieticketbooking.enums.Code;
 import com.example.movieticketbooking.exception.ResourceAlreadyExistsException;
+import com.example.movieticketbooking.exception.ResourceNotFoundException;
 import com.example.movieticketbooking.mapper.MovieMapper;
 import com.example.movieticketbooking.repository.MovieRepository;
 import com.example.movieticketbooking.service.MovieImageService;
@@ -37,6 +38,13 @@ public class MovieServiceImpl implements MovieService {
         // save movie
         MovieEntity savedMovie = movieRepository.save(movieEntity);
         return movieMapper.toResponse(savedMovie);
+    }
+
+    @Override
+    public MovieResponse getMovieById(Integer id) {
+        MovieEntity movieEntity = movieRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(Code.MOVIE_NOT_FOUND));
+        return movieMapper.toResponse(movieEntity);
     }
 
 

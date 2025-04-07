@@ -31,4 +31,13 @@ public class MovieController {
                 .build();
         return ResponseEntity.ok(movieResponse);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<MovieResponse>> getMovie(@PathVariable("id") Integer id) {
+        ApiResponse<MovieResponse> movieResponse = ApiResponse.<MovieResponse>builder()
+                .code(Code.MOVIE_GET_ALL.getCode())
+                .data(movieService.getMovieById(id))
+                .build();
+        return ResponseEntity.ok(movieResponse);
+    }
 }
