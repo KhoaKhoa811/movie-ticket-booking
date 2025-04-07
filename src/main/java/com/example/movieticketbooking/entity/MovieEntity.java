@@ -30,8 +30,9 @@ public class MovieEntity {
     private LocalDate releaseDate;
     private String language;
     private String country;
+    @Column(name = "style")
     @Enumerated(EnumType.STRING)
-    private MovieType style;
+    private MovieType movieType;
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.REFRESH})
     @JoinTable(
             name = "movie_genre",
