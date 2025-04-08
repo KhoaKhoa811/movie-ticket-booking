@@ -40,4 +40,14 @@ public class MovieController {
                 .build();
         return ResponseEntity.ok(movieResponse);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<?>> deleteMovieById(@PathVariable("id") Integer id) {
+        movieService.removeMovieById(id);
+        ApiResponse<?> movieResponse = ApiResponse.builder()
+                .code(Code.MOVIE_DELETED.getCode())
+                .message(Code.MOVIE_DELETED.getMessage())
+                .build();
+        return ResponseEntity.ok(movieResponse);
+    }
 }

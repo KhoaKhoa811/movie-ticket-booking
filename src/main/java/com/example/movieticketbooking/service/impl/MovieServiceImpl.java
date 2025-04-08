@@ -4,11 +4,13 @@ import com.example.movieticketbooking.dto.movie.request.MovieCreateRequest;
 import com.example.movieticketbooking.dto.movie.response.MovieResponse;
 import com.example.movieticketbooking.dto.movie.storage.UploadImage;
 import com.example.movieticketbooking.entity.MovieEntity;
+import com.example.movieticketbooking.enums.CloudinaryFolderName;
 import com.example.movieticketbooking.enums.Code;
 import com.example.movieticketbooking.exception.ResourceAlreadyExistsException;
 import com.example.movieticketbooking.exception.ResourceNotFoundException;
 import com.example.movieticketbooking.mapper.MovieMapper;
 import com.example.movieticketbooking.repository.MovieRepository;
+import com.example.movieticketbooking.service.CloudinaryService;
 import com.example.movieticketbooking.service.MovieImageService;
 import com.example.movieticketbooking.service.MovieService;
 import jakarta.transaction.Transactional;
@@ -22,6 +24,7 @@ public class MovieServiceImpl implements MovieService {
     private final MovieRepository movieRepository;
     private final MovieMapper movieMapper;
     private final MovieImageService movieImageService;
+    private final CloudinaryService cloudinaryService;
 
     @Override
     @Transactional
@@ -45,6 +48,17 @@ public class MovieServiceImpl implements MovieService {
         MovieEntity movieEntity = movieRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(Code.MOVIE_NOT_FOUND));
         return movieMapper.toResponse(movieEntity);
+    }
+
+    @Override
+    @Transactional
+    public void removeMovieById(Integer id) {
+        if (!movieRepository.existsById(id)) {
+            throw new ResourceNotFoundException(Code.MOVIE_NOT_FOUND);
+        }
+        String title = movieRepository.findTitleById(id);
+        cloudinaryService.deleteFolder(CloudinaryFolderName.MOVIE.getCinemaFolder() + "/" + title);
+        movieRepository.deleteById(id);
     }
 
 

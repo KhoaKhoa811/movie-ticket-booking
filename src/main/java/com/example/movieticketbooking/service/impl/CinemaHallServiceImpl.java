@@ -47,6 +47,7 @@ public class CinemaHallServiceImpl implements CinemaHallService {
     }
 
     @Override
+    @Transactional
     public List<CinemaHallResponse> getCinemaHallsByCinemaId(Integer cinemaId) {
         if (!cinemaRepository.existsById(cinemaId)) {
             throw new ResourceNotFoundException(Code.CINEMA_NOT_FOUND);
@@ -56,6 +57,7 @@ public class CinemaHallServiceImpl implements CinemaHallService {
     }
 
     @Override
+    @Transactional
     public void removeCinemaHall(Integer id) {
         if (!cinemaHallRepository.existsById(id)) {
             throw new ResourceNotFoundException(Code.CINEMA_HALL_NOT_FOUND);

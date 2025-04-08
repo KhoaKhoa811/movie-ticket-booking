@@ -7,4 +7,5 @@ import org.springframework.web.multipart.MultipartFile;
 public interface MovieService {
     MovieResponse createMovie(MovieCreateRequest movieCreateRequest, MultipartFile movieImage);
     MovieResponse getMovieById(Integer id);
+    void removeMovieById(Integer id);
 }
