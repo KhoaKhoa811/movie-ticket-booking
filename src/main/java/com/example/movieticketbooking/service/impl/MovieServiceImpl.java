@@ -1,14 +1,17 @@
 package com.example.movieticketbooking.service.impl;
 
 import com.example.movieticketbooking.dto.movie.request.MovieCreateRequest;
+import com.example.movieticketbooking.dto.movie.request.MovieUpdateRequest;
 import com.example.movieticketbooking.dto.movie.response.MovieResponse;
 import com.example.movieticketbooking.dto.movie.storage.UploadImage;
+import com.example.movieticketbooking.entity.GenreEntity;
 import com.example.movieticketbooking.entity.MovieEntity;
 import com.example.movieticketbooking.enums.CloudinaryFolderName;
 import com.example.movieticketbooking.enums.Code;
 import com.example.movieticketbooking.exception.ResourceAlreadyExistsException;
 import com.example.movieticketbooking.exception.ResourceNotFoundException;
 import com.example.movieticketbooking.mapper.MovieMapper;
+import com.example.movieticketbooking.repository.GenreRepository;
 import com.example.movieticketbooking.repository.MovieRepository;
 import com.example.movieticketbooking.service.CloudinaryService;
 import com.example.movieticketbooking.service.MovieImageService;
@@ -18,6 +21,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class MovieServiceImpl implements MovieService {
@@ -25,6 +30,7 @@ public class MovieServiceImpl implements MovieService {
     private final MovieMapper movieMapper;
     private final MovieImageService movieImageService;
     private final CloudinaryService cloudinaryService;
+    private final GenreRepository genreRepository;
 
     @Override
     @Transactional
@@ -38,6 +44,9 @@ public class MovieServiceImpl implements MovieService {
         UploadImage savedImage = movieImageService.uploadMovieImage(movieCreateRequest, movieImage);
         movieEntity.setImagePath(savedImage.getImagePath());
         movieEntity.setImageId(savedImage.getImageId());
+        // adding genres
+        List<GenreEntity> genres = genreRepository.findAllById(movieCreateRequest.getGenreIds());
+        movieEntity.setGenres(genres);
         // save movie
         MovieEntity savedMovie = movieRepository.save(movieEntity);
         return movieMapper.toResponse(savedMovie);
@@ -59,6 +68,18 @@ public class MovieServiceImpl implements MovieService {
         String title = movieRepository.findTitleById(id);
         cloudinaryService.deleteFolder(CloudinaryFolderName.MOVIE.getCinemaFolder() + "/" + title);
         movieRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    public MovieResponse updateMovieById(Integer id, MovieUpdateRequest movieUpdateRequest) {
+        MovieEntity movieEntity = movieRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(Code.MOVIE_NOT_FOUND));
+        movieMapper.updateMovieByUpdateRequest(movieEntity, movieUpdateRequest);
+        List<GenreEntity> genres = genreRepository.findAllById(movieUpdateRequest.getGenreIds());
+        movieEntity.setGenres(genres);
+        MovieEntity savedMovie = movieRepository.save(movieEntity);
+        return movieMapper.toResponse(savedMovie);
     }
 
 
