@@ -24,6 +24,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -117,7 +118,7 @@ public class MovieServiceImpl implements MovieService {
                 .map(movieMapper::toResponse)
                 .toList();
         // mapping to paged response
-        PagedResponse<MovieResponse> pagedResponse = PagedResponse.<MovieResponse>builder()
+        return PagedResponse.<MovieResponse>builder()
                 .content(content)
                 .page(moviePage.getNumber())
                 .size(moviePage.getSize())
@@ -125,7 +126,28 @@ public class MovieServiceImpl implements MovieService {
                 .totalPages(moviePage.getTotalPages())
                 .last(moviePage.isLast())
                 .build();
-        return pagedResponse;
+    }
+
+    @Override
+    public PagedResponse<MovieResponse> getAllAvailableMovie(Pageable pageable) {
+        // find all by page
+        LocalDate releaseDate = LocalDate.now();
+        Boolean isActive = true;
+        Page<MovieEntity> moviePage = movieRepository.findActiveMoviesToday(releaseDate, isActive, pageable);
+        // get movies list
+        List<MovieResponse> content = moviePage.getContent()
+                .stream()
+                .map(movieMapper::toResponse)
+                .toList();
+        // mapping to paged response
+        return PagedResponse.<MovieResponse>builder()
+                .content(content)
+                .page(moviePage.getNumber())
+                .size(moviePage.getSize())
+                .totalElements(moviePage.getTotalElements())
+                .totalPages(moviePage.getTotalPages())
+                .last(moviePage.isLast())
+                .build();
     }
 
 

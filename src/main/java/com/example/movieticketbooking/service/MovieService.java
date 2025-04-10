@@ -16,4 +16,5 @@ public interface MovieService {
     MovieResponse updateMovieById(Integer id, MovieUpdateRequest movieUpdateRequest);
     MovieResponse updateMovieImage(Integer movieId, MultipartFile movieImage);
     PagedResponse<MovieResponse> getAllMovie(Pageable pageable);
+    PagedResponse<MovieResponse> getAllAvailableMovie(Pageable pageable);
 }

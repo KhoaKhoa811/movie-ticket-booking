@@ -93,4 +93,20 @@ public class MovieController {
                 .build();
         return ResponseEntity.ok(movieResponse);
     }
+
+    @GetMapping("/available")
+    public ResponseEntity<ApiResponse<PagedResponse<MovieResponse>>> getAvailableMovies(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortDir
+    ) {
+        Sort sort = sortDir.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+        ApiResponse<PagedResponse<MovieResponse>> movieResponse = ApiResponse.<PagedResponse<MovieResponse>>builder()
+                .code(Code.MOVIE_GET_ALL.getCode())
+                .data(movieService.getAllAvailableMovie(pageable))
+                .build();
+        return ResponseEntity.ok(movieResponse);
+    }
 }
