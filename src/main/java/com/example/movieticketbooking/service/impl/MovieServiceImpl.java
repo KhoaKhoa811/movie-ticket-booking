@@ -1,5 +1,6 @@
 package com.example.movieticketbooking.service.impl;
 
+import com.example.movieticketbooking.dto.api.PagedResponse;
 import com.example.movieticketbooking.dto.movie.request.MovieCreateRequest;
 import com.example.movieticketbooking.dto.movie.request.MovieUpdateRequest;
 import com.example.movieticketbooking.dto.movie.response.MovieResponse;
@@ -18,6 +19,8 @@ import com.example.movieticketbooking.service.MovieImageService;
 import com.example.movieticketbooking.service.MovieService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -102,6 +105,27 @@ public class MovieServiceImpl implements MovieService {
         // save image
         MovieEntity savedMovie = movieRepository.save(movieEntity);
         return movieMapper.toResponse(savedMovie);
+    }
+
+    @Override
+    public PagedResponse<MovieResponse> getAllMovie(Pageable pageable) {
+        // find all by page
+        Page<MovieEntity> moviePage = movieRepository.findAll(pageable);
+        // get movies list
+        List<MovieResponse> content = moviePage.getContent()
+                .stream()
+                .map(movieMapper::toResponse)
+                .toList();
+        // mapping to paged response
+        PagedResponse<MovieResponse> pagedResponse = PagedResponse.<MovieResponse>builder()
+                .content(content)
+                .page(moviePage.getNumber())
+                .size(moviePage.getSize())
+                .totalElements(moviePage.getTotalElements())
+                .totalPages(moviePage.getTotalPages())
+                .last(moviePage.isLast())
+                .build();
+        return pagedResponse;
     }
 
 
