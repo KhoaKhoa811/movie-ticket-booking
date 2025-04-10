@@ -22,6 +22,7 @@ public class MovieUpdateRequest {
     private String releaseDate;
     private String language;
     private String country;
+    private Boolean isActive;
     @Enumerated(EnumType.STRING)
     private MovieType movieType;
     private List<Integer> genreIds;

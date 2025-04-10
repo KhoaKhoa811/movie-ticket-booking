@@ -32,6 +32,8 @@ public class MovieCreateRequest {
     private String releaseDate;
     private String language;
     private String country;
+    @NotNull(message = "MOVIE_ACTIVE_INVALID")
+    private Boolean isActive;
     @NotNull(message = "MOVIE_TYPE_INVALID")
     @Enumerated(EnumType.STRING)
     private MovieType movieType;

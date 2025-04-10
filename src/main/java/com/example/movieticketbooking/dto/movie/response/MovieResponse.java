@@ -24,6 +24,7 @@ public class MovieResponse {
     private String releaseDate;
     private String language;
     private String country;
+    private Boolean isActive;
     private MovieType movieType;
     private List<GenreResponse> genres;
 }
