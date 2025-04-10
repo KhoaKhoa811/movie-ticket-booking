@@ -10,4 +10,5 @@ public interface MovieService {
     MovieResponse getMovieById(Integer id);
     void removeMovieById(Integer id);
     MovieResponse updateMovieById(Integer id, MovieUpdateRequest movieUpdateRequest);
+    MovieResponse updateMovieImage(Integer movieId, MultipartFile movieImage);
 }

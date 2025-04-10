@@ -62,4 +62,15 @@ public class MovieController {
                 .build();
         return ResponseEntity.ok(movieResponse);
     }
+
+    @PutMapping(value = "/{id}/images", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ApiResponse<MovieResponse>> updateMovieImages(
+            @PathVariable("id") Integer movieId,
+            @RequestPart(value = "image") MultipartFile movieImage) {
+        ApiResponse<MovieResponse> movieResponse = ApiResponse.<MovieResponse>builder()
+                .code(Code.MOVIE_IMAGE_UPDATED.getCode())
+                .data(movieService.updateMovieImage(movieId, movieImage))
+                .build();
+        return ResponseEntity.ok(movieResponse);
+    }
 }

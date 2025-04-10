@@ -41,7 +41,7 @@ public class MovieServiceImpl implements MovieService {
         // map create request to entity
         MovieEntity movieEntity = movieMapper.toEntity(movieCreateRequest);
         // update image
-        UploadImage savedImage = movieImageService.uploadMovieImage(movieCreateRequest, movieImage);
+        UploadImage savedImage = movieImageService.uploadMovieImage(movieCreateRequest.getTitle(), movieImage);
         movieEntity.setImagePath(savedImage.getImagePath());
         movieEntity.setImageId(savedImage.getImageId());
         // adding genres
@@ -73,11 +73,33 @@ public class MovieServiceImpl implements MovieService {
     @Override
     @Transactional
     public MovieResponse updateMovieById(Integer id, MovieUpdateRequest movieUpdateRequest) {
+        // find the movie needed to update
         MovieEntity movieEntity = movieRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(Code.MOVIE_NOT_FOUND));
+        // update new information
         movieMapper.updateMovieByUpdateRequest(movieEntity, movieUpdateRequest);
-        List<GenreEntity> genres = genreRepository.findAllById(movieUpdateRequest.getGenreIds());
-        movieEntity.setGenres(genres);
+        // update
+        if (movieUpdateRequest.getGenreIds() != null) {
+            List<GenreEntity> genres = genreRepository.findAllById(movieUpdateRequest.getGenreIds());
+            movieEntity.setGenres(genres);
+        }
+        MovieEntity savedMovie = movieRepository.save(movieEntity);
+        return movieMapper.toResponse(savedMovie);
+    }
+
+    @Override
+    public MovieResponse updateMovieImage(Integer movieId, MultipartFile movieImage) {
+        // find movie needed to update image
+        MovieEntity movieEntity = movieRepository.findById(movieId)
+                .orElseThrow(() -> new ResourceNotFoundException(Code.MOVIE_NOT_FOUND));
+        // delete old image
+        cloudinaryService.deleteImage(movieEntity.getImageId());
+        // update new image
+        UploadImage updatedImage = movieImageService.uploadMovieImage(movieEntity.getTitle(), movieImage);
+        // update new image information
+        movieEntity.setImageId(updatedImage.getImageId());
+        movieEntity.setImagePath(updatedImage.getImagePath());
+        // save image
         MovieEntity savedMovie = movieRepository.save(movieEntity);
         return movieMapper.toResponse(savedMovie);
     }

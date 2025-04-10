@@ -18,13 +18,15 @@ public class MovieImageServiceImpl implements MovieImageService {
 
 
     @Override
-    public UploadImage uploadMovieImage(MovieCreateRequest movieCreateRequest, MultipartFile movieImage) {
+    public UploadImage uploadMovieImage(String title, MultipartFile movieImage) {
         Map<String, Object> uploadedImage = cloudinaryService.uploadImage(
-                movieImage, CloudinaryFolderName.MOVIE.getCinemaFolder() + "/" + movieCreateRequest.getTitle()
+                movieImage, CloudinaryFolderName.MOVIE.getCinemaFolder() + "/" + title
         );
         return UploadImage.builder()
                 .imageId(uploadedImage.get("public_id").toString())
                 .imagePath(uploadedImage.get("url").toString())
                 .build();
     }
+
+
 }
