@@ -14,10 +14,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.time.LocalDate;
 
 @RestController
 @RequestMapping("api/v1/movies")
@@ -92,14 +95,28 @@ public class MovieController {
         return ResponseEntity.ok(movieResponse);
     }
 
-    @GetMapping("/available")
+    @GetMapping("/showing")
     public ResponseEntity<ApiResponse<PagedResponse<MovieResponse>>> getAvailableMovies(
-            @ModelAttribute PaginationRequest paginationRequest
+            @ModelAttribute PaginationRequest paginationRequest,
+            @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
     ) {
         Pageable pageable = PaginationUtils.createPageable(paginationRequest, paginationProperties);
         ApiResponse<PagedResponse<MovieResponse>> movieResponse = ApiResponse.<PagedResponse<MovieResponse>>builder()
                 .code(Code.MOVIE_GET_ALL.getCode())
-                .data(movieService.getAllAvailableMovie(pageable))
+                .data(movieService.getAllAvailableMovieForDate(date, pageable))
+                .build();
+        return ResponseEntity.ok(movieResponse);
+    }
+
+    @GetMapping("/upcoming")
+    public ResponseEntity<ApiResponse<PagedResponse<MovieResponse>>> getUpcomingMovies(
+            @ModelAttribute PaginationRequest paginationRequest,
+            @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
+    ) {
+        Pageable pageable = PaginationUtils.createPageable(paginationRequest, paginationProperties);
+        ApiResponse<PagedResponse<MovieResponse>> movieResponse = ApiResponse.<PagedResponse<MovieResponse>>builder()
+                .code(Code.MOVIE_GET_ALL.getCode())
+                .data(movieService.getAllUpcomingMovieForDate(date, pageable))
                 .build();
         return ResponseEntity.ok(movieResponse);
     }

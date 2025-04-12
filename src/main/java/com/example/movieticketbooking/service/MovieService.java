@@ -7,6 +7,7 @@ import com.example.movieticketbooking.dto.movie.response.MovieResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface MovieService {
@@ -16,5 +17,6 @@ public interface MovieService {
     MovieResponse updateMovieById(Integer id, MovieUpdateRequest movieUpdateRequest);
     MovieResponse updateMovieImage(Integer movieId, MultipartFile movieImage);
     PagedResponse<MovieResponse> getAllMovie(Pageable pageable);
-    PagedResponse<MovieResponse> getAllAvailableMovie(Pageable pageable);
+    PagedResponse<MovieResponse> getAllAvailableMovieForDate(LocalDate date, Pageable pageable);
+    PagedResponse<MovieResponse> getAllUpcomingMovieForDate(LocalDate date, Pageable pageable);
 }

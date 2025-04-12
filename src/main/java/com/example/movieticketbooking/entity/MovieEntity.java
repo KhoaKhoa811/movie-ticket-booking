@@ -31,6 +31,8 @@ public class MovieEntity {
     private LocalDate releaseDate;
     private String language;
     private String country;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private Boolean isActive;
     @Column(name = "style")
     @Enumerated(EnumType.STRING)

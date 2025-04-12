@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -32,6 +33,8 @@ public class MovieCreateRequest {
     private String releaseDate;
     private String language;
     private String country;
+    private String startDate;
+    private String endDate;
     @NotNull(message = "MOVIE_ACTIVE_INVALID")
     private Boolean isActive;
     @NotNull(message = "MOVIE_TYPE_INVALID")

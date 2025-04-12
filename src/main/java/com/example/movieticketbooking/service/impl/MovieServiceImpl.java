@@ -129,11 +129,27 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public PagedResponse<MovieResponse> getAllAvailableMovie(Pageable pageable) {
-        // find all by page
-        LocalDate releaseDate = LocalDate.now();
-        Boolean isActive = true;
-        Page<MovieEntity> moviePage = movieRepository.findActiveMoviesToday(releaseDate, isActive, pageable);
+    public PagedResponse<MovieResponse> getAllAvailableMovieForDate(LocalDate date, Pageable pageable) {
+        Page<MovieEntity> moviePage = movieRepository.findActiveAvailableMoviesByDate(date, true, pageable);
+        // get movies list
+        List<MovieResponse> content = moviePage.getContent()
+                .stream()
+                .map(movieMapper::toResponse)
+                .toList();
+        // mapping to paged response
+        return PagedResponse.<MovieResponse>builder()
+                .content(content)
+                .page(moviePage.getNumber())
+                .size(moviePage.getSize())
+                .totalElements(moviePage.getTotalElements())
+                .totalPages(moviePage.getTotalPages())
+                .last(moviePage.isLast())
+                .build();
+    }
+
+    @Override
+    public PagedResponse<MovieResponse> getAllUpcomingMovieForDate(LocalDate date, Pageable pageable) {
+        Page<MovieEntity> moviePage = movieRepository.findActiveUpcomingMoviesByDate(date, true, pageable);
         // get movies list
         List<MovieResponse> content = moviePage.getContent()
                 .stream()

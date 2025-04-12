@@ -22,6 +22,8 @@ public class MovieUpdateRequest {
     private String releaseDate;
     private String language;
     private String country;
+    private String startDate;
+    private String endDate;
     private Boolean isActive;
     @Enumerated(EnumType.STRING)
     private MovieType movieType;
