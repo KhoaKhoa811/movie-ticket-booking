@@ -64,6 +64,20 @@ public enum Code {
     SEAT_GET_ALL(600, "seat retrieved"),
     SEAT_UPDATED(601, "seat updated successfully"),
     SEAT_NOT_FOUND(602, "seat does not exist"),
+    // movie
+    MOVIE_CREATED(700, "Movie created"),
+    MOVIE_GET_ALL(701, "Movie retrieved"),
+    MOVIE_NOT_FOUND(702, "Movie not found"),
+    MOVIE_DELETED(703, "Movie deleted successfully"),
+    MOVIE_UPDATED(704, "Movie updated successfully"),
+    MOVIE_TITLE_INVALID(705, "Movie title invalid"),
+    MOVIE_DESCRIPTION_INVALID(706, "Movie description invalid"),
+    MOVIE_DURATION_INVALID(707, "Movie duration invalid"),
+    MOVIE_RELEASE_DATE_INVALID(708, "Movie release date invalid"),
+    MOVIE_TYPE_INVALID(709, "Movie type invalid"),
+    MOVIE_GENRE_INVALID(710, "Movie genre invalid"),
+    MOVIE_ALREADY_EXIST(711, "Movie already exist"),
+    MOVIE_IMAGE_UPDATED(712, "Movie image updated successfully"),
     ;
 
 

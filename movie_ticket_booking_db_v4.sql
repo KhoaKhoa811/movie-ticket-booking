@@ -38,7 +38,8 @@ CREATE TABLE movie (
 	language VARCHAR(100),
 	release_date DATE,
 	country VARCHAR(100),
-	style VARCHAR(100)
+	style VARCHAR(100),
+	image_id VARCHAR(255)
 );
 
 CREATE TABLE genre (
@@ -66,14 +67,16 @@ CREATE TABLE cinema (
 CREATE TABLE cinema_hall (
 	id SERIAL PRIMARY KEY,
 	name VARCHAR(255) NOT NULL,
-	total_seat INT NOT NULL
+	total_seat INT NOT NULL,
+	is_active BOOLEAN NOT NULL
 );
 
 CREATE TABLE cinema_hall_seat (
 	id SERIAL PRIMARY KEY,
 	seat_row CHAR(1) NOT NULL,
 	seat_column INT NOT NULL,
-	type VARCHAR(255) NOT NULL
+	type VARCHAR(255) NOT NULL,
+	is_active BOOLEAN DEFAULT TRUE
 );
 
 CREATE TABLE shows (
@@ -84,22 +87,11 @@ CREATE TABLE shows (
 	type VARCHAR(255)
 );
 
-CREATE TABLE show_seat (
-	id SERIAL PRIMARY KEY,
-	status VARCHAR(255) NOT NULL
-);
-
 CREATE TABLE booking (
 	id SERIAL PRIMARY KEY,
 	number_of_seats INT NOT NULL,
 	create_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	status VARCHAR(255) NOT NULL
-);
-
-CREATE TABLE booking_detail (
-	id SERIAL PRIMARY KEY,
-	booking_id INT NOT NULL,
-	show_seat_id INT NOT NULL
 );
 
 CREATE TABLE payment (
@@ -118,6 +110,27 @@ CREATE TABLE cinema_images (
 CREATE TABLE city(
 	id SERIAL PRIMARY KEY,
 	name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE reserved_seat (
+	id INT PRIMARY KEY
+);
+
+CREATE TABLE seat_template (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    row_count INTEGER NOT NULL,
+    column_count INTEGER NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE seat_template_detail (
+    id SERIAL PRIMARY KEY,
+    seat_row CHAR(1) NOT NULL,
+    seat_column INTEGER NOT NULL,
+    type VARCHAR(50) DEFAULT 'NORMAL',
+    is_active BOOLEAN DEFAULT TRUE
 );
 
 
@@ -167,29 +180,10 @@ ALTER TABLE shows
 ADD CONSTRAINT fk_shows_ch FOREIGN KEY (cinema_hall_id)
 REFERENCES cinema_hall(id);
 
-
-ALTER TABLE show_seat ADD COLUMN show_id INT NOT NULL;
-ALTER TABLE show_seat
-ADD CONSTRAINT fk_ss_shows FOREIGN KEY (show_id)
-REFERENCES shows(id);
-
-ALTER TABLE show_seat ADD COLUMN cinema_hall_seat_id INT NOT NULL;
-ALTER TABLE show_seat
-ADD CONSTRAINT fk_ss_chs FOREIGN KEY (cinema_hall_seat_id)
-REFERENCES cinema_hall_seat(id);
-
 ALTER TABLE booking ADD COLUMN account_id INT NOT NULL;
 ALTER TABLE booking
 ADD CONSTRAINT fk_booking_account FOREIGN KEY (account_id)
 REFERENCES account(id);
-
-ALTER TABLE booking_detail
-ADD CONSTRAINT fk_bd_booking FOREIGN KEY (booking_id)
-REFERENCES booking(id);
-
-ALTER TABLE booking_detail
-ADD CONSTRAINT fk_bd_ss FOREIGN KEY (show_seat_id)
-REFERENCES show_seat(id);
 
 ALTER TABLE payment ADD COLUMN booking_id INT NOT NULL;
 ALTER TABLE payment
@@ -205,5 +199,30 @@ ALTER TABLE cinema ADD COLUMN city_id INT NOT NULL;
 ALTER TABLE cinema
 ADD CONSTRAINT fk_cinema_city FOREIGN KEY(city_id)
 REFERENCES city(id);
+
+ALTER TABLE booking ADD COLUMN show_id INT NOT NULL;
+ALTER TABLE booking
+ADD CONSTRAINT fk_booking_show FOREIGN KEY (show_id)
+REFERENCES shows(id);
+
+ALTER TABLE reserved_seat ADD COLUMN booking_id INT NOT NULL;
+ALTER TABLE reserved_seat
+ADD CONSTRAINT fk_rs_booking FOREIGN KEY (booking_id)
+REFERENCES booking(id);
+
+ALTER TABLE reserved_seat ADD COLUMN seat_id INT NOT NULL;
+ALTER TABLE reserved_seat
+ADD CONSTRAINT fk_rs_seat FOREIGN KEY (seat_id)
+REFERENCES cinema_hall_seat(id);
+
+ALTER TABLE seat_template_detail ADD COLUMN seat_template_id INT NOT NULL;
+ALTER TABLE seat_template_detail
+ADD CONSTRAINT fk_std_st FOREIGN KEY (seat_template_id)
+REFERENCES seat_template(id);
+
+ALTER TABLE cinema_hall ADD COLUMN seat_template_id INT NOT NULL;
+ALTER TABLE cinema_hall
+ADD CONSTRAINT fk_ch_st FOREIGN KEY (seat_template_id)
+REFERENCES seat_template(id);
 
 COMMIT;

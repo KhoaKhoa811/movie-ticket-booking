@@ -23,6 +23,7 @@ public class MovieEntity {
     @Column(nullable = false)
     private String title;
     private String imagePath;
+    private String imageId;
     private String description;
     private String director;
     @Column(name = "duration_in_mins")
@@ -30,8 +31,12 @@ public class MovieEntity {
     private LocalDate releaseDate;
     private String language;
     private String country;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private Boolean isActive;
+    @Column(name = "style")
     @Enumerated(EnumType.STRING)
-    private MovieType style;
+    private MovieType movieType;
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.REFRESH})
     @JoinTable(
             name = "movie_genre",

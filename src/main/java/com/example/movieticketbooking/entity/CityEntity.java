@@ -20,6 +20,6 @@ public class CityEntity {
     private Integer id;
     @Column(unique = true, nullable = false)
     private String name;
-    @OneToMany(mappedBy = "city", cascade = {CascadeType.DETACH, CascadeType.REFRESH})
+    @OneToMany(mappedBy = "city", cascade = {CascadeType.DETACH, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.PERSIST})
     private List<CinemaEntity> cinemas;
 }

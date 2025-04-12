@@ -7,6 +7,7 @@ import lombok.Getter;
 @Getter
 public enum CloudinaryFolderName {
     CINEMA("cinema"),
+    MOVIE("movie"),
     ;
 
     private final String cinemaFolder;
