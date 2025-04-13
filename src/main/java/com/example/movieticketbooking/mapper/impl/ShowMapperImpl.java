@@ -1,6 +1,7 @@
 package com.example.movieticketbooking.mapper.impl;
 
 import com.example.movieticketbooking.dto.show.request.ShowCreateRequest;
+import com.example.movieticketbooking.dto.show.response.ShowResponse;
 import com.example.movieticketbooking.entity.CinemaHallEntity;
 import com.example.movieticketbooking.entity.MovieEntity;
 import com.example.movieticketbooking.entity.ShowEntity;
@@ -24,6 +25,29 @@ public class ShowMapperImpl implements ShowMapper {
                         .movie(movie)
                         .cinemaHall(hall)
                         .build())
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public ShowResponse toShowResponse(ShowEntity showEntity, MovieEntity movie, CinemaHallEntity cinemaHall) {
+        return ShowResponse.builder()
+                .id(showEntity.getId())
+                .showDate(showEntity.getShowDate())
+                .startTime(showEntity.getStartTime())
+                .endTime(showEntity.getEndTime())
+                .type(showEntity.getType())
+                .isActive(showEntity.getIsActive())
+                .movieId(movie.getId())
+                .movieTitle(movie.getTitle())
+                .cinemaHallId(cinemaHall.getId())
+                .cinemaHallName(cinemaHall.getName())
+                .build();
+    }
+
+    @Override
+    public List<ShowResponse> toShowResponseList(List<ShowEntity> showEntities, MovieEntity movie, CinemaHallEntity cinemaHall) {
+        return showEntities.stream()
+                .map(entity -> toShowResponse(entity, movie, cinemaHall))
                 .collect(Collectors.toList());
     }
 }

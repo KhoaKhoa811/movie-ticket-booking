@@ -2,10 +2,7 @@ package com.example.movieticketbooking.entity;
 
 import com.example.movieticketbooking.enums.ShowType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -17,6 +14,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ShowEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,6 +28,7 @@ public class ShowEntity {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private ShowType type;
+    private Boolean isActive;
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "movie_id")
     private MovieEntity movie;
