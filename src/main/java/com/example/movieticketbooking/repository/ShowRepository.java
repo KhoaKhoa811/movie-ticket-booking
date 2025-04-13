@@ -11,7 +11,11 @@ import java.util.List;
 public interface ShowRepository extends JpaRepository<ShowEntity, Integer> {
     List<ShowEntity> findByCinemaHallIdAndShowDate(Integer cinemaHallId, LocalDate showDate);
     boolean existsByMovieId(Integer movieId);
-    @Query("SELECT s FROM ShowEntity s WHERE s.movie.id = :movieId AND s.cinemaHall.id IN :cinemaHallIds")
+    @Query("SELECT s " +
+            "FROM ShowEntity s " +
+            "JOIN s.cinemaHall ch " +
+            "WHERE ch.cinema.id = :cinemaId " +
+            "AND s.movie.id = :movieId")
     List<ShowEntity> findByMovieIdAndCinemaHallIds(@Param("movieId") Integer movieId,
-                                                   @Param("cinemaHallIds") List<Integer> cinemaHallIds);
+                                                   @Param("cinemaId") Integer cinemaId);
 }

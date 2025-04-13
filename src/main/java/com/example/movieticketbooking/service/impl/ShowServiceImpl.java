@@ -71,15 +71,8 @@ public class ShowServiceImpl implements ShowService {
         if (!cinemaRepository.existsById(movieAndCinemaRequest.getCinemaId())) {
             throw new ResourceNotFoundException(Code.CINEMA_NOT_FOUND);
         }
-        // get list of cinema hall belong to cinema
-        List<Integer> cinemaHallIds = cinemaHallRepository.findByCinemaId(movieAndCinemaRequest.getCinemaId())
-                .stream()
-                .map(CinemaHallEntity::getId)
-                .toList();
-        // check if cinema hall list is empty
-        if (cinemaHallIds.isEmpty()) return Collections.emptyList();
         // get show by movie id and cinema hall id
-        List<ShowEntity> shows = showRepository.findByMovieIdAndCinemaHallIds(movieAndCinemaRequest.getMovieId(), cinemaHallIds);
+        List<ShowEntity> shows = showRepository.findByMovieIdAndCinemaHallIds(movieAndCinemaRequest.getMovieId(), movieAndCinemaRequest.getCinemaId());
         // map to response
         return showMapper.toShowBasicResponseList(shows);
     }
