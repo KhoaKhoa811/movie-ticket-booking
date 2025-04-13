@@ -1,6 +1,8 @@
 package com.example.movieticketbooking.service.impl;
 
+import com.example.movieticketbooking.dto.show.request.MovieAndCinemaRequest;
 import com.example.movieticketbooking.dto.show.request.ShowCreateRequest;
+import com.example.movieticketbooking.dto.show.response.ShowBasicResponse;
 import com.example.movieticketbooking.dto.show.response.ShowResponse;
 import com.example.movieticketbooking.entity.CinemaHallEntity;
 import com.example.movieticketbooking.entity.MovieEntity;
@@ -9,6 +11,7 @@ import com.example.movieticketbooking.enums.Code;
 import com.example.movieticketbooking.exception.ResourceNotFoundException;
 import com.example.movieticketbooking.mapper.ShowMapper;
 import com.example.movieticketbooking.repository.CinemaHallRepository;
+import com.example.movieticketbooking.repository.CinemaRepository;
 import com.example.movieticketbooking.repository.MovieRepository;
 import com.example.movieticketbooking.repository.ShowRepository;
 import com.example.movieticketbooking.service.ShowService;
@@ -18,8 +21,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalTime;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +32,7 @@ public class ShowServiceImpl implements ShowService {
     private final MovieRepository movieRepository;
     private final CinemaHallRepository cinemaHallRepository;
     private final ShowMapper showMapper;
+    private final CinemaRepository cinemaRepository;
 
     @Override
     @Transactional
@@ -56,5 +61,26 @@ public class ShowServiceImpl implements ShowService {
         // save shows
         List<ShowEntity> savedShows = showRepository.saveAll(showEntities);
         return showMapper.toShowResponseList(savedShows);
+    }
+
+    @Override
+    public List<ShowBasicResponse> getShowsByMovieIdAndCinemaId(MovieAndCinemaRequest movieAndCinemaRequest) {
+        if (!movieRepository.existsById(movieAndCinemaRequest.getMovieId())) {
+            throw new ResourceNotFoundException(Code.MOVIE_NOT_FOUND);
+        }
+        if (!cinemaRepository.existsById(movieAndCinemaRequest.getCinemaId())) {
+            throw new ResourceNotFoundException(Code.CINEMA_NOT_FOUND);
+        }
+        // get list of cinema hall belong to cinema
+        List<Integer> cinemaHallIds = cinemaHallRepository.findByCinemaId(movieAndCinemaRequest.getCinemaId())
+                .stream()
+                .map(CinemaHallEntity::getId)
+                .toList();
+        // check if cinema hall list is empty
+        if (cinemaHallIds.isEmpty()) return Collections.emptyList();
+        // get show by movie id and cinema hall id
+        List<ShowEntity> shows = showRepository.findByMovieIdAndCinemaHallIds(movieAndCinemaRequest.getMovieId(), cinemaHallIds);
+        // map to response
+        return showMapper.toShowBasicResponseList(shows);
     }
 }

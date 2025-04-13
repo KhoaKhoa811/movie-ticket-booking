@@ -1,18 +1,15 @@
 package com.example.movieticketbooking.controller;
 
-import com.cloudinary.Api;
 import com.example.movieticketbooking.dto.api.ApiResponse;
+import com.example.movieticketbooking.dto.show.request.MovieAndCinemaRequest;
 import com.example.movieticketbooking.dto.show.request.ShowCreateRequest;
+import com.example.movieticketbooking.dto.show.response.ShowBasicResponse;
 import com.example.movieticketbooking.dto.show.response.ShowResponse;
 import com.example.movieticketbooking.enums.Code;
 import com.example.movieticketbooking.service.ShowService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,6 +24,17 @@ public class ShowController {
         ApiResponse<List<ShowResponse>> showResponse = ApiResponse.<List<ShowResponse>>builder()
                 .code(Code.SHOWS_CREATED.getCode())
                 .data(showService.createShows(request))
+                .build();
+        return ResponseEntity.ok(showResponse);
+    }
+
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<ShowBasicResponse>>> getShowsByMovieId(
+            @ModelAttribute MovieAndCinemaRequest movieAndCinemaRequest
+    ) {
+        ApiResponse<List<ShowBasicResponse>> showResponse = ApiResponse.<List<ShowBasicResponse>>builder()
+                .code(Code.SHOWS_GET.getCode())
+                .data(showService.getShowsByMovieIdAndCinemaId(movieAndCinemaRequest))
                 .build();
         return ResponseEntity.ok(showResponse);
     }
