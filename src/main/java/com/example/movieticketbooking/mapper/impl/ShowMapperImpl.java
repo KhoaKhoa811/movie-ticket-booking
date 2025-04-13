@@ -29,7 +29,7 @@ public class ShowMapperImpl implements ShowMapper {
     }
 
     @Override
-    public ShowResponse toShowResponse(ShowEntity showEntity, MovieEntity movie, CinemaHallEntity cinemaHall) {
+    public ShowResponse toShowResponse(ShowEntity showEntity) {
         return ShowResponse.builder()
                 .id(showEntity.getId())
                 .showDate(showEntity.getShowDate())
@@ -37,17 +37,17 @@ public class ShowMapperImpl implements ShowMapper {
                 .endTime(showEntity.getEndTime())
                 .type(showEntity.getType())
                 .isActive(showEntity.getIsActive())
-                .movieId(movie.getId())
-                .movieTitle(movie.getTitle())
-                .cinemaHallId(cinemaHall.getId())
-                .cinemaHallName(cinemaHall.getName())
+                .movieId(showEntity.getMovie().getId())
+                .movieTitle(showEntity.getMovie().getTitle())
+                .cinemaHallId(showEntity.getCinemaHall().getId())
+                .cinemaHallName(showEntity.getCinemaHall().getName())
                 .build();
     }
 
     @Override
-    public List<ShowResponse> toShowResponseList(List<ShowEntity> showEntities, MovieEntity movie, CinemaHallEntity cinemaHall) {
+    public List<ShowResponse> toShowResponseList(List<ShowEntity> showEntities) {
         return showEntities.stream()
-                .map(entity -> toShowResponse(entity, movie, cinemaHall))
+                .map(this::toShowResponse)
                 .collect(Collectors.toList());
     }
 }
