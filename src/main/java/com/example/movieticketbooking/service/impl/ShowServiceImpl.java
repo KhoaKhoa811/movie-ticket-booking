@@ -21,6 +21,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,6 +34,7 @@ public class ShowServiceImpl implements ShowService {
     private final CinemaHallRepository cinemaHallRepository;
     private final ShowMapper showMapper;
     private final CinemaRepository cinemaRepository;
+    private final ShowService showService;
 
     @Override
     @Transactional
@@ -72,8 +74,31 @@ public class ShowServiceImpl implements ShowService {
             throw new ResourceNotFoundException(Code.CINEMA_NOT_FOUND);
         }
         // get show by movie id and cinema hall id
-        List<ShowEntity> shows = showRepository.findByMovieIdAndCinemaHallIds(movieAndCinemaRequest.getMovieId(), movieAndCinemaRequest.getCinemaId());
+        List<ShowEntity> shows = showRepository.findByMovieIdAndCinemaHallIds(
+                movieAndCinemaRequest.getMovieId(),
+                movieAndCinemaRequest.getCinemaId()
+        );
         // map to response
         return showMapper.toShowBasicResponseList(shows);
     }
+
+    @Override
+    public List<ShowBasicResponse> getShowsByMovieIdAndCinemaIdAndShowDate(MovieAndCinemaRequest movieAndCinemaRequest, LocalDate showDate) {
+        if (!movieRepository.existsById(movieAndCinemaRequest.getMovieId())) {
+            throw new ResourceNotFoundException(Code.MOVIE_NOT_FOUND);
+        }
+        if (!cinemaRepository.existsById(movieAndCinemaRequest.getCinemaId())) {
+            throw new ResourceNotFoundException(Code.CINEMA_NOT_FOUND);
+        }
+        // get show by movie id and cinema hall id and show date
+        List<ShowEntity> shows = showRepository.findByMovieIdAndCinemaHallIdsAndShowDate(
+                movieAndCinemaRequest.getMovieId(),
+                movieAndCinemaRequest.getCinemaId(),
+                showDate
+        );
+        // map to response
+        return showMapper.toShowBasicResponseList(shows);
+    }
+
+
 }
