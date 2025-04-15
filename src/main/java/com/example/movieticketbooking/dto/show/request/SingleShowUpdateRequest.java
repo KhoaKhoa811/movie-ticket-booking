@@ -15,13 +15,11 @@ import java.time.LocalTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ShowUpdateRequest {
+public class SingleShowUpdateRequest {
     private Integer id;
     private LocalDate showDate;
     @Enumerated(EnumType.STRING)
     private ShowType type;
     private Boolean isActive;
-    private Integer movieId;
-    private Integer cinemaHallId;
     private LocalTime startTime;
 }

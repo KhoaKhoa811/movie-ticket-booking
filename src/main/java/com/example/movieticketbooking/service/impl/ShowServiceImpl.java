@@ -2,6 +2,7 @@ package com.example.movieticketbooking.service.impl;
 
 import com.example.movieticketbooking.dto.show.request.MovieAndCinemaRequest;
 import com.example.movieticketbooking.dto.show.request.ShowCreateRequest;
+import com.example.movieticketbooking.dto.show.request.SingleShowUpdateRequest;
 import com.example.movieticketbooking.dto.show.response.ShowBasicResponse;
 import com.example.movieticketbooking.dto.show.response.ShowResponse;
 import com.example.movieticketbooking.entity.CinemaHallEntity;
@@ -22,8 +23,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -106,6 +110,37 @@ public class ShowServiceImpl implements ShowService {
             throw new ResourceNotFoundException(Code.SHOWS_NOT_FOUND);
         }
         showRepository.deleteById(id);
+    }
+
+    @Override
+    public List<ShowResponse> updateShows(List<SingleShowUpdateRequest> request) {
+        if (request == null || request.isEmpty()) {
+            return Collections.emptyList();
+        }
+        // get all id from request first
+        List<Integer> ids = request.stream()
+                .map(SingleShowUpdateRequest::getId)
+                .collect(Collectors.toList());
+        // get list of shows by ids
+        List<ShowEntity> existingShows = showRepository.findAllById(ids);
+        // adding id and show into map
+        Map<Integer, ShowEntity> showMap = existingShows.stream()
+                .collect(Collectors.toMap(ShowEntity::getId, Function.identity()));
+        // List of entity that need to be updated
+        List<ShowEntity> updatedEntities = new ArrayList<>();
+        // mapping request items to entity
+        for (SingleShowUpdateRequest updateRequest : request) {
+            ShowEntity entity = showMap.get(updateRequest.getId());
+            if (entity == null) {
+                throw new ResourceNotFoundException(Code.SHOWS_NOT_FOUND);
+            }
+            // mapping
+            showMapper.toShowEntity(entity, updateRequest); // update dữ liệu
+            updatedEntities.add(entity);
+        }
+        // update show
+        List<ShowEntity> savedShows = showRepository.saveAll(updatedEntities);
+        return showMapper.toShowResponseList(savedShows);
     }
 
 

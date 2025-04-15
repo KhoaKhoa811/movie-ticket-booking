@@ -1,6 +1,7 @@
 package com.example.movieticketbooking.mapper.impl;
 
 import com.example.movieticketbooking.dto.show.request.ShowCreateRequest;
+import com.example.movieticketbooking.dto.show.request.SingleShowUpdateRequest;
 import com.example.movieticketbooking.dto.show.response.ShowBasicResponse;
 import com.example.movieticketbooking.dto.show.response.ShowResponse;
 import com.example.movieticketbooking.entity.CinemaHallEntity;
@@ -69,5 +70,21 @@ public class ShowMapperImpl implements ShowMapper {
         return showEntities.stream()
                 .map(this::toShowBasicResponse)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void toShowEntity(ShowEntity showEntity, SingleShowUpdateRequest singleShowUpdateRequest) {
+        if (singleShowUpdateRequest.getShowDate() != null) {
+            showEntity.setShowDate(singleShowUpdateRequest.getShowDate());
+        }
+        if (singleShowUpdateRequest.getStartTime() != null) {
+            showEntity.setStartTime(singleShowUpdateRequest.getStartTime());
+        }
+        if (singleShowUpdateRequest.getType() != null) {
+            showEntity.setType(singleShowUpdateRequest.getType());
+        }
+        if (singleShowUpdateRequest.getIsActive() != null) {
+            showEntity.setIsActive(singleShowUpdateRequest.getIsActive());
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.example.movieticketbooking.mapper;
 
 import com.example.movieticketbooking.dto.show.request.ShowCreateRequest;
+import com.example.movieticketbooking.dto.show.request.SingleShowUpdateRequest;
 import com.example.movieticketbooking.dto.show.response.ShowBasicResponse;
 import com.example.movieticketbooking.dto.show.response.ShowResponse;
 import com.example.movieticketbooking.entity.CinemaHallEntity;
@@ -18,5 +19,7 @@ public interface ShowMapper {
     // convert from show entity to show basic response
     ShowBasicResponse toShowBasicResponse(ShowEntity showEntity);
     List<ShowBasicResponse> toShowBasicResponseList(List<ShowEntity> showEntities);
+    // convert from single show update request to show entity
+    void toShowEntity(ShowEntity showEntity, SingleShowUpdateRequest singleShowUpdateRequest);
 
 }

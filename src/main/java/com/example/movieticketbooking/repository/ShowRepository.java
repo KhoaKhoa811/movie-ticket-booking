@@ -15,7 +15,8 @@ public interface ShowRepository extends JpaRepository<ShowEntity, Integer> {
             "FROM ShowEntity s " +
             "JOIN s.cinemaHall ch " +
             "WHERE ch.cinema.id = :cinemaId " +
-            "AND s.movie.id = :movieId")
+            "AND s.movie.id = :movieId " +
+            "ORDER BY s.startTime ASC")
     List<ShowEntity> findByMovieIdAndCinemaHallIds(@Param("movieId") Integer movieId,
                                                    @Param("cinemaId") Integer cinemaId);
     @Query("SELECT s " +
@@ -23,7 +24,8 @@ public interface ShowRepository extends JpaRepository<ShowEntity, Integer> {
             "JOIN s.cinemaHall ch " +
             "WHERE ch.cinema.id = :cinemaId " +
             "AND s.movie.id = :movieId " +
-            "AND s.showDate = :showDate")
+            "AND s.showDate = :showDate " +
+            "ORDER BY s.startTime ASC")
     List<ShowEntity> findByMovieIdAndCinemaHallIdsAndShowDate(@Param("movieId") Integer movieId,
                                                               @Param("cinemaId") Integer cinemaId,
                                                               @Param("showDate") LocalDate showDate);

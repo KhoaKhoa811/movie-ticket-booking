@@ -3,10 +3,10 @@ package com.example.movieticketbooking.controller;
 import com.example.movieticketbooking.dto.api.ApiResponse;
 import com.example.movieticketbooking.dto.show.request.MovieAndCinemaRequest;
 import com.example.movieticketbooking.dto.show.request.ShowCreateRequest;
+import com.example.movieticketbooking.dto.show.request.SingleShowUpdateRequest;
 import com.example.movieticketbooking.dto.show.response.ShowBasicResponse;
 import com.example.movieticketbooking.dto.show.response.ShowResponse;
 import com.example.movieticketbooking.enums.Code;
-import com.example.movieticketbooking.repository.ShowRepository;
 import com.example.movieticketbooking.service.ShowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -64,5 +64,12 @@ public class ShowController {
         return ResponseEntity.ok(showResponse);
     }
 
-
+    @PatchMapping
+    public ResponseEntity<ApiResponse<List<ShowResponse>>> updateShow(@RequestBody List<SingleShowUpdateRequest> request) {
+        ApiResponse<List<ShowResponse>> showResponse = ApiResponse.<List<ShowResponse>>builder()
+                .code(Code.SHOWS_UPDATED.getCode())
+                .data(showService.updateShows(request))
+                .build();
+        return ResponseEntity.ok(showResponse);
+    }
 }
