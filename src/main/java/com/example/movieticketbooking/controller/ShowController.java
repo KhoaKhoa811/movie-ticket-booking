@@ -1,12 +1,12 @@
 package com.example.movieticketbooking.controller;
 
-import com.cloudinary.Api;
 import com.example.movieticketbooking.dto.api.ApiResponse;
 import com.example.movieticketbooking.dto.show.request.MovieAndCinemaRequest;
 import com.example.movieticketbooking.dto.show.request.ShowCreateRequest;
 import com.example.movieticketbooking.dto.show.response.ShowBasicResponse;
 import com.example.movieticketbooking.dto.show.response.ShowResponse;
 import com.example.movieticketbooking.enums.Code;
+import com.example.movieticketbooking.repository.ShowRepository;
 import com.example.movieticketbooking.service.ShowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -50,6 +50,16 @@ public class ShowController {
         ApiResponse<List<ShowBasicResponse>> showResponse = ApiResponse.<List<ShowBasicResponse>>builder()
                 .code(Code.SHOWS_GET.getCode())
                 .data(showService.getShowsByMovieIdAndCinemaIdAndShowDate(movieAndCinemaRequest, showDate))
+                .build();
+        return ResponseEntity.ok(showResponse);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<?>> deleteShow(@PathVariable Integer id) {
+        showService.removeShowById(id);
+        ApiResponse<?> showResponse = ApiResponse.builder()
+                .code(Code.SHOWS_DELETED.getCode())
+                .message(Code.SHOWS_DELETED.getMessage())
                 .build();
         return ResponseEntity.ok(showResponse);
     }

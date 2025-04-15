@@ -27,4 +27,5 @@ public interface ShowRepository extends JpaRepository<ShowEntity, Integer> {
     List<ShowEntity> findByMovieIdAndCinemaHallIdsAndShowDate(@Param("movieId") Integer movieId,
                                                               @Param("cinemaId") Integer cinemaId,
                                                               @Param("showDate") LocalDate showDate);
+
 }

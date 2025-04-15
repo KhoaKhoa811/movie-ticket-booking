@@ -12,4 +12,5 @@ public interface ShowService {
     List<ShowResponse> createShows(ShowCreateRequest request);
     List<ShowBasicResponse> getShowsByMovieIdAndCinemaId(MovieAndCinemaRequest movieAndCinemaRequest);
     List<ShowBasicResponse> getShowsByMovieIdAndCinemaIdAndShowDate(MovieAndCinemaRequest movieAndCinemaRequest, LocalDate showDate);
+    void removeShowById(Integer id);
 }

@@ -100,5 +100,13 @@ public class ShowServiceImpl implements ShowService {
         return showMapper.toShowBasicResponseList(shows);
     }
 
+    @Override
+    public void removeShowById(Integer id) {
+        if (!showRepository.existsById(id)) {
+            throw new ResourceNotFoundException(Code.SHOWS_NOT_FOUND);
+        }
+        showRepository.deleteById(id);
+    }
+
 
 }
