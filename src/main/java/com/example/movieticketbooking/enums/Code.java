@@ -78,6 +78,16 @@ public enum Code {
     MOVIE_GENRE_INVALID(710, "Movie genre invalid"),
     MOVIE_ALREADY_EXIST(711, "Movie already exist"),
     MOVIE_IMAGE_UPDATED(712, "Movie image updated successfully"),
+    // shows
+    SHOWS_CREATED(800, "Shows created" ),
+    SHOWS_DELETED(801, "Shows deleted" ),
+    SHOWS_NOT_FOUND(802, "Shows not found" ),
+    SHOWS_GET(803, "Shows retrieved" ),
+    SHOWS_GET_ALL(804, "Shows retrieved" ),
+    SHOWS_UPDATED(805, "Shows updated successfully"),
+    SHOWS_ALREADY_EXIST(806, "Shows already exist" ),
+    SHOWS_CONFLICT_WITH_EXISTING_SHOWS(807, "Shows conflict with existing shows"),
+    SHOWS_CONFLICT_WITHIN_REQUEST(808, "Shows conflict within request"),
     ;
 
 
