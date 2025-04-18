@@ -35,7 +35,10 @@ public class CustomUserDetailsService implements UserDetailsService {
         // a new list GrantAuthority
         List<GrantedAuthority> authorities = new ArrayList<>();
         for (RoleEntity role : accountEntity.getRoles()) {
+            // get role and attach a prefix ROLE_
             authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName())); // a new SimpleGranteAuthority
+            // get permission based on role
+            role.getPermissions().forEach(permission -> authorities.add(new SimpleGrantedAuthority(permission.getName())));
         }
         return authorities;
     }
