@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
+import java.util.Base64;
 import java.util.Date;
 import java.util.stream.Collectors;
 
@@ -39,7 +40,8 @@ public class JwtUtils {
         // create jws object
         JWSObject jwsObject = new JWSObject(header, payload);
         // sign jws object
-        jwsObject.sign(new MACSigner(SIGNER_KEY.getBytes()));
+        byte[] decodedKey = Base64.getDecoder().decode(SIGNER_KEY);
+        jwsObject.sign(new MACSigner(decodedKey));
         // return String jwt
         return jwsObject.serialize();
     }
