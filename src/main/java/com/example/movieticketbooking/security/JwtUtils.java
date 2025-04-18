@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 public class JwtUtils {
     @Value("${jwt.signed-key}")
-    private static String SIGNER_KEY;
+    private String SIGNER_KEY;
 
     public String generateToken(Authentication authentication) throws JOSEException {
         // get user information
