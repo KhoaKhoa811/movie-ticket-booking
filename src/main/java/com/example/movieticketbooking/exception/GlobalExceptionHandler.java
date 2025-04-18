@@ -2,6 +2,7 @@ package com.example.movieticketbooking.exception;
 
 import com.example.movieticketbooking.dto.api.ApiResponse;
 import com.example.movieticketbooking.enums.Code;
+import com.nimbusds.jose.JOSEException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
@@ -15,14 +16,14 @@ import java.util.Objects;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-//    @ExceptionHandler(value = Exception.class)
-//    public ResponseEntity<ApiResponse<?>> handlingException(Exception exception) {
-//        ApiResponse<?> exceptionResponse = ApiResponse.builder()
-//                .code(Code.UNCATEGORIZED_EXCEPTION.getCode())
-//                .message(Code.UNCATEGORIZED_EXCEPTION.getMessage())
-//                .build();
-//        return ResponseEntity.badRequest().body(exceptionResponse);
-//    }
+    @ExceptionHandler(value = Exception.class)
+    public ResponseEntity<ApiResponse<?>> handlingException(Exception exception) {
+        ApiResponse<?> exceptionResponse = ApiResponse.builder()
+                .code(Code.UNCATEGORIZED_EXCEPTION.getCode())
+                .message(Code.UNCATEGORIZED_EXCEPTION.getMessage())
+                .build();
+        return ResponseEntity.badRequest().body(exceptionResponse);
+    }
 
     @ExceptionHandler(value = ResourceAlreadyExistsException.class)
     public ResponseEntity<ApiResponse<?>> handlingDuplicateCreateException(ResourceAlreadyExistsException exception) {
@@ -80,14 +81,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(exceptionResponse);
     }
 
-//    @ExceptionHandler(value = HttpMediaTypeNotSupportedException.class)
-//    public ResponseEntity<ApiResponse<?>> handlingHttpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException exception) {
-//        ApiResponse<?> exceptionResponse = ApiResponse.builder()
-//                .code(Code.CONTENT_TYPE_INVALID.getCode())
-//                .message(Code.CONTENT_TYPE_INVALID.getMessage())
-//                .build();
-//        return ResponseEntity.badRequest().body(exceptionResponse);
-//    }
+    @ExceptionHandler(value = HttpMediaTypeNotSupportedException.class)
+    public ResponseEntity<ApiResponse<?>> handlingHttpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException exception) {
+        ApiResponse<?> exceptionResponse = ApiResponse.builder()
+                .code(Code.CONTENT_TYPE_INVALID.getCode())
+                .message(Code.CONTENT_TYPE_INVALID.getMessage())
+                .build();
+        return ResponseEntity.badRequest().body(exceptionResponse);
+    }
 
     @ExceptionHandler(value = BadRequestException.class)
     public ResponseEntity<ApiResponse<?>> handlingBadRequestException(BadRequestException exception) {
@@ -109,6 +110,15 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = ConflictException.class)
     public ResponseEntity<ApiResponse<?>> handlingConflictException(ConflictException exception) {
+        ApiResponse<?> exceptionResponse = ApiResponse.builder()
+                .code(exception.getErrorCode().getCode())
+                .message(exception.getErrorCode().getMessage())
+                .build();
+        return ResponseEntity.badRequest().body(exceptionResponse);
+    }
+
+    @ExceptionHandler(value = InvalidTokenSignatureException.class)
+    public ResponseEntity<ApiResponse<?>> handlingJOSEException(InvalidTokenSignatureException exception) {
         ApiResponse<?> exceptionResponse = ApiResponse.builder()
                 .code(exception.getErrorCode().getCode())
                 .message(exception.getErrorCode().getMessage())

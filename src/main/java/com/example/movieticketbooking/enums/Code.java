@@ -96,6 +96,9 @@ public enum Code {
     ACCOUNT_GET_ALL(1204, "Account retrieved"),
     ACCOUNT_UPDATED(1205, "Account updated successfully"),
     ACCOUNT_GET(1206, "Account retrieved"),
+    // jwt
+    JWT_CREATED(1300, "JWT Created"),
+    JWT_INVALID(1301, "JWT Invalid"),
     ;
 
 

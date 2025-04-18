@@ -1,7 +1,10 @@
 package com.example.movieticketbooking.security;
 
+import com.example.movieticketbooking.enums.Code;
+import com.example.movieticketbooking.exception.InvalidTokenSignatureException;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
+import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWT;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
@@ -39,5 +42,38 @@ public class JwtUtils {
         jwsObject.sign(new MACSigner(SIGNER_KEY.getBytes()));
         // return String jwt
         return jwsObject.serialize();
+    }
+
+    public String getEmail(String token) {
+        try {
+            // Parse JWT
+            SignedJWT signedJWT = SignedJWT.parse(token);
+            // Create verifier to validate the jwt sign
+            JWSVerifier verifier = new MACVerifier(SIGNER_KEY);
+
+            // validate jwt sign
+            if (signedJWT.verify(verifier)) {
+                // get claims from JWT
+                JWTClaimsSet claims = signedJWT.getJWTClaimsSet();
+                return claims.getSubject();  // Trả về username
+            } else {
+                throw new InvalidTokenSignatureException(Code.JWT_INVALID);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Error while validating JWT", e);
+        }
+    }
+
+    public String getScope(String token) {
+        try {
+            // Parse JWT
+            SignedJWT signedJWT = SignedJWT.parse(token);
+            // get claims from JWT
+            JWTClaimsSet claims = signedJWT.getJWTClaimsSet();
+            // return String scope
+            return claims.getStringClaim("scope");
+        } catch (Exception e) {
+            throw new RuntimeException("Error while extracting scope from JWT", e);
+        }
     }
 }
