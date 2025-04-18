@@ -11,6 +11,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,9 +23,9 @@ import java.io.IOException;
 import java.util.Collections;
 
 @Component
+@RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
-    @Value("${jwt.signed-key}")
-    private String SIGNER_KEY;
+    private final JwtUtils jwtUtils;
 
     @Override
     protected void doFilterInternal(
@@ -32,40 +33,13 @@ public class JwtFilter extends OncePerRequestFilter {
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
-        String token = extractToken(request);
-        if (isValidToken(token)) {
-            Authentication authentication = getAuthentication(token);
+        String token = jwtUtils.extractToken(request);
+        if (jwtUtils.isValidToken(token)) {
+            Authentication authentication = jwtUtils.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         filterChain.doFilter(request, response);
     }
 
-    private String extractToken(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Authorization");
-        if (bearerToken == null || !bearerToken.startsWith("Bearer ")) {
-            throw new InvalidTokenSignatureException(Code.JWT_INVALID);
-        }
-        return bearerToken.substring(7); // get token after "Bearer "
-    }
 
-    private boolean isValidToken(String token) {
-        try {
-            SignedJWT signedJWT = SignedJWT.parse(token);
-            JWSVerifier verifier = new MACVerifier(SIGNER_KEY);
-            return signedJWT.verify(verifier);
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    private Authentication getAuthentication(String token) {
-        try {
-            SignedJWT signedJWT = SignedJWT.parse(token);
-            JWTClaimsSet claims = signedJWT.getJWTClaimsSet();
-            String email = claims.getSubject();
-            return new UsernamePasswordAuthenticationToken(email, null, Collections.emptyList());
-        } catch (Exception e) {
-            return null;
-        }
-    }
 }

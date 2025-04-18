@@ -5,17 +5,21 @@ import com.example.movieticketbooking.exception.InvalidTokenSignatureException;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
-import com.nimbusds.jwt.JWT;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.stereotype.Component;
 
 import java.util.Base64;
+import java.util.Collections;
 import java.util.Date;
 import java.util.stream.Collectors;
 
+@Component
 public class JwtUtils {
     @Value("${jwt.signed-key}")
     private String SIGNER_KEY;
@@ -48,13 +52,10 @@ public class JwtUtils {
 
     public String getEmail(String token) {
         try {
-            // Parse JWT
-            SignedJWT signedJWT = SignedJWT.parse(token);
-            // Create verifier to validate the jwt sign
-            JWSVerifier verifier = new MACVerifier(SIGNER_KEY);
-
             // validate jwt sign
-            if (signedJWT.verify(verifier)) {
+            if (isValidToken(token)) {
+                // Parse JWT
+                SignedJWT signedJWT = SignedJWT.parse(token);
                 // get claims from JWT
                 JWTClaimsSet claims = signedJWT.getJWTClaimsSet();
                 return claims.getSubject();  // Trả về username
@@ -76,6 +77,35 @@ public class JwtUtils {
             return claims.getStringClaim("scope");
         } catch (Exception e) {
             throw new RuntimeException("Error while extracting scope from JWT", e);
+        }
+    }
+
+    public String extractToken(HttpServletRequest request) {
+        String bearerToken = request.getHeader("Authorization");
+        if (bearerToken == null || !bearerToken.startsWith("Bearer ")) {
+            throw new InvalidTokenSignatureException(Code.JWT_INVALID);
+        }
+        return bearerToken.substring(7); // get token after "Bearer "
+    }
+
+    public boolean isValidToken(String token) {
+        try {
+            SignedJWT signedJWT = SignedJWT.parse(token);
+            JWSVerifier verifier = new MACVerifier(SIGNER_KEY);
+            return signedJWT.verify(verifier);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public Authentication getAuthentication(String token) {
+        try {
+            SignedJWT signedJWT = SignedJWT.parse(token);
+            JWTClaimsSet claims = signedJWT.getJWTClaimsSet();
+            String email = claims.getSubject();
+            return new UsernamePasswordAuthenticationToken(email, null, Collections.emptyList());
+        } catch (Exception e) {
+            throw new InvalidTokenSignatureException(Code.JWT_INVALID);
         }
     }
 }
