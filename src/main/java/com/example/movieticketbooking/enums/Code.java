@@ -88,6 +88,14 @@ public enum Code {
     SHOWS_ALREADY_EXIST(806, "Shows already exist" ),
     SHOWS_CONFLICT_WITH_EXISTING_SHOWS(807, "Shows conflict with existing shows"),
     SHOWS_CONFLICT_WITHIN_REQUEST(808, "Shows conflict within request"),
+    // account
+    ACCOUNT_EMAIL_NOT_FOUND(1200, "Account email not found" ),
+    ACCOUNT_EMAIL_ALREADY_EXIST(1201, "Account email already exist"),
+    ACCOUNT_NOT_FOUND(1202, "Account not found"),
+    ACCOUNT_DELETED(1203, "Account deleted successfully"),
+    ACCOUNT_GET_ALL(1204, "Account retrieved"),
+    ACCOUNT_UPDATED(1205, "Account updated successfully"),
+    ACCOUNT_GET(1206, "Account retrieved"),
     ;
 
 

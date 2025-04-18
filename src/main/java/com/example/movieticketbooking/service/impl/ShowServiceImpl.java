@@ -135,7 +135,7 @@ public class ShowServiceImpl implements ShowService {
                 throw new ResourceNotFoundException(Code.SHOWS_NOT_FOUND);
             }
             // mapping
-            showMapper.toShowEntity(entity, updateRequest); // update dữ liệu
+            showMapper.toShowEntity(entity, updateRequest);
             updatedEntities.add(entity);
         }
         // update show
