@@ -4,8 +4,11 @@ import com.example.movieticketbooking.dto.api.PagedResponse;
 import com.example.movieticketbooking.dto.permission.request.PermissionRequest;
 import com.example.movieticketbooking.dto.permission.response.PermissionResponse;
 import com.example.movieticketbooking.entity.PermissionEntity;
+import com.example.movieticketbooking.enums.Code;
+import com.example.movieticketbooking.exception.ResourceNotFoundException;
 import com.example.movieticketbooking.mapper.PermissionMapper;
 import com.example.movieticketbooking.repository.PermissionRepository;
+import com.example.movieticketbooking.repository.RoleRepository;
 import com.example.movieticketbooking.service.PermissionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,6 +22,7 @@ import java.util.List;
 public class PermissionServiceImpl implements PermissionService {
     private final PermissionMapper permissionMapper;
     private final PermissionRepository permissionRepository;
+    private final RoleRepository roleRepository;
 
     @Override
     public PermissionResponse createPermission(PermissionRequest permissionRequest) {
@@ -46,6 +50,9 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     public PagedResponse<PermissionResponse> getPermissionByRoleId(Integer roleId, Pageable pageable) {
+        if (!roleRepository.existsById(roleId)) {
+            throw new ResourceNotFoundException(Code.ROLE_NOT_FOUND);
+        }
         // find permissions by role id
         Page<PermissionEntity> permissionEntities = permissionRepository.findAllByRoleId(roleId, pageable);
         // get a list of permissions
@@ -59,5 +66,13 @@ public class PermissionServiceImpl implements PermissionService {
                 .totalPages(permissionEntities.getTotalPages())
                 .last(permissionEntities.isLast())
                 .build();
+    }
+
+    @Override
+    public void deletePermission(Integer id) {
+        if (!permissionRepository.existsById(id)) {
+            throw new ResourceNotFoundException(Code.PERMISSION_NOT_FOUND);
+        }
+        permissionRepository.deleteById(id);
     }
 }

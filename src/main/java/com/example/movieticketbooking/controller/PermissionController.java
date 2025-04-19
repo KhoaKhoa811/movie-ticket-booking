@@ -54,4 +54,14 @@ public class PermissionController {
                 .build();
         return ResponseEntity.ok(permissionResponse);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<?>> deletePermission(@PathVariable("id") Integer id) {
+        permissionService.deletePermission(id);
+        ApiResponse<?> permissionResponse = ApiResponse.builder()
+                .code(Code.PERMISSION_DELETED.getCode())
+                .message(Code.PERMISSION_DELETED.getMessage())
+                .build();
+        return ResponseEntity.ok(permissionResponse);
+    }
 }

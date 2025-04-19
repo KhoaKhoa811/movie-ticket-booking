@@ -20,6 +20,11 @@ public class PermissionEntity {
     private Integer id;
     @Column(unique = true, nullable = false)
     private String name;
-    @ManyToMany(mappedBy = "permissions")
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinTable(
+            name = "roles_permissions",
+            joinColumns = @JoinColumn(name = "permission_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
     private List<RoleEntity> roles;
 }
