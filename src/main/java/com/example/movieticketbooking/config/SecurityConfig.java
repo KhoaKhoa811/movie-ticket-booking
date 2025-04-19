@@ -39,7 +39,7 @@ public class SecurityConfig {
     @Value("${jwt.signed-key}")
     private String SIGNER_KEY;
     private final JwtFilter jwtFilter;
-    private final String[] PUBLIC_ENDPOINTS = {"/users", "/auth/login", "/auth/introspect"};
+    private final String[] PUBLIC_ENDPOINTS = {"/api/v1/users", "/api/v1/auth/login"};
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -62,11 +62,11 @@ public class SecurityConfig {
     @Bean
     JwtDecoder jwtDecoder() {
         byte[] decodedKey = Base64.getDecoder().decode(SIGNER_KEY);
-        SecretKeySpec secretKeySpec = new SecretKeySpec(decodedKey, "HS512");
+        SecretKeySpec secretKeySpec = new SecretKeySpec(decodedKey, "HS526");
 
         return NimbusJwtDecoder
                 .withSecretKey(secretKeySpec)
-                .macAlgorithm(MacAlgorithm.HS512)
+                .macAlgorithm(MacAlgorithm.HS256)
                 .build();
     }
 

@@ -116,6 +116,8 @@ public enum Code {
     ROLE_NOT_FOUND(1502, "Role not found"),
     ROLE_DELETED(1503, "Role deleted successfully"),
     ROLE_UPDATED(1504, "Role updated successfully"),
+    // login
+    LOGIN_SUCCESS(1600, "Login success"),
     ;
 
     private final int code;

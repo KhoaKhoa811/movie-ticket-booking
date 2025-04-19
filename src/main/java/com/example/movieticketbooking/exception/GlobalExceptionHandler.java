@@ -16,14 +16,14 @@ import java.util.Objects;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(value = Exception.class)
-    public ResponseEntity<ApiResponse<?>> handlingException(Exception exception) {
-        ApiResponse<?> exceptionResponse = ApiResponse.builder()
-                .code(Code.UNCATEGORIZED_EXCEPTION.getCode())
-                .message(Code.UNCATEGORIZED_EXCEPTION.getMessage())
-                .build();
-        return ResponseEntity.badRequest().body(exceptionResponse);
-    }
+//    @ExceptionHandler(value = Exception.class)
+//    public ResponseEntity<ApiResponse<?>> handlingException(Exception exception) {
+//        ApiResponse<?> exceptionResponse = ApiResponse.builder()
+//                .code(Code.UNCATEGORIZED_EXCEPTION.getCode())
+//                .message(Code.UNCATEGORIZED_EXCEPTION.getMessage())
+//                .build();
+//        return ResponseEntity.badRequest().body(exceptionResponse);
+//    }
 
     @ExceptionHandler(value = ResourceAlreadyExistsException.class)
     public ResponseEntity<ApiResponse<?>> handlingDuplicateCreateException(ResourceAlreadyExistsException exception) {
@@ -117,12 +117,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(exceptionResponse);
     }
 
-    @ExceptionHandler(value = InvalidTokenSignatureException.class)
-    public ResponseEntity<ApiResponse<?>> handlingJOSEException(InvalidTokenSignatureException exception) {
-        ApiResponse<?> exceptionResponse = ApiResponse.builder()
-                .code(exception.getErrorCode().getCode())
-                .message(exception.getErrorCode().getMessage())
-                .build();
-        return ResponseEntity.badRequest().body(exceptionResponse);
-    }
+//    @ExceptionHandler(value = InvalidTokenSignatureException.class)
+//    public ResponseEntity<ApiResponse<?>> handlingJOSEException(InvalidTokenSignatureException exception) {
+//        ApiResponse<?> exceptionResponse = ApiResponse.builder()
+//                .code(exception.getErrorCode().getCode())
+//                .message(exception.getErrorCode().getMessage())
+//                .build();
+//        return ResponseEntity.badRequest().body(exceptionResponse);
+//    }
 }

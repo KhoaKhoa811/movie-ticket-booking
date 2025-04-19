@@ -31,7 +31,7 @@ public class JwtUtils {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(" "));
         // create header
-        JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
+        JWSHeader header = new JWSHeader(JWSAlgorithm.HS256);
         // create JWT Claims
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
                 .subject(email)
@@ -85,13 +85,14 @@ public class JwtUtils {
         if (bearerToken == null || !bearerToken.startsWith("Bearer ")) {
             throw new InvalidTokenSignatureException(Code.JWT_INVALID);
         }
-        return bearerToken.substring(7); // get token after "Bearer "
+        return bearerToken.substring(7); // get token after Bearer
     }
 
     public boolean isValidToken(String token) {
         try {
             SignedJWT signedJWT = SignedJWT.parse(token);
-            JWSVerifier verifier = new MACVerifier(SIGNER_KEY);
+            byte[] decodedKey = Base64.getDecoder().decode(SIGNER_KEY);
+            JWSVerifier verifier = new MACVerifier(decodedKey);
             return signedJWT.verify(verifier);
         } catch (Exception e) {
             return false;
