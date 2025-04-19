@@ -5,6 +5,7 @@ import com.example.movieticketbooking.dto.permission.request.PermissionRequest;
 import com.example.movieticketbooking.dto.permission.response.PermissionResponse;
 import com.example.movieticketbooking.entity.PermissionEntity;
 import com.example.movieticketbooking.enums.Code;
+import com.example.movieticketbooking.exception.ResourceAlreadyExistsException;
 import com.example.movieticketbooking.exception.ResourceNotFoundException;
 import com.example.movieticketbooking.mapper.PermissionMapper;
 import com.example.movieticketbooking.repository.PermissionRepository;
@@ -26,6 +27,9 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     public PermissionResponse createPermission(PermissionRequest permissionRequest) {
+        if (permissionRepository.existsByName((permissionRequest.getName()))) {
+            throw new ResourceAlreadyExistsException(Code.PERMISSION_ALREADY_EXIST);
+        }
         PermissionEntity permissionEntity = permissionMapper.toEntity(permissionRequest);
         PermissionEntity savedEntity = permissionRepository.save(permissionEntity);
         return permissionMapper.toResponse(savedEntity);
@@ -78,6 +82,9 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     public PermissionResponse updatePermission(Integer id, PermissionRequest permissionRequest) {
+        if (permissionRepository.existsByName((permissionRequest.getName()))) {
+            throw new ResourceAlreadyExistsException(Code.PERMISSION_ALREADY_EXIST);
+        }
         PermissionEntity permissionEntity = permissionRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(Code.PERMISSION_NOT_FOUND));
         permissionMapper.updatePermissionFromRequest(permissionEntity, permissionRequest);

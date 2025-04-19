@@ -110,12 +110,14 @@ public enum Code {
     PERMISSION_NOT_FOUND(1402, "Permission not found"),
     PERMISSION_DELETED(1403, "Permission deleted successfully"),
     PERMISSION_UPDATED(1404, "Permission updated successfully"),
+    PERMISSION_ALREADY_EXIST(1405, "Permission already exist" ),
     // role
     ROLE_CREATED(1500, "Role created"),
     ROLE_GET_ALL(1501, "Role retrieved"),
     ROLE_NOT_FOUND(1502, "Role not found"),
     ROLE_DELETED(1503, "Role deleted successfully"),
     ROLE_UPDATED(1504, "Role updated successfully"),
+    ROLE_ALREADY_EXIST(1505, "Role already exist" ),
     // login
     LOGIN_SUCCESS(1600, "Login success"),
     ;
