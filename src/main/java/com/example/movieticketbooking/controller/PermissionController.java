@@ -64,4 +64,15 @@ public class PermissionController {
                 .build();
         return ResponseEntity.ok(permissionResponse);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<PermissionResponse>> updatePermission(
+            @PathVariable("id") Integer id,
+            @RequestBody PermissionRequest permissionRequest) {
+        ApiResponse<PermissionResponse> permissionResponse = ApiResponse.<PermissionResponse>builder()
+                .code(Code.PERMISSION_UPDATED.getCode())
+                .data(permissionService.updatePermission(id, permissionRequest))
+                .build();
+        return ResponseEntity.ok(permissionResponse);
+    }
 }

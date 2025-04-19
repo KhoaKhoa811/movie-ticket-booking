@@ -10,4 +10,5 @@ public interface PermissionService {
     PagedResponse<PermissionResponse> getAllPermission(Pageable pageable);
     PagedResponse<PermissionResponse> getPermissionByRoleId(Integer roleId, Pageable pageable);
     void deletePermission(Integer id);
+    PermissionResponse updatePermission(Integer id, PermissionRequest permissionRequest);
 }

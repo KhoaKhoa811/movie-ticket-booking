@@ -3,7 +3,10 @@ package com.example.movieticketbooking.mapper;
 import com.example.movieticketbooking.dto.permission.request.PermissionRequest;
 import com.example.movieticketbooking.dto.permission.response.PermissionResponse;
 import com.example.movieticketbooking.entity.PermissionEntity;
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import java.util.List;
 
@@ -15,4 +18,7 @@ public interface PermissionMapper {
     // convert permission entity to permission response
     PermissionResponse toResponse(PermissionEntity permissionEntity);
     List<PermissionResponse> toResponseList(List<PermissionEntity> permissionEntities);
+    // update permission entity from permission request
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updatePermissionFromRequest(@MappingTarget PermissionEntity permissionEntity, PermissionRequest permissionRequest);
 }

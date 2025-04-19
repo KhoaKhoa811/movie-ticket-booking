@@ -75,4 +75,13 @@ public class PermissionServiceImpl implements PermissionService {
         }
         permissionRepository.deleteById(id);
     }
+
+    @Override
+    public PermissionResponse updatePermission(Integer id, PermissionRequest permissionRequest) {
+        PermissionEntity permissionEntity = permissionRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(Code.PERMISSION_NOT_FOUND));
+        permissionMapper.updatePermissionFromRequest(permissionEntity, permissionRequest);
+        PermissionEntity savedEntity = permissionRepository.save(permissionEntity);
+        return permissionMapper.toResponse(savedEntity);
+    }
 }
