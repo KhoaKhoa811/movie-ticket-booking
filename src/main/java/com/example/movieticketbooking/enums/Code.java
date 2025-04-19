@@ -3,12 +3,17 @@ package com.example.movieticketbooking.enums;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import javax.tools.Diagnostic;
+
 @AllArgsConstructor
 @Getter
 public enum Code {
     UNCATEGORIZED_EXCEPTION(9999, "Uncagorized error"),
     JSON_FORMAT_INVALID(9998, "JSON format invalid"),
     CONTENT_TYPE_INVALID(9997, "Content type invalid"),
+    BAD_CREDENTIALS(9996, "Bad credentials"),
+    USERNAME_NOT_FOUND(9995, "Username not exists"),
+
     // genre code
     GENRE_CREATED(100, "Genre created"),
     GENRE_GET_ALL(101, "Genre retrieved"),
@@ -99,8 +104,19 @@ public enum Code {
     // jwt
     JWT_CREATED(1300, "JWT Created"),
     JWT_INVALID(1301, "JWT Invalid"),
+    // permission
+    PERMISSION_CREATED(1400, "Permission created"),
+    PERMISSION_GET_ALL(1401, "Permission retrieved"),
+    PERMISSION_NOT_FOUND(1402, "Permission not found"),
+    PERMISSION_DELETED(1403, "Permission deleted successfully"),
+    PERMISSION_UPDATED(1404, "Permission updated successfully"),
+    // role
+    ROLE_CREATED(1500, "Role created"),
+    ROLE_GET_ALL(1501, "Role retrieved"),
+    ROLE_NOT_FOUND(1502, "Role not found"),
+    ROLE_DELETED(1503, "Role deleted successfully"),
+    ROLE_UPDATED(1504, "Role updated successfully"),
     ;
-
 
     private final int code;
     private final String message;
