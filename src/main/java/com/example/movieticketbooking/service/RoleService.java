@@ -10,4 +10,5 @@ public interface RoleService {
     List<RoleResponse> getAllRoles();
     List<RoleResponse> getRoleByAccountId(Integer accountId);
     void deleteRole(Integer id);
+    RoleResponse updateRole(Integer id, RoleRequest roleRequest);
 }

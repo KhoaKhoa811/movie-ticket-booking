@@ -65,4 +65,24 @@ public class RoleServiceImpl implements RoleService {
         }
         roleRepository.deleteById(id);
     }
+
+    @Override
+    public RoleResponse updateRole(Integer id, RoleRequest roleRequest) {
+        if (!roleRepository.existsById(id)) {
+            throw new ResourceNotFoundException(Code.ROLE_NOT_FOUND);
+        }
+        RoleEntity roleEntity = roleRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(Code.ROLE_NOT_FOUND));
+        // update role entity
+        roleMapper.updateRoleFromRequest(roleEntity, roleRequest);
+        // find permissions by ids
+        if (roleRequest.getPermissionIds() != null) {
+            List<PermissionEntity> permissionEntities = permissionRepository.findAllById(roleRequest.getPermissionIds());
+            // set permissions to role entity
+            roleEntity.setPermissions(permissionEntities);
+        }
+        // save role entity to db
+        RoleEntity updatedEntity = roleRepository.save(roleEntity);
+        return roleMapper.toResponse(updatedEntity);
+    }
 }

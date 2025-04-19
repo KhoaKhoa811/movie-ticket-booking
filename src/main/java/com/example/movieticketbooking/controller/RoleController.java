@@ -53,4 +53,16 @@ public class RoleController {
                 .build();
         return ResponseEntity.ok(roleResponse);
     }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<ApiResponse<RoleResponse>> updateRole(
+            @PathVariable("id") Integer id,
+            @RequestBody RoleRequest roleRequest
+    ) {
+        ApiResponse<RoleResponse> roleResponse = ApiResponse.<RoleResponse>builder()
+                .code(Code.ROLE_UPDATED.getCode())
+                .data(roleService.updateRole(id, roleRequest))
+                .build();
+        return ResponseEntity.ok(roleResponse);
+    }
 }
