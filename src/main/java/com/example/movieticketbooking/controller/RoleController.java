@@ -7,10 +7,9 @@ import com.example.movieticketbooking.enums.Code;
 import com.example.movieticketbooking.service.RoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/roles")
@@ -23,6 +22,15 @@ public class RoleController {
         ApiResponse<RoleResponse> roleResponse = ApiResponse.<RoleResponse>builder()
                 .code(Code.ROLE_CREATED.getCode())
                 .data(roleService.createRole(roleRequest))
+                .build();
+        return ResponseEntity.ok(roleResponse);
+    }
+
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<RoleResponse>>> getAllRoles() {
+        ApiResponse<List<RoleResponse>> roleResponse = ApiResponse.<List<RoleResponse>>builder()
+                .code(Code.ROLE_GET_ALL.getCode())
+                .data(roleService.getAllRoles())
                 .build();
         return ResponseEntity.ok(roleResponse);
     }

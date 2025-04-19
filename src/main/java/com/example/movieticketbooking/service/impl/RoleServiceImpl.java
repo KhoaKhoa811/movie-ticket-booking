@@ -39,4 +39,10 @@ public class RoleServiceImpl implements RoleService {
         RoleEntity savedEntity = roleRepository.save(roleEntity);
         return roleMapper.toResponse(savedEntity);
     }
+
+    @Override
+    public List<RoleResponse> getAllRoles() {
+        List<RoleEntity> roleEntities = roleRepository.findAll();
+        return roleMapper.toResponseList(roleEntities);
+    }
 }
