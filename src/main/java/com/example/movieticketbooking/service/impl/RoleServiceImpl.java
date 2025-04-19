@@ -57,4 +57,12 @@ public class RoleServiceImpl implements RoleService {
         List<RoleEntity> roleEntities = roleRepository.findByAccountId(accountId);
         return roleMapper.toResponseList(roleEntities);
     }
+
+    @Override
+    public void deleteRole(Integer id) {
+        if (!roleRepository.existsById(id)) {
+            throw new ResourceNotFoundException(Code.ROLE_NOT_FOUND);
+        }
+        roleRepository.deleteById(id);
+    }
 }

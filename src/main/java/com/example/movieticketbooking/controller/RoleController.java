@@ -43,4 +43,14 @@ public class RoleController {
                 .build();
         return ResponseEntity.ok(roleResponse);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<?>> deleteRole(@PathVariable("id") Integer id) {
+        roleService.deleteRole(id);
+        ApiResponse<?> roleResponse = ApiResponse.builder()
+                .code(Code.ROLE_DELETED.getCode())
+                .message(Code.ROLE_DELETED.getMessage())
+                .build();
+        return ResponseEntity.ok(roleResponse);
+    }
 }
