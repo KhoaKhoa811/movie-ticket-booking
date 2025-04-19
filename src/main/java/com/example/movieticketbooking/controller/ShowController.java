@@ -42,7 +42,7 @@ public class ShowController {
         return ResponseEntity.ok(showResponse);
     }
 
-    @GetMapping
+    @GetMapping("/by-date")
     public ResponseEntity<ApiResponse<List<ShowBasicResponse>>> getShowsByMovieIdAndCinemaIdAndShowDate(
             @ModelAttribute MovieAndCinemaRequest movieAndCinemaRequest,
             @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate showDate

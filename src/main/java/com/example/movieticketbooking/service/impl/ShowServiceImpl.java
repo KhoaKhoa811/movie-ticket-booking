@@ -38,7 +38,6 @@ public class ShowServiceImpl implements ShowService {
     private final CinemaHallRepository cinemaHallRepository;
     private final ShowMapper showMapper;
     private final CinemaRepository cinemaRepository;
-    private final ShowService showService;
 
     @Override
     @Transactional

@@ -37,7 +37,7 @@ public class JwtUtils {
                 .subject(email)
                 .claim("scope", scope)
                 .issueTime(new Date())
-                .expirationTime(new Date(System.currentTimeMillis() + 3600_000)) // one hour
+                .expirationTime(new Date(System.currentTimeMillis() + 3600000)) // one hour
                 .build();
         // create signer
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
