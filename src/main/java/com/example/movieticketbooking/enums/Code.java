@@ -13,7 +13,7 @@ public enum Code {
     CONTENT_TYPE_INVALID(9997, "Content type invalid"),
     BAD_CREDENTIALS(9996, "Bad credentials"),
     USERNAME_NOT_FOUND(9995, "Username not exists"),
-
+    TOKEN_INVALID(9994, "Invalid or malformed token"),
     // genre code
     GENRE_CREATED(100, "Genre created"),
     GENRE_GET_ALL(101, "Genre retrieved"),
