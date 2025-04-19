@@ -8,4 +8,5 @@ import java.util.List;
 public interface RoleService {
     RoleResponse createRole(RoleRequest roleRequest);
     List<RoleResponse> getAllRoles();
+    List<RoleResponse> getRoleByAccountId(Integer accountId);
 }

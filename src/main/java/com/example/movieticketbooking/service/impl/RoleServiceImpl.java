@@ -6,7 +6,9 @@ import com.example.movieticketbooking.entity.PermissionEntity;
 import com.example.movieticketbooking.entity.RoleEntity;
 import com.example.movieticketbooking.enums.Code;
 import com.example.movieticketbooking.exception.ResourceAlreadyExistsException;
+import com.example.movieticketbooking.exception.ResourceNotFoundException;
 import com.example.movieticketbooking.mapper.RoleMapper;
+import com.example.movieticketbooking.repository.AccountRepository;
 import com.example.movieticketbooking.repository.PermissionRepository;
 import com.example.movieticketbooking.repository.RoleRepository;
 import com.example.movieticketbooking.service.RoleService;
@@ -22,6 +24,7 @@ public class RoleServiceImpl implements RoleService {
     private final RoleRepository roleRepository;
     private final RoleMapper roleMapper;
     private final PermissionRepository permissionRepository;
+    private final AccountRepository accountRepository;
 
     @Override
     @Transactional
@@ -43,6 +46,15 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public List<RoleResponse> getAllRoles() {
         List<RoleEntity> roleEntities = roleRepository.findAll();
+        return roleMapper.toResponseList(roleEntities);
+    }
+
+    @Override
+    public List<RoleResponse> getRoleByAccountId(Integer accountId) {
+        if (!accountRepository.existsById(accountId)) {
+            throw new ResourceNotFoundException(Code.ACCOUNT_NOT_FOUND);
+        }
+        List<RoleEntity> roleEntities = roleRepository.findByAccountId(accountId);
         return roleMapper.toResponseList(roleEntities);
     }
 }

@@ -34,4 +34,13 @@ public class RoleController {
                 .build();
         return ResponseEntity.ok(roleResponse);
     }
+
+    @GetMapping("/account")
+    public ResponseEntity<ApiResponse<List<RoleResponse>>> getRolesByAccountId(@RequestParam("accountId") Integer accountId) {
+        ApiResponse<List<RoleResponse>> roleResponse = ApiResponse.<List<RoleResponse>>builder()
+                .code(Code.ROLE_GET_ALL.getCode())
+                .data(roleService.getRoleByAccountId(accountId))
+                .build();
+        return ResponseEntity.ok(roleResponse);
+    }
 }
