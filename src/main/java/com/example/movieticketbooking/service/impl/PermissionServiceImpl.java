@@ -43,4 +43,21 @@ public class PermissionServiceImpl implements PermissionService {
                 .last(permissionEntities.isLast())
                 .build();
     }
+
+    @Override
+    public PagedResponse<PermissionResponse> getPermissionByRoleId(Integer roleId, Pageable pageable) {
+        // find permissions by role id
+        Page<PermissionEntity> permissionEntities = permissionRepository.findAllByRoleId(roleId, pageable);
+        // get a list of permissions
+        List<PermissionResponse> permissionResponses = permissionMapper.toResponseList(permissionEntities.getContent());
+        // mapping to paged response
+        return PagedResponse.<PermissionResponse>builder()
+                .content(permissionResponses)
+                .page(permissionEntities.getNumber())
+                .size(permissionEntities.getSize())
+                .totalElements(permissionEntities.getTotalElements())
+                .totalPages(permissionEntities.getTotalPages())
+                .last(permissionEntities.isLast())
+                .build();
+    }
 }

@@ -41,4 +41,17 @@ public class PermissionController {
                 .build();
         return ResponseEntity.ok(permissionResponse);
     }
+
+    @GetMapping("/role")
+    public ResponseEntity<ApiResponse<PagedResponse<PermissionResponse>>> getPermissionByRoleId(
+            @RequestParam("roleId") Integer roleId,
+            @ModelAttribute PaginationRequest paginationRequest
+    ) {
+        Pageable pageable = PaginationUtils.createPageable(paginationRequest, paginationProperties);
+        ApiResponse<PagedResponse<PermissionResponse>> permissionResponse = ApiResponse.<PagedResponse<PermissionResponse>>builder()
+                .code(Code.PERMISSION_GET_ALL.getCode())
+                .data(permissionService.getPermissionByRoleId(roleId, pageable))
+                .build();
+        return ResponseEntity.ok(permissionResponse);
+    }
 }
