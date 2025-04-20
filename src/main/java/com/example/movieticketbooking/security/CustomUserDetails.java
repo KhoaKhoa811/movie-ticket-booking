@@ -1,18 +1,19 @@
 package com.example.movieticketbooking.security;
 
+import com.example.movieticketbooking.entity.AccountEntity;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
 @AllArgsConstructor
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class CustomUserDetails implements UserDetails {
+    private final AccountEntity accountEntity;
 
-    private String email;
-    private String password;
     private Collection<? extends GrantedAuthority> authorities;
 
     @Override
@@ -22,11 +23,16 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return password;
+        return accountEntity.getPassword();
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return accountEntity.getEnabled();
     }
 
     @Override
     public String getUsername() {
-        return email;
+        return accountEntity.getEmail();
     }
 }

@@ -15,5 +15,6 @@ import java.util.List;
 public class RegisterResponse {
     private Integer id;
     private String email;
+    private Boolean enabled;
     private List<RoleResponse> roles;
 }

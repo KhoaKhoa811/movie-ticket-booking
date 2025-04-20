@@ -28,7 +28,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         AccountEntity accountEntity = accountRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException(Code.ACCOUNT_EMAIL_NOT_FOUND));
         // return a CustomUserDetails
-        return new CustomUserDetails(accountEntity.getEmail(), accountEntity.getPassword(), getAuthorities(accountEntity));
+        return new CustomUserDetails(accountEntity, getAuthorities(accountEntity));
     }
 
     private Collection<? extends GrantedAuthority> getAuthorities(AccountEntity accountEntity) {

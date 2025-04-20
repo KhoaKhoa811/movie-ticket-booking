@@ -23,6 +23,7 @@ public class AccountEntity {
     private String email;
     @Column(nullable = false)
     private String password;
+    private Boolean enabled;
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.REFRESH})
     @JoinTable(
             name = "account_roles",
