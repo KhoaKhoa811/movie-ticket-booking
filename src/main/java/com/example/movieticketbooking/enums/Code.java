@@ -120,6 +120,7 @@ public enum Code {
     ROLE_ALREADY_EXIST(1505, "Role already exist" ),
     // login
     LOGIN_SUCCESS(1600, "Login success"),
+    REGISTER_SUCCESS(1601, "Register success"),
     ;
 
     private final int code;

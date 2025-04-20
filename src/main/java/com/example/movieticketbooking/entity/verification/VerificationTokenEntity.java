@@ -2,10 +2,7 @@ package com.example.movieticketbooking.entity.verification;
 
 import com.example.movieticketbooking.entity.AccountEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -15,6 +12,7 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class VerificationTokenEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

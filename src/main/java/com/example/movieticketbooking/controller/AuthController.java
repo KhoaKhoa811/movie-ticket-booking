@@ -2,7 +2,9 @@ package com.example.movieticketbooking.controller;
 
 import com.example.movieticketbooking.dto.api.ApiResponse;
 import com.example.movieticketbooking.dto.auth.request.LoginRequest;
+import com.example.movieticketbooking.dto.auth.request.RegisterRequest;
 import com.example.movieticketbooking.dto.auth.response.LoginResponse;
+import com.example.movieticketbooking.dto.auth.response.RegisterResponse;
 import com.example.movieticketbooking.enums.Code;
 import com.example.movieticketbooking.service.auth.AuthService;
 import com.nimbusds.jose.JOSEException;
@@ -26,5 +28,14 @@ public class AuthController {
                 .data(authService.login(request))
                 .build();
         return ResponseEntity.ok(loginResponse);
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<ApiResponse<RegisterResponse>> register(@RequestBody RegisterRequest request) throws JOSEException {
+        ApiResponse<RegisterResponse> registerResponse = ApiResponse.<RegisterResponse>builder()
+                .code(Code.REGISTER_SUCCESS.getCode())
+                .data(authService.register(request))
+                .build();
+        return ResponseEntity.ok(registerResponse);
     }
 }
