@@ -1,5 +1,6 @@
 package com.example.movieticketbooking.entity;
 
+import com.example.movieticketbooking.entity.verification.VerificationTokenEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,4 +32,6 @@ public class AccountEntity {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private List<RoleEntity> roles;
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
+    private List<VerificationTokenEntity> verificationTokens;
 }
