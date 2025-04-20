@@ -7,7 +7,7 @@ import org.mapstruct.*;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {PermissionMapper.class})
 public interface RoleMapper {
     // convert role request to role entity
     @Mapping(target = "permissions", ignore = true)
