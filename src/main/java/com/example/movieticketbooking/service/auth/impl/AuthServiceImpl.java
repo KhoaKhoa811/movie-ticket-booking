@@ -6,11 +6,15 @@ import com.example.movieticketbooking.dto.auth.response.LoginResponse;
 import com.example.movieticketbooking.dto.auth.response.RegisterResponse;
 import com.example.movieticketbooking.entity.AccountEntity;
 import com.example.movieticketbooking.entity.RoleEntity;
+import com.example.movieticketbooking.entity.verification.VerificationTokenEntity;
 import com.example.movieticketbooking.enums.Code;
+import com.example.movieticketbooking.exception.InvalidTokenSignatureException;
 import com.example.movieticketbooking.exception.ResourceAlreadyExistsException;
+import com.example.movieticketbooking.exception.ResourceNotFoundException;
 import com.example.movieticketbooking.mapper.auth.AuthMapper;
 import com.example.movieticketbooking.repository.AccountRepository;
 import com.example.movieticketbooking.repository.RoleRepository;
+import com.example.movieticketbooking.repository.auth.VerificationTokenRepository;
 import com.example.movieticketbooking.security.JwtUtils;
 import com.example.movieticketbooking.service.auth.AuthService;
 import com.example.movieticketbooking.service.auth.VerificationTokenService;
@@ -25,7 +29,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.management.relation.Role;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -39,6 +43,7 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final VerificationTokenService verificationTokenService;
     private final EmailSenderService emailSenderService;
+    private final VerificationTokenRepository verificationTokenRepository;
 
     @Override
     public LoginResponse login(LoginRequest request) throws JOSEException {
@@ -76,5 +81,27 @@ public class AuthServiceImpl implements AuthService {
         emailSenderService.sendVerificationEmail(savedEntity.getEmail(), verifyToken);
         // convert the entity to response
         return authMapper.toResponse(savedEntity);
+    }
+
+    @Override
+    @Transactional
+    public RegisterResponse verifyRegisterToken(String token) {
+        // get verification token
+        VerificationTokenEntity verificationToken = verificationTokenRepository.findByToken(token)
+                .orElseThrow(() -> new ResourceNotFoundException(Code.VERIFY_TOKEN_INVALID));
+        // validate verification token
+        if (verificationToken.getExpiryDate().isBefore(LocalDateTime.now())) {
+            throw new InvalidTokenSignatureException(Code.VERIFY_TOKEN_INVALID);
+        }
+        // get account from verification token
+        AccountEntity account = verificationToken.getAccount();
+        // check if the account has already verified
+        if (account.getEnabled()) {
+            throw new ResourceAlreadyExistsException(Code.ACCOUNT_ALREADY_VERIFY);
+        }
+        account.setEnabled(true);
+        AccountEntity updatedAccount = accountRepository.save(account); // update status of the account
+        verificationTokenRepository.delete(verificationToken);
+        return authMapper.toResponse(updatedAccount);
     }
 }

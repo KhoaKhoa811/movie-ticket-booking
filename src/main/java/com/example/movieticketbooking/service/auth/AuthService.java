@@ -9,4 +9,5 @@ import com.nimbusds.jose.JOSEException;
 public interface AuthService {
     LoginResponse login(LoginRequest request) throws JOSEException;
     RegisterResponse register(RegisterRequest request);
+    RegisterResponse verifyRegisterToken(String token);
 }

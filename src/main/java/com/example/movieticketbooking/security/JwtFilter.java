@@ -20,7 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
     private final JwtUtils jwtUtils;
-    private final String[] PUBLIC_ENDPOINTS = {"/api/v1/users", "/api/v1/auth/login"};
+    private final String[] PUBLIC_ENDPOINTS = {"/api/v1/users", "/api/v1/auth/login", "/api/v1/auth/register", "/api/v1/auth/verify"};
 
     @Override
     protected void doFilterInternal(

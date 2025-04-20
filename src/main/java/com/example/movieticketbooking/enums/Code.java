@@ -121,6 +121,9 @@ public enum Code {
     // login
     LOGIN_SUCCESS(1600, "Login success"),
     REGISTER_SUCCESS(1601, "Register success"),
+    REGISTER_PROCESS(1602, "Register process"),
+    VERIFY_TOKEN_INVALID(1603, "Verify token invalid"),
+    ACCOUNT_ALREADY_VERIFY(1604, "Account already verify"),
     ;
 
     private final int code;

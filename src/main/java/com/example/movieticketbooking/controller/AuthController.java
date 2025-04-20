@@ -10,10 +10,7 @@ import com.example.movieticketbooking.service.auth.AuthService;
 import com.nimbusds.jose.JOSEException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/v1/auth")
@@ -33,8 +30,17 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<RegisterResponse>> register(@RequestBody RegisterRequest request) throws JOSEException {
         ApiResponse<RegisterResponse> registerResponse = ApiResponse.<RegisterResponse>builder()
-                .code(Code.REGISTER_SUCCESS.getCode())
+                .code(Code.REGISTER_PROCESS.getCode())
                 .data(authService.register(request))
+                .build();
+        return ResponseEntity.ok(registerResponse);
+    }
+
+    @GetMapping("/verify")
+    public ResponseEntity<ApiResponse<RegisterResponse>> verify(@RequestParam("token") String token) throws JOSEException {
+        ApiResponse<RegisterResponse> registerResponse = ApiResponse.<RegisterResponse>builder()
+                .code(Code.REGISTER_SUCCESS.getCode())
+                .data(authService.verifyRegisterToken(token))
                 .build();
         return ResponseEntity.ok(registerResponse);
     }

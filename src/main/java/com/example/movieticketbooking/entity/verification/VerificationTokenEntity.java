@@ -18,6 +18,7 @@ public class VerificationTokenEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String token;
+    @Column(name = "expire_time")
     private LocalDateTime expiryDate;
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "account_id")

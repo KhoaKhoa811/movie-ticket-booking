@@ -50,6 +50,7 @@ public class SecurityConfig {
                 .logout(Customizer.withDefaults())
                 .authorizeHttpRequests(request ->
                         request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/v1/auth/verify").permitAll()
                                 .anyRequest().authenticated()
                 );
         http.oauth2ResourceServer(oath2 ->
