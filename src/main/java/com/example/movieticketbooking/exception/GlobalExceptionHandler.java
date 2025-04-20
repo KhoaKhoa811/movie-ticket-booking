@@ -116,13 +116,4 @@ public class GlobalExceptionHandler {
                 .build();
         return ResponseEntity.badRequest().body(exceptionResponse);
     }
-
-//    @ExceptionHandler(value = InvalidTokenSignatureException.class)
-//    public ResponseEntity<ApiResponse<?>> handlingJOSEException(InvalidTokenSignatureException exception) {
-//        ApiResponse<?> exceptionResponse = ApiResponse.builder()
-//                .code(exception.getErrorCode().getCode())
-//                .message(exception.getErrorCode().getMessage())
-//                .build();
-//        return ResponseEntity.badRequest().body(exceptionResponse);
-//    }
 }

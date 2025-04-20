@@ -31,7 +31,7 @@ public class JwtFilter extends OncePerRequestFilter {
         String requestPath = request.getRequestURI();
         // return if the requested path is the public endpoint
         for (String endpoint : PUBLIC_ENDPOINTS) {
-            if (new AntPathMatcher().match(endpoint, requestPath)) {
+            if (requestPath.startsWith(endpoint)) {
                 filterChain.doFilter(request, response);
                 return;
             }

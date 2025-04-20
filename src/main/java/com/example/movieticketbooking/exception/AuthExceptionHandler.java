@@ -4,7 +4,6 @@ import com.example.movieticketbooking.dto.api.ApiResponse;
 import com.example.movieticketbooking.enums.Code;
 import com.nimbusds.jose.JOSEException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -35,6 +34,15 @@ public class AuthExceptionHandler {
         ApiResponse<?> exceptionResponse = ApiResponse.builder()
                 .code(Code.TOKEN_INVALID.getCode())
                 .message(Code.TOKEN_INVALID.getMessage())
+                .build();
+        return ResponseEntity.badRequest().body(exceptionResponse);
+    }
+
+    @ExceptionHandler(value = InvalidTokenSignatureException.class)
+    public ResponseEntity<ApiResponse<?>> handlingJOSEException(InvalidTokenSignatureException exception) {
+        ApiResponse<?> exceptionResponse = ApiResponse.builder()
+                .code(exception.getErrorCode().getCode())
+                .message(exception.getErrorCode().getMessage())
                 .build();
         return ResponseEntity.badRequest().body(exceptionResponse);
     }
