@@ -1,16 +1,21 @@
 package com.example.movieticketbooking.service.impl;
 
+import com.example.movieticketbooking.dto.account.request.AccountUpdateRequest;
 import com.example.movieticketbooking.dto.account.response.AccountResponse;
 import com.example.movieticketbooking.dto.api.PagedResponse;
 import com.example.movieticketbooking.entity.AccountEntity;
+import com.example.movieticketbooking.entity.RoleEntity;
 import com.example.movieticketbooking.enums.Code;
 import com.example.movieticketbooking.exception.ResourceNotFoundException;
 import com.example.movieticketbooking.mapper.AccountMapper;
 import com.example.movieticketbooking.repository.AccountRepository;
+import com.example.movieticketbooking.repository.RoleRepository;
 import com.example.movieticketbooking.service.AccountService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +25,8 @@ import java.util.List;
 public class AccountServiceImpl implements AccountService {
     private final AccountRepository accountRepository;
     private final AccountMapper accountMapper;
+    private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
 
     @Override
     public PagedResponse<AccountResponse> getAllAccounts(Pageable pageable) {
@@ -53,5 +60,21 @@ public class AccountServiceImpl implements AccountService {
             throw new ResourceNotFoundException(Code.ACCOUNT_NOT_FOUND);
         }
         accountRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    public AccountResponse updateAccountById(Integer id, AccountUpdateRequest accountUpdateRequest) {
+        AccountEntity accountEntity = accountRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(Code.ACCOUNT_NOT_FOUND));
+        if (accountUpdateRequest.getEnabled() != null) {
+            accountEntity.setEnabled(accountUpdateRequest.getEnabled());
+        }
+        if (accountUpdateRequest.getRoleIds() != null) {
+            List<RoleEntity> roleEntities = roleRepository.findAllById(accountUpdateRequest.getRoleIds());
+            accountEntity.setRoles(roleEntities);
+        }
+        AccountEntity savedAccount = accountRepository.save(accountEntity);
+        return accountMapper.toResponse(savedAccount);
     }
 }
