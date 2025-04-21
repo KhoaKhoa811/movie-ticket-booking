@@ -11,10 +11,7 @@ import com.example.movieticketbooking.utils.PaginationUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/accounts")
@@ -29,6 +26,25 @@ public class AccountController {
         ApiResponse<PagedResponse<AccountResponse>> accountResponse = ApiResponse.<PagedResponse<AccountResponse>>builder()
                 .code(Code.ACCOUNT_GET_ALL.getCode())
                 .data(accountService.getAllAccounts(pageable))
+                .build();
+        return ResponseEntity.ok(accountResponse);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<AccountResponse>> getAccountById(@PathVariable Integer id) {
+        ApiResponse<AccountResponse> accountResponse = ApiResponse.<AccountResponse>builder()
+                .code(Code.ACCOUNT_GET_ALL.getCode())
+                .data(accountService.getAccountById(id))
+                .build();
+        return ResponseEntity.ok(accountResponse);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<?>> deleteAccountById(@PathVariable Integer id) {
+        accountService.deleteAccountById(id);
+        ApiResponse<?> accountResponse = ApiResponse.builder()
+                .code(Code.ACCOUNT_DELETED.getCode())
+                .message(Code.ACCOUNT_DELETED.getMessage())
                 .build();
         return ResponseEntity.ok(accountResponse);
     }

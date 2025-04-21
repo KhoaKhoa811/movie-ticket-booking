@@ -2,8 +2,9 @@ package com.example.movieticketbooking.service.impl;
 
 import com.example.movieticketbooking.dto.account.response.AccountResponse;
 import com.example.movieticketbooking.dto.api.PagedResponse;
-import com.example.movieticketbooking.dto.movie.response.MovieResponse;
 import com.example.movieticketbooking.entity.AccountEntity;
+import com.example.movieticketbooking.enums.Code;
+import com.example.movieticketbooking.exception.ResourceNotFoundException;
 import com.example.movieticketbooking.mapper.AccountMapper;
 import com.example.movieticketbooking.repository.AccountRepository;
 import com.example.movieticketbooking.service.AccountService;
@@ -37,5 +38,20 @@ public class AccountServiceImpl implements AccountService {
                 .totalPages(accountPage.getTotalPages())
                 .last(accountPage.isLast())
                 .build();
+    }
+
+    @Override
+    public AccountResponse getAccountById(Integer id) {
+        AccountEntity accountEntity = accountRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(Code.ACCOUNT_NOT_FOUND));
+        return accountMapper.toResponse(accountEntity);
+    }
+
+    @Override
+    public void deleteAccountById(Integer id) {
+        if (!accountRepository.existsById(id)) {
+            throw new ResourceNotFoundException(Code.ACCOUNT_NOT_FOUND);
+        }
+        accountRepository.deleteById(id);
     }
 }

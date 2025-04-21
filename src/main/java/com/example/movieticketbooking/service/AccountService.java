@@ -6,4 +6,6 @@ import org.springframework.data.domain.Pageable;
 
 public interface AccountService {
     PagedResponse<AccountResponse> getAllAccounts(Pageable pageable);
+    AccountResponse getAccountById(Integer id);
+    void deleteAccountById(Integer id);
 }
