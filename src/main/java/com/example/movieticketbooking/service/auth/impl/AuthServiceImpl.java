@@ -8,6 +8,7 @@ import com.example.movieticketbooking.entity.AccountEntity;
 import com.example.movieticketbooking.entity.RoleEntity;
 import com.example.movieticketbooking.entity.verification.VerificationTokenEntity;
 import com.example.movieticketbooking.enums.Code;
+import com.example.movieticketbooking.enums.TokenType;
 import com.example.movieticketbooking.exception.InvalidTokenSignatureException;
 import com.example.movieticketbooking.exception.ResourceAlreadyExistsException;
 import com.example.movieticketbooking.exception.ResourceNotFoundException;
@@ -77,7 +78,7 @@ public class AuthServiceImpl implements AuthService {
         // save the entity
         AccountEntity savedEntity = accountRepository.save(accountEntity);
         // generate verification token for the account
-        String verifyToken = verificationTokenService.generateVerificationToken(savedEntity);
+        String verifyToken = verificationTokenService.generateVerificationToken(savedEntity, TokenType.EMAIL_VERIFICATION);
         emailSenderService.sendVerificationEmail(savedEntity.getEmail(), verifyToken);
         // convert the entity to response
         return authMapper.toResponse(savedEntity);
@@ -91,6 +92,9 @@ public class AuthServiceImpl implements AuthService {
                 .orElseThrow(() -> new ResourceNotFoundException(Code.VERIFY_TOKEN_INVALID));
         // validate verification token
         if (verificationToken.getExpiryDate().isBefore(LocalDateTime.now())) {
+            throw new InvalidTokenSignatureException(Code.VERIFY_TOKEN_INVALID);
+        }
+        if (verificationToken.getTokenType() != TokenType.EMAIL_VERIFICATION) {
             throw new InvalidTokenSignatureException(Code.VERIFY_TOKEN_INVALID);
         }
         // get account from verification token

@@ -1,6 +1,7 @@
 package com.example.movieticketbooking.entity.verification;
 
 import com.example.movieticketbooking.entity.AccountEntity;
+import com.example.movieticketbooking.enums.TokenType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,6 +21,8 @@ public class VerificationTokenEntity {
     private String token;
     @Column(name = "expire_time")
     private LocalDateTime expiryDate;
+    @Enumerated(EnumType.STRING)
+    private TokenType tokenType;
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "account_id")
     private AccountEntity account;
