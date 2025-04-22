@@ -29,7 +29,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse<VerificationTokenResponse>> register(@RequestBody RegisterRequest request) throws JOSEException {
+    public ResponseEntity<ApiResponse<VerificationTokenResponse>> register(@RequestBody RegisterRequest request) {
         ApiResponse<VerificationTokenResponse> registerResponse = ApiResponse.<VerificationTokenResponse>builder()
                 .code(Code.REGISTER_PROCESS.getCode())
                 .data(authService.register(request))
@@ -37,8 +37,8 @@ public class AuthController {
         return ResponseEntity.ok(registerResponse);
     }
 
-    @GetMapping("/verify")
-    public ResponseEntity<ApiResponse<RegisterResponse>> verify(@RequestParam("token") String token) throws JOSEException {
+    @GetMapping("/register/verify")
+    public ResponseEntity<ApiResponse<RegisterResponse>> verify(@RequestParam("token") String token) {
         ApiResponse<RegisterResponse> registerResponse = ApiResponse.<RegisterResponse>builder()
                 .code(Code.REGISTER_SUCCESS.getCode())
                 .data(authService.verifyRegisterToken(token))

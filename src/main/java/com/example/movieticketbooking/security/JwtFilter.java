@@ -20,7 +20,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
     private final JwtUtils jwtUtils;
-    private final String[] PUBLIC_ENDPOINTS = {"/api/v1/users", "/api/v1/auth/login", "/api/v1/auth/register", "/api/v1/auth/verify", "/api/v1/email"};
+    private final String[] PUBLIC_ENDPOINTS = {
+            "/api/v1/users", "/api/v1/auth/login", "/api/v1/auth/register",
+            "/api/v1/auth/register/verify", "/api/v1/email"};
 
     @Override
     protected void doFilterInternal(
@@ -39,7 +41,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 return;
             }
         }
-
+        // validate token
         String token = jwtUtils.extractToken(request);
         if (jwtUtils.isValidToken(token)) {
             Authentication authentication = jwtUtils.getAuthentication(token);
