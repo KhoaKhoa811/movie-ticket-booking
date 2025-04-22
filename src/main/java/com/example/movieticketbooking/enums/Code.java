@@ -102,6 +102,8 @@ public enum Code {
     ACCOUNT_GET_ALL(1204, "Account retrieved"),
     ACCOUNT_UPDATED(1205, "Account updated successfully"),
     ACCOUNT_GET(1206, "Account retrieved"),
+    ACCOUNT_PASSWORD_CHANGED(1207, "Account password changed successfully"),
+    PASSWORD_NOT_MATCH(1208, "Password not match" ),
     // jwt
     JWT_CREATED(1300, "JWT Created"),
     JWT_INVALID(1301, "JWT Invalid"),

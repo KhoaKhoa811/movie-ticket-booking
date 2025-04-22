@@ -2,6 +2,7 @@ package com.example.movieticketbooking.controller;
 
 import com.example.movieticketbooking.config.PaginationProperties;
 import com.example.movieticketbooking.dto.account.request.AccountUpdateRequest;
+import com.example.movieticketbooking.dto.account.request.ChangeUserPasswordRequest;
 import com.example.movieticketbooking.dto.account.response.AccountResponse;
 import com.example.movieticketbooking.dto.api.ApiResponse;
 import com.example.movieticketbooking.dto.api.PagedResponse;
@@ -58,6 +59,16 @@ public class AccountController {
         ApiResponse<AccountResponse> accountResponse = ApiResponse.<AccountResponse>builder()
                 .code(Code.ACCOUNT_UPDATED.getCode())
                 .data(accountService.updateAccountById(id, accountUpdateRequest))
+                .build();
+        return ResponseEntity.ok(accountResponse);
+    }
+
+    @PatchMapping("/change-password")
+    public ResponseEntity<ApiResponse<?>> changeUserPassword(@RequestBody ChangeUserPasswordRequest changeUserPasswordRequest) {
+        accountService.changeUserPassword(changeUserPasswordRequest);
+        ApiResponse<?> accountResponse = ApiResponse.builder()
+                .code(Code.ACCOUNT_PASSWORD_CHANGED.getCode())
+                .message(Code.ACCOUNT_PASSWORD_CHANGED.getMessage())
                 .build();
         return ResponseEntity.ok(accountResponse);
     }

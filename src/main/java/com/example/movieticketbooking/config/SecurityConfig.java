@@ -1,6 +1,5 @@
 package com.example.movieticketbooking.config;
 
-import com.example.movieticketbooking.security.JwtFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -10,22 +9,26 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.crypto.spec.SecretKeySpec;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Collection;
 import java.util.List;
 
 @Configuration
@@ -35,32 +38,31 @@ import java.util.List;
 public class SecurityConfig {
     @Value("${jwt.signed-key}")
     private String SIGNER_KEY;
-    private final JwtFilter jwtFilter;
     private final String[] PUBLIC_ENDPOINTS = {"/api/v1/auth/**", "/api/v1/email"};
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .httpBasic(Customizer.withDefaults())
-                .formLogin(Customizer.withDefaults())
-                .logout(Customizer.withDefaults())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(request ->
                         request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/v1/auth/register/verify").permitAll()
                                 .anyRequest().authenticated()
                 );
         http.oauth2ResourceServer(oath2 ->
-                oath2.jwt(jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder()))
+                oath2.jwt(jwtConfigurer ->
+                        jwtConfigurer
+                                .decoder(jwtDecoder())
+                                .jwtAuthenticationConverter(jwtAuthenticationConverter()))
         );
-        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
     @Bean
     JwtDecoder jwtDecoder() {
         byte[] decodedKey = Base64.getDecoder().decode(SIGNER_KEY);
-        SecretKeySpec secretKeySpec = new SecretKeySpec(decodedKey, "HS526");
+        SecretKeySpec secretKeySpec = new SecretKeySpec(decodedKey, "HmacSHA256");
 
         return NimbusJwtDecoder
                 .withSecretKey(secretKeySpec)
@@ -84,5 +86,22 @@ public class SecurityConfig {
         authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(encoder);
         return authProvider;
+    }
+
+    @Bean
+    public JwtAuthenticationConverter jwtAuthenticationConverter() {
+        JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
+        converter.setJwtGrantedAuthoritiesConverter(jwt -> {
+            // Get roles/permissions from "scope" claim or another claim in the JWT
+            Collection<GrantedAuthority> authorities = new ArrayList<>();
+            String scope = jwt.getClaimAsString("scope");
+            if (scope != null) {
+                for (String role : scope.split(" ")) {
+                    authorities.add(new SimpleGrantedAuthority(role));
+                }
+            }
+            return authorities;
+        });
+        return converter;
     }
 }

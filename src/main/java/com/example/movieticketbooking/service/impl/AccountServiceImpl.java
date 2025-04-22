@@ -1,11 +1,13 @@
 package com.example.movieticketbooking.service.impl;
 
 import com.example.movieticketbooking.dto.account.request.AccountUpdateRequest;
+import com.example.movieticketbooking.dto.account.request.ChangeUserPasswordRequest;
 import com.example.movieticketbooking.dto.account.response.AccountResponse;
 import com.example.movieticketbooking.dto.api.PagedResponse;
 import com.example.movieticketbooking.entity.AccountEntity;
 import com.example.movieticketbooking.entity.RoleEntity;
 import com.example.movieticketbooking.enums.Code;
+import com.example.movieticketbooking.exception.IllegalArgumentException;
 import com.example.movieticketbooking.exception.ResourceNotFoundException;
 import com.example.movieticketbooking.mapper.AccountMapper;
 import com.example.movieticketbooking.repository.AccountRepository;
@@ -15,6 +17,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -76,5 +81,20 @@ public class AccountServiceImpl implements AccountService {
         }
         AccountEntity savedAccount = accountRepository.save(accountEntity);
         return accountMapper.toResponse(savedAccount);
+    }
+
+    @Override
+    public void changeUserPassword(ChangeUserPasswordRequest changeUserPasswordRequest) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        AccountEntity accountEntity = accountRepository.findByEmail(authentication.getName())
+                .orElseThrow(() -> new ResourceNotFoundException(Code.ACCOUNT_NOT_FOUND));
+        // compare the current password with the password user requests
+        if (!passwordEncoder.matches(changeUserPasswordRequest.getCurrentPassword(), accountEntity.getPassword())) {
+            throw new IllegalArgumentException(Code.PASSWORD_NOT_MATCH);
+        }
+        // encode the new password
+        String encodedNewPassword = passwordEncoder.encode(changeUserPasswordRequest.getNewPassword());
+        accountEntity.setPassword(encodedNewPassword);
+        accountRepository.save(accountEntity);
     }
 }

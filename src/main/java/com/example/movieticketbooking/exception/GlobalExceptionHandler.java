@@ -2,7 +2,6 @@ package com.example.movieticketbooking.exception;
 
 import com.example.movieticketbooking.dto.api.ApiResponse;
 import com.example.movieticketbooking.enums.Code;
-import com.nimbusds.jose.JOSEException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;

@@ -57,7 +57,7 @@ public class AuthController {
         return ResponseEntity.ok(forgotPasswordResponse);
     }
 
-    @PostMapping("/forgot-password/verify")
+    @PostMapping("/change-password")
     public ResponseEntity<ApiResponse<?>> verifyForgotPassword(@RequestBody ChangePasswordRequest changePasswordRequest) {
         authService.verifyForgotPassword(changePasswordRequest);
         ApiResponse<?> verifyPasswordResponse = ApiResponse.builder()
