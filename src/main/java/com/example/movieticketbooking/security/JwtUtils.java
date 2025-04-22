@@ -21,7 +21,7 @@ public class JwtUtils {
     private String SIGNER_KEY;
     private final UserDetailsService userDetailsService;
 
-    public String generateToken(Authentication authentication) throws JOSEException {
+    public String generateAccessToken(Authentication authentication) throws JOSEException {
         // get user information
         String email = authentication.getName();
         String scope = authentication.getAuthorities().stream()
@@ -46,4 +46,31 @@ public class JwtUtils {
         // return String jwt
         return jwsObject.serialize();
     }
+
+    public String generateRefreshToken(Authentication authentication) throws JOSEException {
+        // get user information
+        String email = authentication.getName();
+        String scope = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(" "));
+        // create header
+        JWSHeader header = new JWSHeader(JWSAlgorithm.HS256);
+        // create JWT Claims
+        JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
+                .subject(email)
+                .claim("scope", scope)
+                .issueTime(new Date())
+                .expirationTime(new Date(System.currentTimeMillis() + 2592000000L)) // one hour
+                .build();
+        // create signer
+        Payload payload = new Payload(jwtClaimsSet.toJSONObject());
+        // create jws object
+        JWSObject jwsObject = new JWSObject(header, payload);
+        // sign jws object
+        byte[] decodedKey = Base64.getDecoder().decode(SIGNER_KEY);
+        jwsObject.sign(new MACSigner(decodedKey));
+        // return String jwt
+        return jwsObject.serialize();
+    }
+
 }
