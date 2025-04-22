@@ -3,12 +3,19 @@ package com.example.movieticketbooking.enums;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import javax.tools.Diagnostic;
+
 @AllArgsConstructor
 @Getter
 public enum Code {
     UNCATEGORIZED_EXCEPTION(9999, "Uncagorized error"),
     JSON_FORMAT_INVALID(9998, "JSON format invalid"),
     CONTENT_TYPE_INVALID(9997, "Content type invalid"),
+    BAD_CREDENTIALS(9996, "Bad credentials"),
+    USERNAME_NOT_FOUND(9995, "Username not exists"),
+    TOKEN_INVALID(9994, "Invalid or malformed token"),
+    EMAIL_SENT_SUCCESS(9993, "Email sent successfully"),
+    REFRESH_TOKEN(9992, "Refresh token successfully"),
     // genre code
     GENRE_CREATED(100, "Genre created"),
     GENRE_GET_ALL(101, "Genre retrieved"),
@@ -88,8 +95,42 @@ public enum Code {
     SHOWS_ALREADY_EXIST(806, "Shows already exist" ),
     SHOWS_CONFLICT_WITH_EXISTING_SHOWS(807, "Shows conflict with existing shows"),
     SHOWS_CONFLICT_WITHIN_REQUEST(808, "Shows conflict within request"),
+    // account
+    ACCOUNT_EMAIL_NOT_FOUND(1200, "Account email not found" ),
+    ACCOUNT_EMAIL_ALREADY_EXIST(1201, "Account email already exist"),
+    ACCOUNT_NOT_FOUND(1202, "Account not found"),
+    ACCOUNT_DELETED(1203, "Account deleted successfully"),
+    ACCOUNT_GET_ALL(1204, "Account retrieved"),
+    ACCOUNT_UPDATED(1205, "Account updated successfully"),
+    ACCOUNT_GET(1206, "Account retrieved"),
+    ACCOUNT_PASSWORD_CHANGED(1207, "Account password changed successfully"),
+    PASSWORD_NOT_MATCH(1208, "Password not match" ),
+    // jwt
+    JWT_CREATED(1300, "JWT Created"),
+    JWT_INVALID(1301, "JWT Invalid"),
+    // permission
+    PERMISSION_CREATED(1400, "Permission created"),
+    PERMISSION_GET_ALL(1401, "Permission retrieved"),
+    PERMISSION_NOT_FOUND(1402, "Permission not found"),
+    PERMISSION_DELETED(1403, "Permission deleted successfully"),
+    PERMISSION_UPDATED(1404, "Permission updated successfully"),
+    PERMISSION_ALREADY_EXIST(1405, "Permission already exist" ),
+    // role
+    ROLE_CREATED(1500, "Role created"),
+    ROLE_GET_ALL(1501, "Role retrieved"),
+    ROLE_NOT_FOUND(1502, "Role not found"),
+    ROLE_DELETED(1503, "Role deleted successfully"),
+    ROLE_UPDATED(1504, "Role updated successfully"),
+    ROLE_ALREADY_EXIST(1505, "Role already exist" ),
+    // login
+    LOGIN_SUCCESS(1600, "Login success"),
+    REGISTER_SUCCESS(1601, "Register success"),
+    REGISTER_PROCESS(1602, "Register process"),
+    VERIFY_TOKEN_INVALID(1603, "Verify token invalid"),
+    ACCOUNT_ALREADY_VERIFY(1604, "Account already verify"),
+    FORGOT_PASSWORD_PROCESS(1605, "Forgot password process"),
+    PASSWORD_CHANGED_SUCCESS(1606, "Password changed successfully"),
     ;
-
 
     private final int code;
     private final String message;

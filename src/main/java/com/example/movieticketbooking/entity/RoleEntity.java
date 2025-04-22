@@ -20,7 +20,12 @@ public class RoleEntity {
     private Integer id;
     @Column(unique = true, nullable = false)
     private String name;
-    @ManyToMany(mappedBy = "roles")
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinTable(
+            name = "account_roles",
+            joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "account_id")
+    )
     private List<AccountEntity> accounts;
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.REFRESH})
     @JoinTable(

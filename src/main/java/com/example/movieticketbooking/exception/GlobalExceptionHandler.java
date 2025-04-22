@@ -80,14 +80,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(exceptionResponse);
     }
 
-//    @ExceptionHandler(value = HttpMediaTypeNotSupportedException.class)
-//    public ResponseEntity<ApiResponse<?>> handlingHttpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException exception) {
-//        ApiResponse<?> exceptionResponse = ApiResponse.builder()
-//                .code(Code.CONTENT_TYPE_INVALID.getCode())
-//                .message(Code.CONTENT_TYPE_INVALID.getMessage())
-//                .build();
-//        return ResponseEntity.badRequest().body(exceptionResponse);
-//    }
+    @ExceptionHandler(value = HttpMediaTypeNotSupportedException.class)
+    public ResponseEntity<ApiResponse<?>> handlingHttpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException exception) {
+        ApiResponse<?> exceptionResponse = ApiResponse.builder()
+                .code(Code.CONTENT_TYPE_INVALID.getCode())
+                .message(Code.CONTENT_TYPE_INVALID.getMessage())
+                .build();
+        return ResponseEntity.badRequest().body(exceptionResponse);
+    }
 
     @ExceptionHandler(value = BadRequestException.class)
     public ResponseEntity<ApiResponse<?>> handlingBadRequestException(BadRequestException exception) {
