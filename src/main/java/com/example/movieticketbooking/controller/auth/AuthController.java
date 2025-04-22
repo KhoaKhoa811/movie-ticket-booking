@@ -1,7 +1,9 @@
-package com.example.movieticketbooking.controller;
+package com.example.movieticketbooking.controller.auth;
 
 import com.example.movieticketbooking.dto.api.ApiResponse;
+import com.example.movieticketbooking.dto.auth.request.ChangePasswordRequest;
 import com.example.movieticketbooking.dto.auth.request.LoginRequest;
+import com.example.movieticketbooking.dto.auth.request.PasswordHandleEmailRequest;
 import com.example.movieticketbooking.dto.auth.request.RegisterRequest;
 import com.example.movieticketbooking.dto.auth.response.LoginResponse;
 import com.example.movieticketbooking.dto.auth.response.RegisterResponse;
@@ -47,7 +49,21 @@ public class AuthController {
     }
 
     @PostMapping("/forgot-password")
-    public ResponseEntity<ApiResponse<?>> forgotPassword(@RequestBody String email) throws JOSEException {
-        return null;
+    public ResponseEntity<ApiResponse<VerificationTokenResponse>> forgotPassword(@RequestBody PasswordHandleEmailRequest request) throws JOSEException {
+        ApiResponse<VerificationTokenResponse> forgotPasswordResponse = ApiResponse.<VerificationTokenResponse>builder()
+                .code(Code.FORGOT_PASSWORD_PROCESS.getCode())
+                .data(authService.forgotPasswordHandler(request))
+                .build();
+        return ResponseEntity.ok(forgotPasswordResponse);
+    }
+
+    @PostMapping("/forgot-password/verify")
+    public ResponseEntity<ApiResponse<?>> verifyForgotPassword(@RequestBody ChangePasswordRequest changePasswordRequest) {
+        authService.verifyForgotPassword(changePasswordRequest);
+        ApiResponse<?> verifyPasswordResponse = ApiResponse.builder()
+                .code(Code.PASSWORD_CHANGED_SUCCESS.getCode())
+                .message(Code.PASSWORD_CHANGED_SUCCESS.getMessage())
+                .build();
+        return ResponseEntity.ok(verifyPasswordResponse);
     }
 }

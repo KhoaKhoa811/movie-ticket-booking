@@ -1,6 +1,8 @@
 package com.example.movieticketbooking.service.auth.impl;
 
+import com.example.movieticketbooking.dto.auth.request.ChangePasswordRequest;
 import com.example.movieticketbooking.dto.auth.request.LoginRequest;
+import com.example.movieticketbooking.dto.auth.request.PasswordHandleEmailRequest;
 import com.example.movieticketbooking.dto.auth.request.RegisterRequest;
 import com.example.movieticketbooking.dto.auth.response.LoginResponse;
 import com.example.movieticketbooking.dto.auth.response.RegisterResponse;
@@ -20,7 +22,6 @@ import com.example.movieticketbooking.repository.auth.VerificationTokenRepositor
 import com.example.movieticketbooking.security.JwtUtils;
 import com.example.movieticketbooking.service.auth.AuthService;
 import com.example.movieticketbooking.service.auth.VerificationTokenService;
-import com.example.movieticketbooking.service.email.EmailSenderService;
 import com.nimbusds.jose.JOSEException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -106,5 +107,38 @@ public class AuthServiceImpl implements AuthService {
         AccountEntity updatedAccount = accountRepository.save(account); // update status of the account
         verificationTokenRepository.delete(verificationToken);
         return authMapper.toResponse(updatedAccount);
+    }
+
+    @Override
+    public VerificationTokenResponse forgotPasswordHandler(PasswordHandleEmailRequest request) {
+        AccountEntity accountEntity = accountRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new ResourceNotFoundException(Code.ACCOUNT_NOT_FOUND));
+        // generate verification token for the account
+        String verifyToken = verificationTokenService.generateVerificationToken(accountEntity, TokenType.PASSWORD_RESET);
+        return new VerificationTokenResponse(verifyToken);
+    }
+
+    @Override
+    public void verifyForgotPassword(ChangePasswordRequest changePasswordRequest) {
+        String token = changePasswordRequest.getToken();
+        String newPassword = changePasswordRequest.getNewPassword();
+        // get verification token
+        VerificationTokenEntity verificationToken = verificationTokenRepository.findByToken(token)
+                .orElseThrow(() -> new ResourceNotFoundException(Code.VERIFY_TOKEN_INVALID));
+        // validate verification token
+        if (verificationToken.getExpiryDate().isBefore(LocalDateTime.now())) {
+            throw new InvalidTokenSignatureException(Code.VERIFY_TOKEN_INVALID);
+        }
+        if (verificationToken.getTokenType() != TokenType.PASSWORD_RESET) {
+            throw new InvalidTokenSignatureException(Code.VERIFY_TOKEN_INVALID);
+        }
+        // get account from verification token
+        AccountEntity account = verificationToken.getAccount();
+        // update password of the account
+        account.setPassword(passwordEncoder.encode(newPassword));
+        // update the account
+        accountRepository.save(account);
+        // delete the verification token
+        verificationTokenRepository.delete(verificationToken);
     }
 }

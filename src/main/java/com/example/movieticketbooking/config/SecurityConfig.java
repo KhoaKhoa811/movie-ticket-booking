@@ -1,9 +1,7 @@
 package com.example.movieticketbooking.config;
 
-import com.example.movieticketbooking.security.CustomUserDetailsService;
 import com.example.movieticketbooking.security.JwtFilter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +11,6 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -39,7 +36,7 @@ public class SecurityConfig {
     @Value("${jwt.signed-key}")
     private String SIGNER_KEY;
     private final JwtFilter jwtFilter;
-    private final String[] PUBLIC_ENDPOINTS = {"/api/v1/users", "/api/v1/auth/**", "/api/v1/email"};
+    private final String[] PUBLIC_ENDPOINTS = {"/api/v1/auth/**", "/api/v1/email"};
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

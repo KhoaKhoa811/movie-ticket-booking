@@ -125,6 +125,8 @@ public enum Code {
     REGISTER_PROCESS(1602, "Register process"),
     VERIFY_TOKEN_INVALID(1603, "Verify token invalid"),
     ACCOUNT_ALREADY_VERIFY(1604, "Account already verify"),
+    FORGOT_PASSWORD_PROCESS(1605, "Forgot password process"),
+    PASSWORD_CHANGED_SUCCESS(1606, "Password changed successfully"),
     ;
 
     private final int code;
