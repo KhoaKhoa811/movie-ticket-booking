@@ -1,8 +1,12 @@
 package com.example.movieticketbooking.security;
 
+import com.example.movieticketbooking.enums.Code;
+import com.example.movieticketbooking.exception.InvalidTokenSignatureException;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
+import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
+import com.nimbusds.jwt.SignedJWT;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -71,6 +75,34 @@ public class JwtUtils {
         jwsObject.sign(new MACSigner(decodedKey));
         // return String jwt
         return jwsObject.serialize();
+    }
+
+    public String getEmail(String token) {
+        try {
+            // Validate jwt sign
+            if (isValidToken(token)) {
+                // Parse JWT
+                SignedJWT signedJWT = SignedJWT.parse(token);
+                // Get claims from JWT
+                JWTClaimsSet claims = signedJWT.getJWTClaimsSet();
+                return claims.getSubject();  // Return the subject (email in this case)
+            } else {
+                throw new InvalidTokenSignatureException(Code.JWT_INVALID);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Error while validating JWT", e);
+        }
+    }
+
+    public boolean isValidToken(String token) {
+        try {
+            SignedJWT signedJWT = SignedJWT.parse(token);
+            byte[] decodedKey = Base64.getDecoder().decode(SIGNER_KEY);
+            JWSVerifier verifier = new MACVerifier(decodedKey);
+            return signedJWT.verify(verifier);  // Verifies the JWT signature
+        } catch (Exception e) {
+            return false;  // If there's any issue parsing or verifying the token, return false
+        }
     }
 
 }

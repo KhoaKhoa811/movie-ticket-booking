@@ -1,10 +1,8 @@
 package com.example.movieticketbooking.service.auth.impl;
 
-import com.example.movieticketbooking.dto.auth.request.ChangePasswordRequest;
-import com.example.movieticketbooking.dto.auth.request.LoginRequest;
-import com.example.movieticketbooking.dto.auth.request.PasswordHandleEmailRequest;
-import com.example.movieticketbooking.dto.auth.request.RegisterRequest;
+import com.example.movieticketbooking.dto.auth.request.*;
 import com.example.movieticketbooking.dto.auth.response.LoginResponse;
+import com.example.movieticketbooking.dto.auth.response.RefreshTokenResponse;
 import com.example.movieticketbooking.dto.auth.response.RegisterResponse;
 import com.example.movieticketbooking.dto.auth.response.VerificationTokenResponse;
 import com.example.movieticketbooking.entity.AccountEntity;
@@ -29,6 +27,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -46,6 +46,7 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final VerificationTokenService verificationTokenService;
     private final VerificationTokenRepository verificationTokenRepository;
+    private final UserDetailsService userDetailsService;
 
     @Override
     public LoginResponse login(LoginRequest request) throws JOSEException {
@@ -141,5 +142,19 @@ public class AuthServiceImpl implements AuthService {
         accountRepository.save(account);
         // delete the verification token
         verificationTokenRepository.delete(verificationToken);
+    }
+
+    @Override
+    public RefreshTokenResponse refreshToken(RefreshTokenRequest request) {
+        try {
+            String email = jwtUtils.getEmail(request.getRefreshToken());
+            UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+            Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+            // Tạo Access Token mới
+            String newAccessToken = jwtUtils.generateAccessToken(authentication);
+            return new RefreshTokenResponse(newAccessToken);
+        } catch (Exception e){
+            throw new RuntimeException(e);
+        }
     }
 }

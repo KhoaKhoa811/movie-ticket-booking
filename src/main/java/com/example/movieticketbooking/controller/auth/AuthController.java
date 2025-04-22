@@ -1,11 +1,9 @@
 package com.example.movieticketbooking.controller.auth;
 
 import com.example.movieticketbooking.dto.api.ApiResponse;
-import com.example.movieticketbooking.dto.auth.request.ChangePasswordRequest;
-import com.example.movieticketbooking.dto.auth.request.LoginRequest;
-import com.example.movieticketbooking.dto.auth.request.PasswordHandleEmailRequest;
-import com.example.movieticketbooking.dto.auth.request.RegisterRequest;
+import com.example.movieticketbooking.dto.auth.request.*;
 import com.example.movieticketbooking.dto.auth.response.LoginResponse;
+import com.example.movieticketbooking.dto.auth.response.RefreshTokenResponse;
 import com.example.movieticketbooking.dto.auth.response.RegisterResponse;
 import com.example.movieticketbooking.dto.auth.response.VerificationTokenResponse;
 import com.example.movieticketbooking.enums.Code;
@@ -49,7 +47,7 @@ public class AuthController {
     }
 
     @PostMapping("/forgot-password")
-    public ResponseEntity<ApiResponse<VerificationTokenResponse>> forgotPassword(@RequestBody PasswordHandleEmailRequest request) throws JOSEException {
+    public ResponseEntity<ApiResponse<VerificationTokenResponse>> forgotPassword(@RequestBody PasswordHandleEmailRequest request) {
         ApiResponse<VerificationTokenResponse> forgotPasswordResponse = ApiResponse.<VerificationTokenResponse>builder()
                 .code(Code.FORGOT_PASSWORD_PROCESS.getCode())
                 .data(authService.forgotPasswordHandler(request))
@@ -65,5 +63,14 @@ public class AuthController {
                 .message(Code.PASSWORD_CHANGED_SUCCESS.getMessage())
                 .build();
         return ResponseEntity.ok(verifyPasswordResponse);
+    }
+
+    @PostMapping("/refresh-token")
+    public ResponseEntity<ApiResponse<RefreshTokenResponse>> refreshToken(@RequestBody RefreshTokenRequest request) throws JOSEException {
+        ApiResponse<RefreshTokenResponse> refreshTokenResponse = ApiResponse.<RefreshTokenResponse>builder()
+                .code(Code.REFRESH_TOKEN.getCode())
+                .data(authService.refreshToken(request))
+                .build();
+        return ResponseEntity.ok(refreshTokenResponse);
     }
 }
