@@ -39,7 +39,7 @@ public class SecurityConfig {
     @Value("${jwt.signed-key}")
     private String SIGNER_KEY;
     private final JwtFilter jwtFilter;
-    private final String[] PUBLIC_ENDPOINTS = {"/api/v1/users", "/api/v1/auth/**"};
+    private final String[] PUBLIC_ENDPOINTS = {"/api/v1/users", "/api/v1/auth/**", "/api/v1/email"};
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

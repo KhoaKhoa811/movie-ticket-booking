@@ -14,6 +14,7 @@ public enum Code {
     BAD_CREDENTIALS(9996, "Bad credentials"),
     USERNAME_NOT_FOUND(9995, "Username not exists"),
     TOKEN_INVALID(9994, "Invalid or malformed token"),
+    EMAIL_SENT_SUCCESS(9993, "Email sent successfully"),
     // genre code
     GENRE_CREATED(100, "Genre created"),
     GENRE_GET_ALL(101, "Genre retrieved"),

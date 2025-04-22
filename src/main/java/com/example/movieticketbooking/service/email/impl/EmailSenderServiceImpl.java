@@ -1,5 +1,6 @@
 package com.example.movieticketbooking.service.email.impl;
 
+import com.example.movieticketbooking.dto.auth.request.VerifyEmailRequest;
 import com.example.movieticketbooking.service.email.EmailSenderService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -38,15 +39,14 @@ public class EmailSenderServiceImpl implements EmailSenderService {
 
     @Override
     @Async("taskExecutor")
-    public void sendVerificationEmail(String toEmail, String token) {
-        String fullVerifyLink = verifyLink + token;
+    public void sendVerificationEmail(VerifyEmailRequest verifyEmailRequest) {
 
         Map<String, String> replacements = new HashMap<>();
-        replacements.put("verifyLink", fullVerifyLink);
+        replacements.put("verifyLink", verifyEmailRequest.getVerificationLink());
 
         try {
             String htmlContent = loadEmailTemplate("templates/verify-email.html", replacements);
-            sendHtmlEmail(toEmail, "Xác nhận tài khoản", htmlContent);
+            sendHtmlEmail(verifyEmailRequest.getEmail(), verifyEmailRequest.getSubject(), htmlContent);
         } catch (IOException e) {
             throw new RuntimeException("Lỗi khi đọc template: " + e.getMessage());
         }

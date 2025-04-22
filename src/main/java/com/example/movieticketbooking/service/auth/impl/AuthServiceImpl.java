@@ -4,6 +4,7 @@ import com.example.movieticketbooking.dto.auth.request.LoginRequest;
 import com.example.movieticketbooking.dto.auth.request.RegisterRequest;
 import com.example.movieticketbooking.dto.auth.response.LoginResponse;
 import com.example.movieticketbooking.dto.auth.response.RegisterResponse;
+import com.example.movieticketbooking.dto.auth.response.VerificationTokenResponse;
 import com.example.movieticketbooking.entity.AccountEntity;
 import com.example.movieticketbooking.entity.RoleEntity;
 import com.example.movieticketbooking.entity.verification.VerificationTokenEntity;
@@ -43,7 +44,6 @@ public class AuthServiceImpl implements AuthService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final VerificationTokenService verificationTokenService;
-    private final EmailSenderService emailSenderService;
     private final VerificationTokenRepository verificationTokenRepository;
 
     @Override
@@ -63,7 +63,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    public RegisterResponse register(RegisterRequest request) {
+    public VerificationTokenResponse register(RegisterRequest request) {
         // validate the request
         if (accountRepository.existsByEmail(request.getEmail())) {
             throw new ResourceAlreadyExistsException(Code.ACCOUNT_EMAIL_ALREADY_EXIST);
@@ -79,9 +79,8 @@ public class AuthServiceImpl implements AuthService {
         AccountEntity savedEntity = accountRepository.save(accountEntity);
         // generate verification token for the account
         String verifyToken = verificationTokenService.generateVerificationToken(savedEntity, TokenType.EMAIL_VERIFICATION);
-        emailSenderService.sendVerificationEmail(savedEntity.getEmail(), verifyToken);
         // convert the entity to response
-        return authMapper.toResponse(savedEntity);
+        return new VerificationTokenResponse(verifyToken);
     }
 
     @Override

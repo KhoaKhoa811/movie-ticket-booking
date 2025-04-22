@@ -20,7 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
     private final JwtUtils jwtUtils;
-    private final String[] PUBLIC_ENDPOINTS = {"/api/v1/users", "/api/v1/auth/login", "/api/v1/auth/register", "/api/v1/auth/verify"};
+    private final String[] PUBLIC_ENDPOINTS = {"/api/v1/users", "/api/v1/auth/login", "/api/v1/auth/register", "/api/v1/auth/verify", "/api/v1/email"};
 
     @Override
     protected void doFilterInternal(
@@ -31,6 +31,9 @@ public class JwtFilter extends OncePerRequestFilter {
         String requestPath = request.getRequestURI();
         // return if the requested path is the public endpoint
         for (String endpoint : PUBLIC_ENDPOINTS) {
+            System.out.println("endpoint: " + endpoint);
+             System.out.println("requestPath: " + requestPath);
+             System.out.println(requestPath.startsWith(endpoint));
             if (requestPath.startsWith(endpoint)) {
                 filterChain.doFilter(request, response);
                 return;

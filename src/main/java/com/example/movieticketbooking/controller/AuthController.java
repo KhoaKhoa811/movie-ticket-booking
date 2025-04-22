@@ -5,6 +5,7 @@ import com.example.movieticketbooking.dto.auth.request.LoginRequest;
 import com.example.movieticketbooking.dto.auth.request.RegisterRequest;
 import com.example.movieticketbooking.dto.auth.response.LoginResponse;
 import com.example.movieticketbooking.dto.auth.response.RegisterResponse;
+import com.example.movieticketbooking.dto.auth.response.VerificationTokenResponse;
 import com.example.movieticketbooking.enums.Code;
 import com.example.movieticketbooking.service.auth.AuthService;
 import com.nimbusds.jose.JOSEException;
@@ -28,8 +29,8 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse<RegisterResponse>> register(@RequestBody RegisterRequest request) throws JOSEException {
-        ApiResponse<RegisterResponse> registerResponse = ApiResponse.<RegisterResponse>builder()
+    public ResponseEntity<ApiResponse<VerificationTokenResponse>> register(@RequestBody RegisterRequest request) throws JOSEException {
+        ApiResponse<VerificationTokenResponse> registerResponse = ApiResponse.<VerificationTokenResponse>builder()
                 .code(Code.REGISTER_PROCESS.getCode())
                 .data(authService.register(request))
                 .build();
@@ -43,5 +44,10 @@ public class AuthController {
                 .data(authService.verifyRegisterToken(token))
                 .build();
         return ResponseEntity.ok(registerResponse);
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<ApiResponse<?>> forgotPassword(@RequestBody String email) throws JOSEException {
+        return null;
     }
 }
