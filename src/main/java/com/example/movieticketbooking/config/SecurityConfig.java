@@ -31,6 +31,8 @@ import java.util.Base64;
 import java.util.Collection;
 import java.util.List;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -56,6 +58,7 @@ public class SecurityConfig {
                                 .decoder(jwtDecoder())
                                 .jwtAuthenticationConverter(jwtAuthenticationConverter()))
         );
+        http.oauth2Login(withDefaults());
         return http.build();
     }
 
