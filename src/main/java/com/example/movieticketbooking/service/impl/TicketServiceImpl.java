@@ -99,4 +99,11 @@ public class TicketServiceImpl implements TicketService {
                 .orElseThrow(() -> new ResourceNotFoundException(Code.TICKET_NOT_FOUND));
         return ticketMapper.toResponse(ticketEntity);
     }
+
+    @Override
+    public TicketResponse getTicketById(Integer id) {
+        TicketEntity ticketEntity = ticketRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(Code.TICKET_NOT_FOUND));
+        return ticketMapper.toResponse(ticketEntity);
+    }
 }

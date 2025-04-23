@@ -46,4 +46,13 @@ public class TicketController {
                 .build();
         return ResponseEntity.ok(ticketResponse);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<TicketResponse>> getTicketById(@PathVariable Integer id) {
+        ApiResponse<TicketResponse> ticketResponse = ApiResponse.<TicketResponse>builder()
+                .code(Code.TICKET_GET_SUCCESS.getCode())
+                .data(ticketService.getTicketById(id))
+                .build();
+        return ResponseEntity.ok(ticketResponse);
+    }
 }

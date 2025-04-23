@@ -12,4 +12,5 @@ public interface TicketService {
     void generateTicket(ShowEntity showEntity);
     PagedResponse<TicketWithSeatResponse> getTicketsByShowId(Integer showId, Pageable pageable);
     TicketResponse getTicketByShowIdAndSeatId(Integer showId, Integer seatId);
+    TicketResponse getTicketById(Integer id);
 }
