@@ -1,5 +1,6 @@
 package com.example.movieticketbooking.mapper;
 
+import com.example.movieticketbooking.dto.api.PagedResponse;
 import com.example.movieticketbooking.dto.ticket.response.TicketResponse;
 import com.example.movieticketbooking.dto.ticket.response.TicketWithSeatResponse;
 import com.example.movieticketbooking.entity.TicketEntity;

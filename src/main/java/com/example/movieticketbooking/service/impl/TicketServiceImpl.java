@@ -1,5 +1,7 @@
 package com.example.movieticketbooking.service.impl;
 
+import com.example.movieticketbooking.dto.api.PagedResponse;
+import com.example.movieticketbooking.dto.ticket.response.TicketResponse;
 import com.example.movieticketbooking.dto.ticket.response.TicketWithSeatResponse;
 import com.example.movieticketbooking.entity.CinemaHallSeatEntity;
 import com.example.movieticketbooking.entity.ShowEntity;
@@ -8,11 +10,14 @@ import com.example.movieticketbooking.enums.Code;
 import com.example.movieticketbooking.exception.ResourceNotFoundException;
 import com.example.movieticketbooking.mapper.TicketMapper;
 import com.example.movieticketbooking.repository.CinemaHallSeatRepository;
+import com.example.movieticketbooking.repository.ShowRepository;
 import com.example.movieticketbooking.repository.TicketRepository;
 import com.example.movieticketbooking.service.TicketService;
 import com.example.movieticketbooking.utils.TicketUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +33,7 @@ public class TicketServiceImpl implements TicketService {
     private final CinemaHallSeatRepository cinemaHallSeatRepository;
     private final ConcurrentMap<Integer, Object> showLocks = new ConcurrentHashMap<>();
     private final TicketMapper ticketMapper;
+    private final ShowRepository showRepository;
 
     @Override
     @Transactional
@@ -60,11 +66,37 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public List<TicketWithSeatResponse> getTicketsByShowId(Integer showId) {
-        if (!ticketRepository.existsByShowId(showId)) {
+    public PagedResponse<TicketWithSeatResponse> getTicketsByShowId(Integer showId, Pageable pageable) {
+        if (!showRepository.existsById(showId)) {
             throw new ResourceNotFoundException(Code.SHOWS_NOT_FOUND);
         }
-        List<TicketEntity> ticketEntities = ticketRepository.findByShowId(showId);
-        return ticketMapper.toWithSeatResponseList(ticketEntities);
+        Page<TicketEntity> ticketEntities = ticketRepository.findByShowId(showId, pageable);
+        // mapping to paged response
+        List<TicketWithSeatResponse> content = ticketEntities.getContent()
+                .stream()
+                .map(ticketMapper::toWithSeatResponse)
+                .toList();
+        // mapping to paged response
+        return PagedResponse.<TicketWithSeatResponse>builder()
+                .content(content)
+                .page(ticketEntities.getNumber())
+                .size(ticketEntities.getSize())
+                .totalElements(ticketEntities.getTotalElements())
+                .totalPages(ticketEntities.getTotalPages())
+                .last(ticketEntities.isLast())
+                .build();
+    }
+
+    @Override
+    public TicketResponse getTicketByShowIdAndSeatId(Integer showId, Integer seatId) {
+        if (!showRepository.existsById(showId)) {
+            throw new ResourceNotFoundException(Code.SHOWS_NOT_FOUND);
+        }
+        if (!cinemaHallSeatRepository.existsById(seatId)) {
+            throw new ResourceNotFoundException(Code.SEAT_NOT_FOUND);
+        }
+        TicketEntity ticketEntity = ticketRepository.findByShowIdAndSeatId(showId, seatId)
+                .orElseThrow(() -> new ResourceNotFoundException(Code.TICKET_NOT_FOUND));
+        return ticketMapper.toResponse(ticketEntity);
     }
 }
