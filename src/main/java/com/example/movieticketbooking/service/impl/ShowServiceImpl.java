@@ -16,6 +16,7 @@ import com.example.movieticketbooking.repository.CinemaRepository;
 import com.example.movieticketbooking.repository.MovieRepository;
 import com.example.movieticketbooking.repository.ShowRepository;
 import com.example.movieticketbooking.service.ShowService;
+import com.example.movieticketbooking.service.TicketService;
 import com.example.movieticketbooking.utils.ShowTimeUtils;
 import com.example.movieticketbooking.validator.ShowConflictValidator;
 import jakarta.transaction.Transactional;
@@ -38,6 +39,7 @@ public class ShowServiceImpl implements ShowService {
     private final CinemaHallRepository cinemaHallRepository;
     private final ShowMapper showMapper;
     private final CinemaRepository cinemaRepository;
+    private final TicketService ticketService;
 
     @Override
     @Transactional
@@ -65,6 +67,10 @@ public class ShowServiceImpl implements ShowService {
         ShowConflictValidator.validateWithExistingShows(showEntities, existingShows);
         // save shows
         List<ShowEntity> savedShows = showRepository.saveAll(showEntities);
+        // generate tickets for each show
+        for (ShowEntity showEntity : savedShows) {
+            ticketService.generateTicket(showEntity);
+        }
         return showMapper.toShowResponseList(savedShows);
     }
 
