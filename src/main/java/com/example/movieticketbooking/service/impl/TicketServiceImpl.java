@@ -1,8 +1,12 @@
 package com.example.movieticketbooking.service.impl;
 
+import com.example.movieticketbooking.dto.ticket.response.TicketWithSeatResponse;
 import com.example.movieticketbooking.entity.CinemaHallSeatEntity;
 import com.example.movieticketbooking.entity.ShowEntity;
 import com.example.movieticketbooking.entity.TicketEntity;
+import com.example.movieticketbooking.enums.Code;
+import com.example.movieticketbooking.exception.ResourceNotFoundException;
+import com.example.movieticketbooking.mapper.TicketMapper;
 import com.example.movieticketbooking.repository.CinemaHallSeatRepository;
 import com.example.movieticketbooking.repository.TicketRepository;
 import com.example.movieticketbooking.service.TicketService;
@@ -23,6 +27,7 @@ public class TicketServiceImpl implements TicketService {
     private final TicketRepository ticketRepository;
     private final CinemaHallSeatRepository cinemaHallSeatRepository;
     private final ConcurrentMap<Integer, Object> showLocks = new ConcurrentHashMap<>();
+    private final TicketMapper ticketMapper;
 
     @Override
     @Transactional
@@ -52,5 +57,14 @@ public class TicketServiceImpl implements TicketService {
             // Unlock show entity after generating tickets
             showLocks.remove(showEntity.getId());
         }
+    }
+
+    @Override
+    public List<TicketWithSeatResponse> getTicketsByShowId(Integer showId) {
+        if (!ticketRepository.existsByShowId(showId)) {
+            throw new ResourceNotFoundException(Code.SHOWS_NOT_FOUND);
+        }
+        List<TicketEntity> ticketEntities = ticketRepository.findByShowId(showId);
+        return ticketMapper.toWithSeatResponseList(ticketEntities);
     }
 }
