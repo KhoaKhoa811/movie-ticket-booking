@@ -4,6 +4,7 @@ import com.example.movieticketbooking.config.PaginationProperties;
 import com.example.movieticketbooking.dto.api.ApiResponse;
 import com.example.movieticketbooking.dto.api.PagedResponse;
 import com.example.movieticketbooking.dto.pagination.PaginationRequest;
+import com.example.movieticketbooking.dto.ticket.request.TicketUpdateRequest;
 import com.example.movieticketbooking.dto.ticket.response.TicketResponse;
 import com.example.movieticketbooking.dto.ticket.response.TicketWithSeatResponse;
 import com.example.movieticketbooking.enums.Code;
@@ -52,6 +53,17 @@ public class TicketController {
         ApiResponse<TicketResponse> ticketResponse = ApiResponse.<TicketResponse>builder()
                 .code(Code.TICKET_GET_SUCCESS.getCode())
                 .data(ticketService.getTicketById(id))
+                .build();
+        return ResponseEntity.ok(ticketResponse);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<ApiResponse<TicketResponse>> updateTicket(
+            @PathVariable Integer id,
+            @RequestBody TicketUpdateRequest ticketUpdateRequest) {
+        ApiResponse<TicketResponse> ticketResponse = ApiResponse.<TicketResponse>builder()
+                .code(Code.TICKET_UPDATED.getCode())
+                .data(ticketService.updateTicket(id, ticketUpdateRequest))
                 .build();
         return ResponseEntity.ok(ticketResponse);
     }

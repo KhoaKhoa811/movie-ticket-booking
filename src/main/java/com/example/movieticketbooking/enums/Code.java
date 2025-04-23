@@ -142,6 +142,7 @@ public enum Code {
     TICKET_ALREADY_USED(1707, "Ticket already used"),
     TICKET_ALREADY_USED_BY_OTHER_USER(1708, "Ticket already used by other user"),
     TICKET_ALREADY_USED_BY_OTHER_SHOW(1709, "Ticket already used by other show"),
+    TICKET_UPDATED(1710, "Ticket updated successfully"),
     ;
 
     private final int code;

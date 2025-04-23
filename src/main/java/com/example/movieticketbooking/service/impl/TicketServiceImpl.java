@@ -1,6 +1,7 @@
 package com.example.movieticketbooking.service.impl;
 
 import com.example.movieticketbooking.dto.api.PagedResponse;
+import com.example.movieticketbooking.dto.ticket.request.TicketUpdateRequest;
 import com.example.movieticketbooking.dto.ticket.response.TicketResponse;
 import com.example.movieticketbooking.dto.ticket.response.TicketWithSeatResponse;
 import com.example.movieticketbooking.entity.CinemaHallSeatEntity;
@@ -105,5 +106,14 @@ public class TicketServiceImpl implements TicketService {
         TicketEntity ticketEntity = ticketRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(Code.TICKET_NOT_FOUND));
         return ticketMapper.toResponse(ticketEntity);
+    }
+
+    @Override
+    public TicketResponse updateTicket(Integer id, TicketUpdateRequest ticketUpdateRequest) {
+        TicketEntity ticketEntity = ticketRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(Code.TICKET_NOT_FOUND));
+        ticketMapper.updateTicketFromRequest(ticketEntity, ticketUpdateRequest);
+        TicketEntity savedTicketEntity = ticketRepository.save(ticketEntity);
+        return ticketMapper.toResponse(savedTicketEntity);
     }
 }
