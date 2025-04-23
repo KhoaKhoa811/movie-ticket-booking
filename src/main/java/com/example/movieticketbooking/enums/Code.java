@@ -1,5 +1,6 @@
 package com.example.movieticketbooking.enums;
 
+import com.nimbusds.oauth2.sdk.ErrorObject;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -130,6 +131,18 @@ public enum Code {
     ACCOUNT_ALREADY_VERIFY(1604, "Account already verify"),
     FORGOT_PASSWORD_PROCESS(1605, "Forgot password process"),
     PASSWORD_CHANGED_SUCCESS(1606, "Password changed successfully"),
+    // ticket
+    TICKET_GET_SUCCESS(1700, "Ticket retrieved successfully"),
+    TICKET_BOOKED_SUCCESS(1701, "Ticket booked successfully"),
+    TICKET_CANCELLED_SUCCESS(1702, "Ticket cancelled successfully"),
+    TICKET_NOT_FOUND(1703, "Ticket not found"),
+    TICKET_ALREADY_BOOKED(1704, "Ticket already booked"),
+    TICKET_ALREADY_CANCELLED(1705, "Ticket already cancelled"),
+    TICKET_ALREADY_EXPIRED(1706, "Ticket already expired"),
+    TICKET_ALREADY_USED(1707, "Ticket already used"),
+    TICKET_ALREADY_USED_BY_OTHER_USER(1708, "Ticket already used by other user"),
+    TICKET_ALREADY_USED_BY_OTHER_SHOW(1709, "Ticket already used by other show"),
+    TICKET_UPDATED(1710, "Ticket updated successfully"),
     ;
 
     private final int code;

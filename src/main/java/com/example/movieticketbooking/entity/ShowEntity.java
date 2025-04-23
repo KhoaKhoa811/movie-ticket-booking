@@ -35,6 +35,6 @@ public class ShowEntity {
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "cinema_hall_id")
     private CinemaHallEntity cinemaHall;
-    @OneToMany(mappedBy = "show", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<ShowSeatEntity> showSeats;
+    @OneToMany(mappedBy = "show", cascade = CascadeType.ALL)
+    private List<TicketEntity> tickets;
 }

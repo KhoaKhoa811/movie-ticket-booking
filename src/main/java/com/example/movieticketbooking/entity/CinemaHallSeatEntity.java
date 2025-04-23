@@ -4,6 +4,8 @@ import com.example.movieticketbooking.enums.SeatType;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "cinema_hall_seat")
 @Setter
@@ -26,4 +28,6 @@ public class CinemaHallSeatEntity {
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "cinema_hall_id")
     private CinemaHallEntity cinemaHall;
+    @OneToMany(mappedBy = "seat", cascade = CascadeType.ALL)
+    private List<TicketEntity> tickets;
 }
