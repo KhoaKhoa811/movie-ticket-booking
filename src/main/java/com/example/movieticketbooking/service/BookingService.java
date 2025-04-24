@@ -10,4 +10,6 @@ public interface BookingService {
     List<Integer> reserveTickets(BookingRequest request);
     BookingResponse createBooking(BookingRequest request);
     BookingResponse confirmPayment(ConfirmPaymentRequest request);
+    void cancelExpiredBooking(Integer bookingId);
+    void releaseTicketByTicketId(Integer ticketId);
 }

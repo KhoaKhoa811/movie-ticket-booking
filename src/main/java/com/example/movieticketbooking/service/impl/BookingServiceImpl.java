@@ -15,8 +15,10 @@ import com.example.movieticketbooking.repository.AccountRepository;
 import com.example.movieticketbooking.repository.BookingRepository;
 import com.example.movieticketbooking.repository.TicketRepository;
 import com.example.movieticketbooking.service.BookingService;
+import com.example.movieticketbooking.service.TicketService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class BookingServiceImpl implements BookingService {
@@ -37,6 +40,7 @@ public class BookingServiceImpl implements BookingService {
     private static final long RESERVE_TTL_SECONDS = 300L;  // 5 minutes TTL
     private final AccountRepository accountRepository;
     private final BookingMapper bookingMapper;
+    private final TicketService ticketService;
 
     // Confirm booking if reserved
     @Override
@@ -76,11 +80,11 @@ public class BookingServiceImpl implements BookingService {
                     .createdAt(LocalDateTime.now())
                     .status(BookingStatus.PENDING)
                     .build();
-            bookingRepository.save(booking);
+            BookingEntity savedbooking = bookingRepository.save(booking);
 
             for (TicketEntity ticket : tickets) {
                 ticket.setIsBooked(false);
-                ticket.setBooking(booking);
+                ticket.setBooking(savedbooking);
                 ticket.setIssuedAt(LocalDateTime.now());
             }
 
@@ -142,6 +146,37 @@ public class BookingServiceImpl implements BookingService {
             return bookingMapper.toResponse(booking);
         } catch (ObjectOptimisticLockingFailureException e) {
             throw new IllegalStateException(Code.TICKET_CONFLICT);
+        }
+    }
+
+    @Override
+    public void cancelExpiredBooking(Integer bookingId) {
+        BookingEntity booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new ResourceNotFoundException(Code.BOOKING_NOT_FOUND));
+
+        if (booking.getStatus().equals(BookingStatus.PENDING)) {
+            booking.setStatus(BookingStatus.CANCELED);
+            bookingRepository.save(booking);
+
+            ticketService.releaseTicket(bookingId);
+        }
+
+    }
+
+    @Override
+    public void releaseTicketByTicketId(Integer ticketId) {
+        TicketEntity ticket = ticketRepository.findById(ticketId)
+                .orElseThrow(() -> new ResourceNotFoundException(Code.TICKET_NOT_FOUND));
+
+        BookingEntity booking = ticket.getBooking();
+        if (booking != null && booking.getStatus() == BookingStatus.PENDING) {
+            booking.setStatus(BookingStatus.CANCELED);
+            bookingRepository.save(booking);
+
+            ticket.setBooking(null);
+            ticketRepository.save(ticket);
+
+            log.info("Auto-canceled bookingId={} and released ticketId={}", booking.getId(), ticketId);
         }
     }
 

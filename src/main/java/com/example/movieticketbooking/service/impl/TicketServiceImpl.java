@@ -10,6 +10,7 @@ import com.example.movieticketbooking.entity.TicketEntity;
 import com.example.movieticketbooking.enums.Code;
 import com.example.movieticketbooking.exception.ResourceNotFoundException;
 import com.example.movieticketbooking.mapper.TicketMapper;
+import com.example.movieticketbooking.repository.BookingRepository;
 import com.example.movieticketbooking.repository.CinemaHallSeatRepository;
 import com.example.movieticketbooking.repository.ShowRepository;
 import com.example.movieticketbooking.repository.TicketRepository;
@@ -35,6 +36,7 @@ public class TicketServiceImpl implements TicketService {
     private final ConcurrentMap<Integer, Object> showLocks = new ConcurrentHashMap<>();
     private final TicketMapper ticketMapper;
     private final ShowRepository showRepository;
+    private final BookingRepository bookingRepository;
 
     @Override
     @Transactional
@@ -115,5 +117,22 @@ public class TicketServiceImpl implements TicketService {
         ticketMapper.updateTicketFromRequest(ticketEntity, ticketUpdateRequest);
         TicketEntity savedTicketEntity = ticketRepository.save(ticketEntity);
         return ticketMapper.toResponse(savedTicketEntity);
+    }
+
+    @Override
+    @Transactional
+    public void releaseTicket(Integer bookingId) {
+        if (!bookingRepository.existsById(bookingId)) {
+            throw new ResourceNotFoundException(Code.BOOKING_NOT_FOUND);
+        }
+        List<TicketEntity> ticketEntities = ticketRepository.findAllByBookingId(bookingId);
+        if (ticketEntities.isEmpty()) {
+            throw new ResourceNotFoundException(Code.TICKET_NOT_FOUND);
+        }
+        ticketEntities.forEach(ticketEntity -> {
+            ticketEntity.setBooking(null);
+            ticketEntity.setIsBooked(false);
+        });
+        ticketRepository.saveAll(ticketEntities);
     }
 }
