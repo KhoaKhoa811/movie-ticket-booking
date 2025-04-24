@@ -13,13 +13,15 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class BookingEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column(nullable = false)
     private Integer numberOfSeats;
-    @Column(nullable = false)
+    private Double totalPrice;
+    @Column(name = "create_at", nullable = false)
     private LocalDateTime createdAt;
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
