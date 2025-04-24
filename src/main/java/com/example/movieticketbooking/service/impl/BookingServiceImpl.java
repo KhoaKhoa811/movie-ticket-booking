@@ -163,21 +163,4 @@ public class BookingServiceImpl implements BookingService {
 
     }
 
-    @Override
-    public void releaseTicketByTicketId(Integer ticketId) {
-        TicketEntity ticket = ticketRepository.findById(ticketId)
-                .orElseThrow(() -> new ResourceNotFoundException(Code.TICKET_NOT_FOUND));
-
-        BookingEntity booking = ticket.getBooking();
-        if (booking != null && booking.getStatus() == BookingStatus.PENDING) {
-            booking.setStatus(BookingStatus.CANCELED);
-            bookingRepository.save(booking);
-
-            ticket.setBooking(null);
-            ticketRepository.save(ticket);
-
-            log.info("Auto-canceled bookingId={} and released ticketId={}", booking.getId(), ticketId);
-        }
-    }
-
 }

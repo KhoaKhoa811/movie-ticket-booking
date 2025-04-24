@@ -11,5 +11,4 @@ public interface BookingService {
     BookingResponse createBooking(BookingRequest request);
     BookingResponse confirmPayment(ConfirmPaymentRequest request);
     void cancelExpiredBooking(Integer bookingId);
-    void releaseTicketByTicketId(Integer ticketId);
 }
