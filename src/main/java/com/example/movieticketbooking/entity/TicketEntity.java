@@ -20,6 +20,8 @@ public class TicketEntity {
     private Boolean isBooked;
     private String ticketCode;
     private LocalDateTime issuedAt;
+    @Version
+    private Long version;
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "show_id")
     private ShowEntity show;
