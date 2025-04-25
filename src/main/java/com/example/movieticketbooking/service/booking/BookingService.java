@@ -1,4 +1,4 @@
-package com.example.movieticketbooking.service;
+package com.example.movieticketbooking.service.booking;
 
 import com.example.movieticketbooking.dto.booking.request.BookingRequest;
 import com.example.movieticketbooking.dto.booking.request.ConfirmPaymentRequest;

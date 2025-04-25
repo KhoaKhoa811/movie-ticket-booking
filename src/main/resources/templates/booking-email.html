@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Vé CGV</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f8f8f8; margin: 0; padding: 0; }
+        .container { background-color: #fff; width: 600px; margin: 20px auto; border: 1px solid #ccc; padding: 20px; }
+        .barcode { color: green; font-weight: bold; text-align: center; margin-bottom: 10px; }
+        .note, .cgv-note { font-size: 14px; text-align: center; color: #333; }
+        .note span { color: #e71a0f; font-weight: bold; }
+        .ticket-info { margin-top: 20px; }
+        .ticket-info h3 { border-bottom: 1px solid #ccc; padding-bottom: 5px; }
+        .ticket-info p { margin: 4px 0; }
+        .label { font-weight: bold; }
+        .highlight { color: #e71a0f; font-weight: bold; }
+        .footer { margin-top: 30px; background-color: #600000; color: white; padding: 20px; }
+        .footer .cgv { font-weight: bold; color: #ffc107; }
+        .footer p { margin: 5px 0; font-size: 14px; }
+        .total { text-align: right; font-size: 18px; font-weight: bold; margin-top: 10px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="barcode">Barcode.</div>
+    <div class="note">
+        Vui lòng đưa mã số này đến quầy vé để nhận vé của bạn<br>
+        <i>*Lưu ý: Vui lòng sử dụng loại vé đúng với độ tuổi theo quy định. Chi tiết xem <a href="#">tại đây</a>!</i>
+    </div>
+
+    <div class="ticket-info">
+        <h3>THÔNG TIN VÉ</h3>
+        <p><span class="label">Mã vé:</span> ${bookingId}</p>
+        <p><span class="label">Tên phim:</span> "${movieName}</p>
+        <p><span class="label">Rạp:</span> ${cinemaName}</p>
+        <p><span class="label">Phòng chiếu:</span> ${hallName}</p>
+        <p><span class="label">Suất chiếu:</span> ${showTime}</p>
+        <p><span class="label">Ghế:</span> ${seatName}</p>
+        <p><span class="label">Giá:</span> ${seatPrice}</p>
+        <div class="total">Tổng Cộng: <span class="highlight">${totalPrice}</span></div>
+    </div>
+
+    <div class="footer">
+        <p><span class="cgv">Cinemas Việt Nam</span></p>
+        <p>Lầu 2, 7/28 Thành Thái, Phường 14, Quận 10, TP.HCM</p>
+        <p>Email hỗ trợ: <a href="mailto:hoidap@cgv.vn" style="color:#ffc107">hoidap@cgv.vn</a></p>
+        <p>Hotline: 1900 6017</p>
+    </div>
+</div>
+</body>
+</html>

@@ -1,5 +1,6 @@
-package com.example.movieticketbooking.service.impl;
+package com.example.movieticketbooking.service.booking.impl;
 
+import com.example.movieticketbooking.dto.booking.request.BookingInfoRequest;
 import com.example.movieticketbooking.dto.booking.request.BookingRequest;
 import com.example.movieticketbooking.dto.booking.request.ConfirmPaymentRequest;
 import com.example.movieticketbooking.dto.booking.response.BookingResponse;
@@ -14,8 +15,10 @@ import com.example.movieticketbooking.mapper.BookingMapper;
 import com.example.movieticketbooking.repository.AccountRepository;
 import com.example.movieticketbooking.repository.BookingRepository;
 import com.example.movieticketbooking.repository.TicketRepository;
-import com.example.movieticketbooking.service.BookingService;
+import com.example.movieticketbooking.service.booking.BookingInfoService;
+import com.example.movieticketbooking.service.booking.BookingService;
 import com.example.movieticketbooking.service.TicketService;
+import com.example.movieticketbooking.service.email.EmailSenderService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +44,8 @@ public class BookingServiceImpl implements BookingService {
     private final AccountRepository accountRepository;
     private final BookingMapper bookingMapper;
     private final TicketService ticketService;
+    private final EmailSenderService emailSenderService;
+    private final BookingInfoService bookingInfoService;
 
     // Confirm booking if reserved
     @Override
@@ -139,9 +144,12 @@ public class BookingServiceImpl implements BookingService {
             }
 
             booking.setStatus(BookingStatus.CONFIRMED);
-            bookingRepository.save(booking);
+            BookingEntity savedBooking = bookingRepository.save(booking);
 
             ticketRepository.saveAll(tickets);
+
+            BookingInfoRequest bookingInfoRequest = bookingInfoService.getBookingInfo(savedBooking);
+            emailSenderService.sendBookingEmail(bookingInfoRequest);
 
             return bookingMapper.toResponse(booking);
         } catch (ObjectOptimisticLockingFailureException e) {
