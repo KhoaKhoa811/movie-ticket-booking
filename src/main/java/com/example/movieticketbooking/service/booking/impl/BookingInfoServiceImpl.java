@@ -18,8 +18,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class BookingInfoServiceImpl implements BookingInfoService {
 
-    private final BookingRepository bookingRepository;
-
     @Override
     public BookingInfoRequest getBookingInfo(BookingEntity bookingEntity) {
         // get tickets from booking

@@ -57,6 +57,9 @@ public class BookingServiceImpl implements BookingService {
         AccountEntity accountEntity = accountRepository.findById(accountId)
                 .orElseThrow(() -> new ResourceNotFoundException(Code.ACCOUNT_NOT_FOUND));
 
+        // lock tickets for 5 minutes
+        this.reserveTickets(request);
+
         List<TicketEntity> tickets = ticketRepository.findAllById(ticketIds);
         if (tickets.size() != ticketIds.size()) {
             throw new ResourceNotFoundException(Code.TICKET_NOT_FOUND);
@@ -100,20 +103,16 @@ public class BookingServiceImpl implements BookingService {
         }
     }
 
-    @Override
-    public List<Integer> reserveTickets(BookingRequest request) {
-        List<Integer> reservedIds = new ArrayList<>();
-
+    public void reserveTickets(BookingRequest request) {
         for (Integer ticketId : request.getTicketIds()) {
             String key = String.format(RESERVE_KEY_FORMAT, ticketId);
             Boolean success = redisTemplate.opsForValue()
                     .setIfAbsent(key, request.getAccountId(), Duration.ofSeconds(RESERVE_TTL_SECONDS));
 
-            if (Boolean.TRUE.equals(success)) {
-                reservedIds.add(ticketId);
+            if (Boolean.FALSE.equals(success)) {
+                throw new IllegalStateException(Code.TICKET_ALREADY_LOCKED);
             }
         }
-        return reservedIds;
     }
 
     @Override
@@ -153,11 +152,11 @@ public class BookingServiceImpl implements BookingService {
 
             return bookingMapper.toResponse(booking);
         } catch (ObjectOptimisticLockingFailureException e) {
+            this.cancelExpiredBooking(request.getBookingId());
             throw new IllegalStateException(Code.TICKET_CONFLICT);
         }
     }
 
-    @Override
     public void cancelExpiredBooking(Integer bookingId) {
         BookingEntity booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new ResourceNotFoundException(Code.BOOKING_NOT_FOUND));

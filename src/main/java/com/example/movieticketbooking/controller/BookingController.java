@@ -22,15 +22,6 @@ import java.util.List;
 public class BookingController {
     private final BookingService bookingService;
 
-    @PostMapping("/reserve")
-    public ResponseEntity<?> reserveTickets(@RequestBody BookingRequest request) {
-        List<Integer> reserved = bookingService.reserveTickets(request);
-        if (reserved.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("All tickets are already reserved.");
-        }
-        return ResponseEntity.ok(reserved);
-    }
-
     @PostMapping("/create")
     public ResponseEntity<ApiResponse<BookingResponse>> createBooking(@RequestBody BookingRequest request) {
         ApiResponse<BookingResponse> createBooking = ApiResponse.<BookingResponse>builder()
