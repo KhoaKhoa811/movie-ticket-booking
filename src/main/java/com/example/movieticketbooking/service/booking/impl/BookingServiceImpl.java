@@ -17,9 +17,9 @@ import com.example.movieticketbooking.mapper.BookingMapper;
 import com.example.movieticketbooking.repository.AccountRepository;
 import com.example.movieticketbooking.repository.BookingRepository;
 import com.example.movieticketbooking.repository.TicketRepository;
+import com.example.movieticketbooking.service.TicketService;
 import com.example.movieticketbooking.service.booking.BookingInfoService;
 import com.example.movieticketbooking.service.booking.BookingService;
-import com.example.movieticketbooking.service.TicketService;
 import com.example.movieticketbooking.service.email.EmailSenderService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +32,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -177,6 +176,26 @@ public class BookingServiceImpl implements BookingService {
     public PagedResponse<BookingInfoResponse> getAllBooking(Pageable pageable) {
         // get all booking info
         Page<BookingEntity> bookingPage = bookingRepository.findAll(pageable);
+        // mapping to paged response
+        List<BookingInfoResponse> content = bookingPage.getContent()
+                .stream()
+                .map(bookingInfoService::getBookingInfoResponse)
+                .toList();
+        // mapping to paged response
+        return PagedResponse.<BookingInfoResponse>builder()
+                .content(content)
+                .page(bookingPage.getNumber())
+                .size(bookingPage.getSize())
+                .totalElements(bookingPage.getTotalElements())
+                .totalPages(bookingPage.getTotalPages())
+                .last(bookingPage.isLast())
+                .build();
+    }
+
+    @Override
+    public PagedResponse<BookingInfoResponse> getBookingByEmail(String accountEmail, Pageable pageable) {
+        // get booking history by account email
+        Page<BookingEntity> bookingPage = bookingRepository.findByAccountEmail(accountEmail, pageable);
         // mapping to paged response
         List<BookingInfoResponse> content = bookingPage.getContent()
                 .stream()

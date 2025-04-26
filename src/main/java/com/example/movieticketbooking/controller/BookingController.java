@@ -54,4 +54,16 @@ public class BookingController {
                 .build();
         return ResponseEntity.ok(bookingResponse);
     }
+
+    @GetMapping("/history")
+    public ResponseEntity<ApiResponse<PagedResponse<BookingInfoResponse>>> getBookingHistory(
+            @RequestParam("email") String accountEmail,
+            @ModelAttribute PaginationRequest paginationRequest) {
+        Pageable pageable = PaginationUtils.createPageable(paginationRequest, paginationProperties);
+        ApiResponse<PagedResponse<BookingInfoResponse>> bookingResponse = ApiResponse.<PagedResponse<BookingInfoResponse>>builder()
+                .code(Code.BOOKING_GET.getCode())
+                .data(bookingService.getBookingByEmail(accountEmail, pageable))
+                .build();
+        return ResponseEntity.ok(bookingResponse);
+    }
 }

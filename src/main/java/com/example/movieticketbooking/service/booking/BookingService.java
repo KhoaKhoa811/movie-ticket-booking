@@ -11,4 +11,5 @@ public interface BookingService {
     BookingResponse createBooking(BookingRequest request);
     BookingResponse confirmPayment(ConfirmPaymentRequest request);
     PagedResponse<BookingInfoResponse> getAllBooking(Pageable pageable);
+    PagedResponse<BookingInfoResponse> getBookingByEmail(String accountEmail, Pageable pageable);
 }
