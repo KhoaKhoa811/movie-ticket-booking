@@ -1,8 +1,10 @@
 package com.example.movieticketbooking.service.booking.impl;
 
+import com.example.movieticketbooking.dto.api.PagedResponse;
 import com.example.movieticketbooking.dto.booking.request.BookingInfoRequest;
 import com.example.movieticketbooking.dto.booking.request.BookingRequest;
 import com.example.movieticketbooking.dto.booking.request.ConfirmPaymentRequest;
+import com.example.movieticketbooking.dto.booking.response.BookingInfoResponse;
 import com.example.movieticketbooking.dto.booking.response.BookingResponse;
 import com.example.movieticketbooking.entity.AccountEntity;
 import com.example.movieticketbooking.entity.BookingEntity;
@@ -22,6 +24,8 @@ import com.example.movieticketbooking.service.email.EmailSenderService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
@@ -87,12 +91,12 @@ public class BookingServiceImpl implements BookingService {
                     .totalPrice(tickets.stream().mapToDouble(TicketEntity::getPrice).sum())
                     .createdAt(LocalDateTime.now())
                     .status(BookingStatus.PENDING)
+                    .tickets(tickets)
                     .build();
-            BookingEntity savedbooking = bookingRepository.save(booking);
+            bookingRepository.save(booking);
 
             for (TicketEntity ticket : tickets) {
                 ticket.setIsBooked(false);
-                ticket.setBooking(savedbooking);
                 ticket.setIssuedAt(LocalDateTime.now());
             }
 
@@ -125,7 +129,7 @@ public class BookingServiceImpl implements BookingService {
             throw new IllegalStateException(Code.BOOKING_INVALID_STATUS);
         }
 
-        List<TicketEntity> tickets = ticketRepository.findAllByBookingId(request.getBookingId());
+        List<TicketEntity> tickets = booking.getTickets();
 
         try {
             for (TicketEntity ticket : tickets) {
@@ -137,7 +141,6 @@ public class BookingServiceImpl implements BookingService {
 
                 ticket.setIsBooked(true);
                 ticket.setIssuedAt(LocalDateTime.now());
-                ticket.setBooking(booking);
 
                 redisTemplate.delete(redisKey); // xoá khỏi Redis
             }
@@ -168,6 +171,26 @@ public class BookingServiceImpl implements BookingService {
             ticketService.releaseTicket(bookingId);
         }
 
+    }
+
+    @Override
+    public PagedResponse<BookingInfoResponse> getAllBooking(Pageable pageable) {
+        // get all booking info
+        Page<BookingEntity> bookingPage = bookingRepository.findAll(pageable);
+        // mapping to paged response
+        List<BookingInfoResponse> content = bookingPage.getContent()
+                .stream()
+                .map(bookingInfoService::getBookingInfoResponse)
+                .toList();
+        // mapping to paged response
+        return PagedResponse.<BookingInfoResponse>builder()
+                .content(content)
+                .page(bookingPage.getNumber())
+                .size(bookingPage.getSize())
+                .totalElements(bookingPage.getTotalElements())
+                .totalPages(bookingPage.getTotalPages())
+                .last(bookingPage.isLast())
+                .build();
     }
 
 }

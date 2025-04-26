@@ -1,6 +1,7 @@
 package com.example.movieticketbooking.service.booking.impl;
 
 import com.example.movieticketbooking.dto.booking.request.BookingInfoRequest;
+import com.example.movieticketbooking.dto.booking.response.BookingInfoResponse;
 import com.example.movieticketbooking.entity.*;
 import com.example.movieticketbooking.enums.Code;
 import com.example.movieticketbooking.exception.ResourceNotFoundException;
@@ -55,6 +56,23 @@ public class BookingInfoServiceImpl implements BookingInfoService {
                 .showTime(showTime)
                 .seatPrice(seatPrices)
                 .totalPrice(bookingEntity.getTotalPrice())
+                .build();
+    }
+
+    @Override
+    public BookingInfoResponse getBookingInfoResponse(BookingEntity bookingEntity) {
+        BookingInfoRequest bookingInfoRequest = getBookingInfo(bookingEntity);
+
+        return BookingInfoResponse.builder()
+                .bookingId(bookingInfoRequest.getBookingId())
+                .accountEmail(bookingInfoRequest.getAccountEmail())
+                .cinemaName(bookingInfoRequest.getCinemaName())
+                .hallName(bookingInfoRequest.getHallName())
+                .movieName(bookingInfoRequest.getMovieName())
+                .seatName(bookingInfoRequest.getSeatName())
+                .showTime(bookingInfoRequest.getShowTime())
+                .seatPrice(bookingInfoRequest.getSeatPrice())
+                .totalPrice(bookingInfoRequest.getTotalPrice())
                 .build();
     }
 

@@ -151,6 +151,8 @@ public enum Code {
     BOOKING_INVALID_STATUS(1801, "Booking invalid status" ),
     BOOKING_CREATED(1802, "Booking created successfully" ),
     CONFIRM_PAYMENT(1803, "Confirm payment" ),
+    BOOKING_GET_ALL(1804, "Booking retrieved" ),
+    BOOKING_GET(1805, "Booking retrieved" ),
     ;
 
     private final int code;

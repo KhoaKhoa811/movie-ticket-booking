@@ -29,6 +29,11 @@ public class BookingEntity {
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "account_id")
     private AccountEntity account;
-    @OneToMany(mappedBy = "booking", cascade = {CascadeType.DETACH, CascadeType.REFRESH})
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinTable(
+            name = "booking_ticket",
+            joinColumns = @JoinColumn(name = "booking_id"),
+            inverseJoinColumns = @JoinColumn(name = "ticket_id")
+    )
     private List<TicketEntity> tickets;
 }

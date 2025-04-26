@@ -130,7 +130,6 @@ public class TicketServiceImpl implements TicketService {
             throw new ResourceNotFoundException(Code.TICKET_NOT_FOUND);
         }
         ticketEntities.forEach(ticketEntity -> {
-            ticketEntity.setBooking(null);
             ticketEntity.setIsBooked(false);
         });
         ticketRepository.saveAll(ticketEntities);

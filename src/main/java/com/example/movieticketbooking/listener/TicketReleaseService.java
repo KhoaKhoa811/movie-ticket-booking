@@ -13,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.event.TransactionalEventListener;
 
+import java.util.List;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -25,15 +27,15 @@ public class TicketReleaseService {
         TicketEntity ticket = ticketRepository.findById(ticketId)
                 .orElseThrow(() -> new ResourceNotFoundException(Code.TICKET_NOT_FOUND));
 
-        BookingEntity booking = ticket.getBooking();
-        if (booking != null && booking.getStatus() == BookingStatus.PENDING) {
-            booking.setStatus(BookingStatus.CANCELED);
-            bookingRepository.save(booking);
+        List<BookingEntity> bookings = ticket.getBooking();
 
-            ticket.setBooking(null);
-            ticketRepository.save(ticket);
+        for (BookingEntity booking : bookings) {
+            if (booking.getStatus() == BookingStatus.PENDING) {
+                booking.setStatus(BookingStatus.CANCELED);
+                bookingRepository.save(booking);
 
-            log.info("Auto-canceled bookingId={} and released ticketId={}", booking.getId(), ticketId);
+                log.info("Auto-canceled bookingId={} and released ticketId={}", booking.getId(), ticketId);
+            }
         }
     }
 }
