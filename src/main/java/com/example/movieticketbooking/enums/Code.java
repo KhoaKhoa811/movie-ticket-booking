@@ -143,6 +143,16 @@ public enum Code {
     TICKET_ALREADY_USED_BY_OTHER_USER(1708, "Ticket already used by other user"),
     TICKET_ALREADY_USED_BY_OTHER_SHOW(1709, "Ticket already used by other show"),
     TICKET_UPDATED(1710, "Ticket updated successfully"),
+    WRONG_ACCOUNT_BOOKING(1711, "Wrong account booking"),
+    TICKET_CONFLICT(1712, "Ticket conflict"),
+    TICKET_ALREADY_LOCKED(1713, "Ticket already locked" ),
+    // booking
+    BOOKING_NOT_FOUND(1800, "Booking not found" ),
+    BOOKING_INVALID_STATUS(1801, "Booking invalid status" ),
+    BOOKING_CREATED(1802, "Booking created successfully" ),
+    CONFIRM_PAYMENT(1803, "Confirm payment" ),
+    BOOKING_GET_ALL(1804, "Booking retrieved" ),
+    BOOKING_GET(1805, "Booking retrieved" ),
     ;
 
     private final int code;

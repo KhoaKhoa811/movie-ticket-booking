@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class EmailSenderController {
     private final EmailSenderService emailSenderService;
 
-    @PostMapping
+    @PostMapping("/verify")
     public ResponseEntity<ApiResponse<?>> sendMail(@RequestBody VerifyEmailRequest verifyEmailRequest){
         emailSenderService.sendVerificationEmail(verifyEmailRequest);
         ApiResponse<?> response = ApiResponse.builder()
@@ -26,4 +26,6 @@ public class EmailSenderController {
                 .build();
         return ResponseEntity.ok(response);
     }
+
+
 }

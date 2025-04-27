@@ -15,4 +15,5 @@ public interface TicketService {
     TicketResponse getTicketByShowIdAndSeatId(Integer showId, Integer seatId);
     TicketResponse getTicketById(Integer id);
     TicketResponse updateTicket(Integer id, TicketUpdateRequest ticketUpdateRequest);
+    void releaseTicket(Integer BookingId);
 }

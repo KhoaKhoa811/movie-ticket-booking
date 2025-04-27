@@ -1,6 +1,7 @@
 package com.example.movieticketbooking.service.email.impl;
 
 import com.example.movieticketbooking.dto.auth.request.VerifyEmailRequest;
+import com.example.movieticketbooking.dto.booking.request.BookingInfoRequest;
 import com.example.movieticketbooking.service.email.EmailSenderService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -26,6 +27,8 @@ public class EmailSenderServiceImpl implements EmailSenderService {
     private final JavaMailSenderImpl mailSender;
     @Value( "${app.verify-link}")
     private String verifyLink;
+    @Value( "${app.booking-email-subject}")
+    private String bookingSubject;
 
     @Override
     public String loadEmailTemplate(String path, Map<String, String> replacements) throws IOException {
@@ -65,6 +68,27 @@ public class EmailSenderServiceImpl implements EmailSenderService {
             mailSender.send(message);
         } catch (MessagingException e) {
             throw new RuntimeException("Lỗi khi gửi email HTML: " + e.getMessage());
+        }
+    }
+
+    @Override
+    @Async("taskExecutor")
+    public void sendBookingEmail(BookingInfoRequest bookingInfoEmailRequest) {
+        Map<String, String> replacements = new HashMap<>();
+        replacements.put("bookingId", bookingInfoEmailRequest.getBookingId().toString());
+        replacements.put("movieName", bookingInfoEmailRequest.getMovieName());
+        replacements.put("cinemaName", bookingInfoEmailRequest.getCinemaName());
+        replacements.put("hallName", bookingInfoEmailRequest.getHallName());
+        replacements.put("showTime", bookingInfoEmailRequest.getShowTime());
+        replacements.put("seatName", String.join(", ", bookingInfoEmailRequest.getSeatName()));
+        replacements.put("seatPrice", String.join(", ", bookingInfoEmailRequest.getSeatPrice().toString()));
+        replacements.put("totalPrice", bookingInfoEmailRequest.getTotalPrice().toString());
+
+        try {
+            String htmlContent = loadEmailTemplate("templates/booking-email.html", replacements);
+            sendHtmlEmail(bookingInfoEmailRequest.getAccountEmail(), bookingSubject, htmlContent);
+        } catch (IOException e) {
+            throw new RuntimeException("Lỗi khi đọc template: " + e.getMessage());
         }
     }
 }
